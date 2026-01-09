@@ -309,22 +309,34 @@
 
       <!-- Live Tickers Row -->
       <div style="background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(10px); border-top: 1px solid rgba(51, 65, 85, 0.5); padding: 12px 40px;">
-        <div style="max-width: 1400px; margin: 0 auto; display: flex; justify-content: center; gap: 60px;">
-          <div class="header-ticker" id="home-nifty" style="display: flex; align-items: center; gap: 12px;">
-            <div class="header-ticker-symbol" style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;">NIFTY</div>
-            <div class="header-ticker-price" id="home-nifty-price" style="font-size: 16px; font-weight: 700; color: #e6eef8; font-family: 'Orbitron', monospace;">--</div>
-            <div class="header-ticker-change" id="home-nifty-change" style="font-size: 12px; font-weight: 600; padding: 3px 8px; border-radius: 4px;">--</div>
+        <div style="max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
+          <!-- Data Source Indicator -->
+          <div id="data-source-indicator" style="display: flex; align-items: center; gap: 8px; font-size: 11px; color: #64748b;">
+            <span id="data-status-dot" style="width: 8px; height: 8px; border-radius: 50%; background: #fbbf24;"></span>
+            <span id="data-status-text">Simulated Data</span>
           </div>
-          <div class="header-ticker" id="home-sensex" style="display: flex; align-items: center; gap: 12px;">
-            <div class="header-ticker-symbol" style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;">SENSEX</div>
-            <div class="header-ticker-price" id="home-sensex-price" style="font-size: 16px; font-weight: 700; color: #e6eef8; font-family: 'Orbitron', monospace;">--</div>
-            <div class="header-ticker-change" id="home-sensex-change" style="font-size: 12px; font-weight: 600; padding: 3px 8px; border-radius: 4px;">--</div>
+          
+          <!-- Tickers -->
+          <div style="display: flex; justify-content: center; gap: 60px; flex: 1;">
+            <div class="header-ticker" id="home-nifty" style="display: flex; align-items: center; gap: 12px;">
+              <div class="header-ticker-symbol" style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;">NIFTY</div>
+              <div class="header-ticker-price" id="home-nifty-price" style="font-size: 16px; font-weight: 700; color: #e6eef8; font-family: 'Orbitron', monospace;">--</div>
+              <div class="header-ticker-change" id="home-nifty-change" style="font-size: 12px; font-weight: 600; padding: 3px 8px; border-radius: 4px;">--</div>
+            </div>
+            <div class="header-ticker" id="home-sensex" style="display: flex; align-items: center; gap: 12px;">
+              <div class="header-ticker-symbol" style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;">SENSEX</div>
+              <div class="header-ticker-price" id="home-sensex-price" style="font-size: 16px; font-weight: 700; color: #e6eef8; font-family: 'Orbitron', monospace;">--</div>
+              <div class="header-ticker-change" id="home-sensex-change" style="font-size: 12px; font-weight: 600; padding: 3px 8px; border-radius: 4px;">--</div>
+            </div>
+            <div class="header-ticker" id="home-banknifty" style="display: flex; align-items: center; gap: 12px;">
+              <div class="header-ticker-symbol" style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;">BANK NIFTY</div>
+              <div class="header-ticker-price" id="home-banknifty-price" style="font-size: 16px; font-weight: 700; color: #e6eef8; font-family: 'Orbitron', monospace;">--</div>
+              <div class="header-ticker-change" id="home-banknifty-change" style="font-size: 12px; font-weight: 600; padding: 3px 8px; border-radius: 4px;">--</div>
+            </div>
           </div>
-          <div class="header-ticker" id="home-banknifty" style="display: flex; align-items: center; gap: 12px;">
-            <div class="header-ticker-symbol" style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;">BANK NIFTY</div>
-            <div class="header-ticker-price" id="home-banknifty-price" style="font-size: 16px; font-weight: 700; color: #e6eef8; font-family: 'Orbitron', monospace;">--</div>
-            <div class="header-ticker-change" id="home-banknifty-change" style="font-size: 12px; font-weight: 600; padding: 3px 8px; border-radius: 4px;">--</div>
-          </div>
+          
+          <!-- Spacer for balance -->
+          <div style="width: 100px;"></div>
         </div>
       </div>
     </header>
@@ -479,15 +491,25 @@
       const SERVER_URL = 'http://localhost:5000';
       let usingLiveData = false;
 
+      // Initialize data
+      let lastPrices = {
+        'home-nifty': { base: 23567, current: 23567, previous: 23567 },
+        'home-sensex': { base: 78234, current: 78234, previous: 78234 },
+        'home-banknifty': { base: 48932, current: 48932, previous: 48932 }
+      };
+
       async function fetchLiveIndices() {
         try {
-          const response = await fetch(`${SERVER_URL}/api/indices`);
+          const response = await fetch(`${SERVER_URL}/api/indices`, { 
+            method: 'GET',
+            signal: AbortSignal.timeout(2000) // 2 second timeout
+          });
           if (!response.ok) throw new Error('Server not available');
           const data = await response.json();
           usingLiveData = true;
           return data;
         } catch (error) {
-          console.warn('Live server not available, using demo data:', error.message);
+          // Silently fall back to simulated data
           usingLiveData = false;
           return null;
         }
@@ -498,15 +520,32 @@
         const liveData = await fetchLiveIndices();
         
         if (liveData && Object.keys(liveData).length > 0) {
-          // Update with live data from Zerodha
+          // Update with live data from Angel One
           updateTickerFromLiveData('home-nifty', liveData['NIFTY 50']);
           updateTickerFromLiveData('home-sensex', liveData['SENSEX']);
           updateTickerFromLiveData('home-banknifty', liveData['BANK NIFTY']);
+          updateDataSourceIndicator(true);
         } else {
-          // Fallback to demo data
-          updateDemoHomeTicker('home-nifty');
-          updateDemoHomeTicker('home-sensex');
-          updateDemoHomeTicker('home-banknifty');
+          // Fallback to realistic simulated data
+          updateRealisticTicker('home-nifty');
+          updateRealisticTicker('home-sensex');
+          updateRealisticTicker('home-banknifty');
+          updateDataSourceIndicator(false);
+        }
+      }
+
+      function updateDataSourceIndicator(isLive) {
+        const dot = document.getElementById('data-status-dot');
+        const text = document.getElementById('data-status-text');
+        
+        if (isLive) {
+          dot.style.background = '#22c55e';
+          text.textContent = 'Live Data • Angel One';
+          text.style.color = '#22c55e';
+        } else {
+          dot.style.background = '#fbbf24';
+          text.textContent = 'Simulated Data';
+          text.style.color = '#64748b';
         }
       }
 
@@ -524,6 +563,41 @@
           const change = data.change;
           const changePercent = data.changePct || 0;
           
+          const changeText = change >= 0 ?
+            `+${change.toFixed(2)} (+${changePercent.toFixed(2)}%)` :
+            `${change.toFixed(2)} (${changePercent.toFixed(2)}%)`;
+
+          changeElement.textContent = changeText;
+          changeElement.className = 'header-ticker-change ' + (change > 0 ? 'positive' : change < 0 ? 'negative' : 'neutral');
+        }
+      }
+
+      function updateRealisticTicker(elementId) {
+        const tickerData = lastPrices[elementId];
+        if (!tickerData) return;
+
+        // Simulate realistic price movement (0.01% to 0.05% per update)
+        const volatility = 0.0003; // 0.03% movement
+        const randomWalk = (Math.random() - 0.5) * 2 * volatility;
+        const momentum = (tickerData.current - tickerData.previous) * 0.3; // 30% momentum carry
+        
+        tickerData.previous = tickerData.current;
+        tickerData.current = tickerData.current * (1 + randomWalk + momentum);
+        
+        const change = tickerData.current - tickerData.base;
+        const changePercent = (change / tickerData.base) * 100;
+
+        const priceElement = document.getElementById(`${elementId}-price`);
+        const changeElement = document.getElementById(`${elementId}-change`);
+
+        if (priceElement) {
+          priceElement.textContent = tickerData.current.toLocaleString('en-IN', { 
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2 
+          });
+        }
+
+        if (changeElement) {
           const changeText = change >= 0 ?
             `+${change.toFixed(2)} (+${changePercent.toFixed(2)}%)` :
             `${change.toFixed(2)} (${changePercent.toFixed(2)}%)`;
