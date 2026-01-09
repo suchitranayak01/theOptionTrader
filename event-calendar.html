@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Event Calendar - TheOptionTrader</title>
+    <link rel="stylesheet" href="style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+      .calendar-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 40px 20px;
+        background: #02101a;
+        min-height: 100vh;
+      }
+
+      .page-header {
+        text-align: center;
+        margin-bottom: 40px;
+        padding: 40px 20px;
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        border-radius: 12px;
+      }
+
+      .page-header h1 {
+        font-size: 3rem;
+        color: #e6eef8;
+        margin-bottom: 1rem;
+      }
+
+      .page-header p {
+        font-size: 1.2rem;
+        color: #94a3b8;
+      }
+
+      .calendar-filters {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+      }
+
+      .filter-btn {
+        background: rgba(59, 130, 246, 0.1);
+        border: 1px solid rgba(59, 130, 246, 0.3);
+        color: #94a3b8;
+        padding: 10px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+      }
+
+      .filter-btn.active {
+        background: #3b82f6;
+        color: white;
+        border-color: #3b82f6;
+      }
+
+      .filter-btn:hover:not(.active) {
+        background: rgba(59, 130, 246, 0.2);
+      }
+
+      .events-grid {
+        display: grid;
+        gap: 20px;
+      }
+
+      .event-card {
+        background: rgba(59, 130, 246, 0.05);
+        border: 1px solid rgba(59, 130, 246, 0.2);
+        border-left: 4px solid #3b82f6;
+        border-radius: 8px;
+        padding: 20px;
+        display: grid;
+        grid-template-columns: 100px 1fr auto;
+        gap: 20px;
+        align-items: center;
+        transition: all 0.3s ease;
+      }
+
+      .event-card:hover {
+        border-left-width: 6px;
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+      }
+
+      .event-card.high-impact {
+        border-left-color: #ef4444;
+        background: rgba(239, 68, 68, 0.05);
+      }
+
+      .event-card.medium-impact {
+        border-left-color: #eab308;
+        background: rgba(234, 179, 8, 0.05);
+      }
+
+      .event-date {
+        text-align: center;
+      }
+
+      .event-date .day {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #e6eef8;
+        line-height: 1;
+      }
+
+      .event-date .month {
+        font-size: 0.9rem;
+        color: #94a3b8;
+        text-transform: uppercase;
+      }
+
+      .event-date .year {
+        font-size: 0.8rem;
+        color: #64748b;
+      }
+
+      .event-details h3 {
+        color: #e6eef8;
+        font-size: 1.3rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .event-details p {
+        color: #94a3b8;
+        line-height: 1.6;
+        margin-bottom: 0.5rem;
+      }
+
+      .event-category {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-right: 8px;
+      }
+
+      .category-monetary {
+        background: rgba(59, 130, 246, 0.2);
+        color: #3b82f6;
+      }
+
+      .category-earnings {
+        background: rgba(34, 197, 94, 0.2);
+        color: #22c55e;
+      }
+
+      .category-economic {
+        background: rgba(234, 179, 8, 0.2);
+        color: #eab308;
+      }
+
+      .category-political {
+        background: rgba(168, 85, 247, 0.2);
+        color: #a855f7;
+      }
+
+      .category-holiday {
+        background: rgba(148, 163, 184, 0.2);
+        color: #94a3b8;
+      }
+
+      .impact-badge {
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        text-align: center;
+        min-width: 100px;
+      }
+
+      .impact-high {
+        background: rgba(239, 68, 68, 0.2);
+        color: #ef4444;
+        border: 1px solid rgba(239, 68, 68, 0.4);
+      }
+
+      .impact-medium {
+        background: rgba(234, 179, 8, 0.2);
+        color: #eab308;
+        border: 1px solid rgba(234, 179, 8, 0.4);
+      }
+
+      .impact-low {
+        background: rgba(34, 197, 94, 0.2);
+        color: #22c55e;
+        border: 1px solid rgba(34, 197, 94, 0.4);
+      }
+
+      @media (max-width: 768px) {
+        .event-card {
+          grid-template-columns: 1fr;
+          text-align: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="app-title">
+        <div class="brand">
+          <img class="brand-img" src="logo.png" alt="TheOptionTrader logo" />
+          <h1 class="logo">TheOptionTrader</h1>
+        </div>
+      </div>
+      <div class="header-actions">
+        <a class="btn ghost" href="index.html">Home</a>
+        <a class="btn ghost" href="Options360.html">Options 360</a>
+        <a class="btn ghost" href="login.html">Login</a>
+      </div>
+    </header>
+
+    <div class="calendar-container">
+      <div class="page-header">
+        <h1>📅 Event Calendar</h1>
+        <p>Stay ahead of market-moving events</p>
+      </div>
+
+      <div class="calendar-filters">
+        <button class="filter-btn active" data-filter="all">All Events</button>
+        <button class="filter-btn" data-filter="monetary">Monetary Policy</button>
+        <button class="filter-btn" data-filter="earnings">Earnings</button>
+        <button class="filter-btn" data-filter="economic">Economic Data</button>
+        <button class="filter-btn" data-filter="political">Political</button>
+        <button class="filter-btn" data-filter="holiday">Market Holidays</button>
+      </div>
+
+      <div class="events-grid" id="eventsContainer">
+        <!-- Events will be loaded here -->
+      </div>
+    </div>
+
+    <footer class="footer" style="background: #0f172a; text-align: center; padding: 40px 20px; border-top: 1px solid #334155;">
+      <p style="color: #64748b;">&copy; 2026 TheOptionTrader. Stay informed with upcoming market events.</p>
+    </footer>
+
+    <script>
+      // Sample events data (in production, fetch from API)
+      const events = [
+        {
+          date: new Date('2026-01-14'),
+          title: 'RBI Monetary Policy Committee Meeting',
+          description: 'Reserve Bank of India announces policy rates and monetary stance. High impact on banking stocks and indices.',
+          category: 'monetary',
+          impact: 'high'
+        },
+        {
+          date: new Date('2026-01-15'),
+          title: 'Nifty Weekly Expiry',
+          description: 'Weekly options expiry for Nifty index. Expect increased volatility near closing.',
+          category: 'economic',
+          impact: 'medium'
+        },
+        {
+          date: new Date('2026-01-20'),
+          title: 'TCS Q3 Earnings Results',
+          description: 'Tata Consultancy Services announces quarterly earnings. Major impact on IT sector.',
+          category: 'earnings',
+          impact: 'high'
+        },
+        {
+          date: new Date('2026-01-22'),
+          title: 'Bank Nifty Weekly Expiry',
+          description: 'Weekly options expiry for Bank Nifty index.',
+          category: 'economic',
+          impact: 'medium'
+        },
+        {
+          date: new Date('2026-01-26'),
+          title: 'Republic Day - Market Holiday',
+          description: 'Indian stock markets closed for Republic Day celebration.',
+          category: 'holiday',
+          impact: 'low'
+        },
+        {
+          date: new Date('2026-01-29'),
+          title: 'Monthly Expiry - Nifty & Bank Nifty',
+          description: 'Monthly derivatives expiry for all indices. Expect high volatility and volume.',
+          category: 'economic',
+          impact: 'high'
+        },
+        {
+          date: new Date('2026-01-30'),
+          title: 'Union Budget 2026',
+          description: 'Finance Minister presents Union Budget. Massive impact across all sectors.',
+          category: 'political',
+          impact: 'high'
+        },
+        {
+          date: new Date('2026-02-01'),
+          title: 'HDFC Bank Q3 Results',
+          description: 'HDFC Bank announces quarterly results. Impacts banking sector sentiment.',
+          category: 'earnings',
+          impact: 'high'
+        },
+        {
+          date: new Date('2026-02-03'),
+          title: 'US Fed Meeting Minutes Release',
+          description: 'Federal Reserve releases FOMC meeting minutes. Global market impact.',
+          category: 'monetary',
+          impact: 'medium'
+        },
+        {
+          date: new Date('2026-02-05'),
+          title: 'Reliance Industries Q3 Earnings',
+          description: 'RIL announces quarterly earnings. Major Nifty weight, high market impact.',
+          category: 'earnings',
+          impact: 'high'
+        },
+        {
+          date: new Date('2026-02-10'),
+          title: 'India CPI Inflation Data',
+          description: 'Consumer Price Index inflation data release. Impacts RBI policy expectations.',
+          category: 'economic',
+          impact: 'medium'
+        },
+        {
+          date: new Date('2026-02-12'),
+          title: 'India GDP Growth Data Q3',
+          description: 'Quarterly GDP growth figures released. Broader economic sentiment impact.',
+          category: 'economic',
+          impact: 'high'
+        }
+      ];
+
+      function renderEvents(filter = 'all') {
+        const container = document.getElementById('eventsContainer');
+        const now = new Date();
+        
+        const filteredEvents = events
+          .filter(e => filter === 'all' || e.category === filter)
+          .filter(e => e.date >= now)
+          .sort((a, b) => a.date - b.date);
+
+        if (filteredEvents.length === 0) {
+          container.innerHTML = '<div style="text-align: center; color: #64748b; padding: 40px;">No upcoming events in this category</div>';
+          return;
+        }
+
+        container.innerHTML = filteredEvents.map(event => {
+          const day = event.date.getDate();
+          const month = event.date.toLocaleString('default', { month: 'short' });
+          const year = event.date.getFullYear();
+          
+          const categoryClass = `category-${event.category}`;
+          const impactClass = `impact-${event.impact}`;
+          const cardClass = event.impact === 'high' ? 'high-impact' : event.impact === 'medium' ? 'medium-impact' : '';
+          
+          return `
+            <div class="event-card ${cardClass}">
+              <div class="event-date">
+                <div class="day">${day}</div>
+                <div class="month">${month}</div>
+                <div class="year">${year}</div>
+              </div>
+              <div class="event-details">
+                <h3>${event.title}</h3>
+                <p>${event.description}</p>
+                <span class="event-category ${categoryClass}">${event.category.toUpperCase()}</span>
+              </div>
+              <div class="impact-badge ${impactClass}">
+                ${event.impact.toUpperCase()} IMPACT
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // Filter buttons
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          renderEvents(this.dataset.filter);
+        });
+      });
+
+      // Initial render
+      renderEvents();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Learn Options - TheOptionTrader</title>
+    <link rel="stylesheet" href="style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+      .learn-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px 20px;
+        background: #02101a;
+        min-height: 100vh;
+      }
+
+      .page-header {
+        text-align: center;
+        margin-bottom: 50px;
+        padding: 40px 20px;
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        border-radius: 12px;
+      }
+
+      .page-header h1 {
+        font-size: 3rem;
+        color: #e6eef8;
+        margin-bottom: 1rem;
+      }
+
+      .page-header p {
+        font-size: 1.2rem;
+        color: #94a3b8;
+      }
+
+      .section-card {
+        background: rgba(59, 130, 246, 0.05);
+        border: 1px solid rgba(59, 130, 246, 0.2);
+        border-radius: 12px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        transition: all 0.3s ease;
+      }
+
+      .section-card:hover {
+        border-color: #3b82f6;
+        box-shadow: 0 10px 30px rgba(59, 130, 246, 0.1);
+      }
+
+      .section-card h2 {
+        color: #e6eef8;
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .section-card h3 {
+        color: #3b82f6;
+        font-size: 1.5rem;
+        margin: 1.5rem 0 1rem 0;
+      }
+
+      .section-card p, .section-card li {
+        color: #94a3b8;
+        line-height: 1.8;
+        font-size: 1.05rem;
+      }
+
+      .section-card ul {
+        margin: 1rem 0;
+        padding-left: 2rem;
+      }
+
+      .section-card li {
+        margin-bottom: 0.8rem;
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-left: 10px;
+      }
+
+      .badge.free {
+        background: rgba(34, 197, 94, 0.2);
+        color: #22c55e;
+      }
+
+      .badge.premium {
+        background: rgba(234, 179, 8, 0.2);
+        color: #eab308;
+      }
+
+      .locked-content {
+        position: relative;
+        filter: blur(3px);
+        pointer-events: none;
+        user-select: none;
+      }
+
+      .unlock-overlay {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(59, 130, 246, 0.95);
+        padding: 30px 40px;
+        border-radius: 12px;
+        text-align: center;
+        z-index: 10;
+        filter: none;
+        backdrop-filter: blur(10px);
+      }
+
+      .unlock-overlay h3 {
+        color: white;
+        margin-bottom: 1rem;
+      }
+
+      .unlock-overlay p {
+        color: #e6eef8;
+        margin-bottom: 1.5rem;
+      }
+
+      .unlock-btn {
+        background: white;
+        color: #3b82f6;
+        padding: 12px 30px;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .unlock-btn:hover {
+        background: #e6eef8;
+        transform: translateY(-2px);
+      }
+
+      .ad-container {
+        background: rgba(148, 163, 184, 0.1);
+        border: 1px dashed rgba(148, 163, 184, 0.3);
+        border-radius: 8px;
+        padding: 20px;
+        text-align: center;
+        margin: 20px 0;
+        color: #64748b;
+        font-size: 0.9rem;
+      }
+
+      .strategy-box {
+        background: rgba(34, 197, 94, 0.05);
+        border-left: 4px solid #22c55e;
+        padding: 1rem 1.5rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+      }
+
+      .strategy-box h4 {
+        color: #22c55e;
+        margin-bottom: 0.5rem;
+      }
+
+      .locked-section {
+        position: relative;
+      }
+
+      @media (max-width: 768px) {
+        .page-header h1 {
+          font-size: 2rem;
+        }
+        
+        .section-card h2 {
+          font-size: 1.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="app-title">
+        <div class="brand">
+          <img class="brand-img" src="logo.png" alt="TheOptionTrader logo" />
+          <h1 class="logo">TheOptionTrader</h1>
+        </div>
+      </div>
+      <div class="header-actions">
+        <a class="btn ghost" href="index.html">Home</a>
+        <a class="btn ghost" href="Options360.html">Options 360</a>
+        <a class="btn ghost" href="login.html">Login</a>
+      </div>
+    </header>
+
+    <div class="learn-container">
+      <div class="page-header">
+        <h1>📚 Learn Options Trading</h1>
+        <p>Master the art of options trading from basics to advanced strategies</p>
+      </div>
+
+      <!-- Buyers Section - FREE -->
+      <div class="section-card">
+        <h2>
+          🚀 Option Buyers - Market Movers
+          <span class="badge free">FREE</span>
+        </h2>
+        <p>Options buying allows you to participate in market movements with limited risk and unlimited profit potential. Learn the fundamentals and strategies that successful option buyers use.</p>
+
+        <div class="ad-container">
+          📢 Advertisement Space - Premium content keeps this section free!
+        </div>
+
+        <h3>A. Buying Strategies</h3>
+        <ul>
+          <li><strong>Long Call:</strong> Buy calls when you expect the underlying stock to rise significantly. Best during bullish trends or before positive events.</li>
+          <li><strong>Long Put:</strong> Buy puts when you expect the stock to fall. Ideal for hedging or profiting from bearish moves.</li>
+          <li><strong>Bull Call Spread:</strong> Buy a call at lower strike and sell at higher strike to reduce cost while limiting profit.</li>
+          <li><strong>Bear Put Spread:</strong> Buy a put at higher strike and sell at lower strike for defined risk/reward in bearish markets.</li>
+          <li><strong>Long Straddle:</strong> Buy both call and put at the same strike when expecting high volatility but uncertain of direction.</li>
+          <li><strong>Long Strangle:</strong> Buy OTM call and put when expecting large moves with less premium outlay than straddle.</li>
+        </ul>
+
+        <div class="strategy-box">
+          <h4>💡 Pro Tip: Risk Management</h4>
+          <p>Never risk more than 2-3% of your trading capital on a single options trade. Options can expire worthless, so always have an exit strategy.</p>
+        </div>
+
+        <h3>B. When to Buy Options - Detailed Guide</h3>
+        <ul>
+          <li><strong>Before Major Events:</strong> Earnings announcements, RBI policy meetings, budget releases, and corporate actions can create significant price movements.</li>
+          <li><strong>During Trends:</strong> Buy calls in strong uptrends with increasing volume. Buy puts in downtrends with distribution patterns.</li>
+          <li><strong>Low Implied Volatility:</strong> Options are cheaper when IV is low. Historical IV percentile below 30% indicates good buying opportunity.</li>
+          <li><strong>Technical Breakouts:</strong> When stock breaks resistance (for calls) or support (for puts) with strong volume.</li>
+          <li><strong>Time Considerations:</strong> Buy options with at least 30-45 days to expiry to avoid rapid theta decay. Weekly options only for very short-term plays.</li>
+          <li><strong>Seasonal Patterns:</strong> Some stocks have seasonal trends (e.g., FMCG stocks before festivals, auto stocks during festive season).</li>
+        </ul>
+
+        <div class="ad-container">
+          📢 Advertisement Space
+        </div>
+
+        <div class="strategy-box">
+          <h4>📊 Best Practices for Option Buyers</h4>
+          <ul>
+            <li>Check IV Rank - buy when it's low (under 30%)</li>
+            <li>Use technical analysis to time entries</li>
+            <li>Set stop-loss at 40-50% of premium paid</li>
+            <li>Book partial profits at 50-75% gains</li>
+            <li>Avoid holding options into expiry week</li>
+            <li>Track open interest and volume for liquidity</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Sellers Section - PAID -->
+      <div class="section-card locked-section">
+        <h2>
+          💰 Option Sellers - Premium Eaters
+          <span class="badge premium">PREMIUM ONLY</span>
+        </h2>
+        
+        <div class="unlock-overlay">
+          <h3>🔒 Premium Content</h3>
+          <p>Unlock advanced selling strategies, premium impact analysis, and event-based trading techniques</p>
+          <button class="unlock-btn" onclick="window.location.href='login.html'">Upgrade to Premium</button>
+        </div>
+
+        <div class="locked-content">
+          <p>Option selling is a probabilistic game where you earn premiums by selling time decay. Professional sellers understand market structure, volatility cycles, and risk management.</p>
+
+          <h3>A. Selling Strategies</h3>
+          <ul>
+            <li><strong>Covered Call:</strong> Sell calls against stock holdings to generate income in sideways markets.</li>
+            <li><strong>Cash-Secured Put:</strong> Sell puts to potentially buy stocks at lower prices while earning premium.</li>
+            <li><strong>Iron Condor:</strong> Sell OTM call spread and put spread simultaneously in range-bound markets.</li>
+            <li><strong>Iron Butterfly:</strong> Sell ATM straddle and buy OTM strangle for defined risk premium collection.</li>
+            <li><strong>Credit Spreads:</strong> Vertical spreads with net credit - bull put spread or bear call spread.</li>
+            <li><strong>Ratio Spreads:</strong> Sell more options than bought to maximize premium collection.</li>
+            <li><strong>Calendar Spreads:</strong> Sell near-term options and buy longer-term to profit from time decay differential.</li>
+          </ul>
+
+          <h3>B. What Impacts Options Premiums</h3>
+          <ul>
+            <li><strong>Implied Volatility (IV):</strong> Higher IV = Higher premiums. IV increases before events and during uncertainty.</li>
+            <li><strong>Time Decay (Theta):</strong> Premiums decay faster in last 30 days. Theta acceleration benefits sellers.</li>
+            <li><strong>Underlying Price Movement:</strong> Delta impact - premiums increase as strikes get closer to ITM.</li>
+            <li><strong>Interest Rates:</strong> Higher rates slightly increase call premiums and decrease put premiums.</li>
+            <li><strong>Dividends:</strong> Upcoming dividends increase put premiums and decrease call premiums.</li>
+            <li><strong>Supply & Demand:</strong> Heavy buying increases premiums, heavy selling decreases them.</li>
+          </ul>
+
+          <h3>C. Events That Impact Premiums</h3>
+          <ul>
+            <li>Earnings Announcements - IV spike 3-5 days before, crush after</li>
+            <li>RBI Monetary Policy - affects Nifty and Bank Nifty significantly</li>
+            <li>Budget Announcements - sector-specific volatility increases</li>
+            <li>Global Market Events - Fed meetings, geopolitical tensions</li>
+            <li>Expiry Day Effects - max pain theory, pin risk</li>
+            <li>Quarterly Results Season - broad market IV expansion</li>
+          </ul>
+
+          <h3>D. When to Sell Options</h3>
+          <ul>
+            <li><strong>High IV Environment:</strong> Sell when IV percentile is above 50-70%</li>
+            <li><strong>Post-Event:</strong> Immediately after earnings/events when IV crashes</li>
+            <li><strong>Range-Bound Markets:</strong> Sell strangles/iron condors when stock is in consolidation</li>
+            <li><strong>Strong Support/Resistance:</strong> Sell puts at support, calls at resistance</li>
+            <li><strong>30-45 DTE:</strong> Optimal time to sell for balance between premium and time</li>
+            <li><strong>High PCR Readings:</strong> Sell puts when PCR >1.3, calls when PCR <0.7</li>
+          </ul>
+
+          <h3>E. Create Your Own Strategy</h3>
+          <div class="strategy-box">
+            <h4>Strategy Builder Framework</h4>
+            <ul>
+              <li><strong>Step 1:</strong> Define market outlook (bullish, bearish, neutral)</li>
+              <li><strong>Step 2:</strong> Assess volatility environment (expanding or contracting)</li>
+              <li><strong>Step 3:</strong> Choose base strategy (directional, non-directional, volatility)</li>
+              <li><strong>Step 4:</strong> Optimize strike selection based on probability</li>
+              <li><strong>Step 5:</strong> Set position sizing (max 5% portfolio per trade)</li>
+              <li><strong>Step 6:</strong> Define entry rules (technical triggers, IV levels)</li>
+              <li><strong>Step 7:</strong> Set exit criteria (profit target 50-70%, stop loss at 2x credit)</li>
+              <li><strong>Step 8:</strong> Plan adjustment triggers (if underlying moves 10-15%)</li>
+              <li><strong>Step 9:</strong> Backtest on historical data</li>
+              <li><strong>Step 10:</strong> Paper trade for 20-30 occurrences before live trading</li>
+            </ul>
+          </div>
+
+          <div class="strategy-box">
+            <h4>Advanced: Event-Based Selling</h4>
+            <p>Sell options 1-2 days before major events when IV is at peak, then buy back post-event during IV crush. Requires quick execution and careful position sizing. Works best with weekly options on highly liquid instruments like Nifty and Bank Nifty.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer" style="background: #0f172a; text-align: center; padding: 40px 20px; border-top: 1px solid #334155;">
+      <p style="color: #64748b;">&copy; 2026 TheOptionTrader. Professional options analysis and education platform.</p>
+    </footer>
+
+    <script>
+      // Check if user is premium member
+      document.addEventListener('DOMContentLoaded', function() {
+        const isPremium = localStorage.getItem('isPremium') === 'true';
+        
+        if (isPremium) {
+          // Unlock premium content
+          const lockedSections = document.querySelectorAll('.locked-section');
+          lockedSections.forEach(section => {
+            const overlay = section.querySelector('.unlock-overlay');
+            const content = section.querySelector('.locked-content');
+            
+            if (overlay) overlay.remove();
+            if (content) content.classList.remove('locked-content');
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

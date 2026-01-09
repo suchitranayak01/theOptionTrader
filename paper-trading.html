@@ -1,0 +1,689 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Paper Trading - TheOptionTrader</title>
+    <link rel="stylesheet" href="style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+      .trading-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 20px;
+        background: #02101a;
+        min-height: 100vh;
+      }
+
+      .premium-check {
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        padding: 60px 20px;
+        text-align: center;
+        border-radius: 12px;
+        margin: 40px auto;
+        max-width: 600px;
+      }
+
+      .premium-check h2 {
+        color: white;
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .premium-check p {
+        color: #e6eef8;
+        font-size: 1.2rem;
+        margin-bottom: 2rem;
+      }
+
+      .upgrade-btn {
+        background: white;
+        color: #3b82f6;
+        padding: 16px 40px;
+        border: none;
+        border-radius: 8px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .upgrade-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255, 255, 255, 0.3);
+      }
+
+      .trading-header {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        padding: 30px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .trading-header h1 {
+        color: #e6eef8;
+        font-size: 2rem;
+        margin: 0;
+      }
+
+      .portfolio-balance {
+        text-align: right;
+      }
+
+      .portfolio-balance .label {
+        color: #94a3b8;
+        font-size: 0.9rem;
+      }
+
+      .portfolio-balance .amount {
+        color: #22c55e;
+        font-size: 2rem;
+        font-weight: 700;
+        font-family: 'Orbitron', monospace;
+      }
+
+      .tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #334155;
+        padding-bottom: 10px;
+      }
+
+      .tab {
+        background: rgba(59, 130, 246, 0.1);
+        border: 1px solid rgba(59, 130, 246, 0.3);
+        color: #94a3b8;
+        padding: 12px 30px;
+        border-radius: 8px 8px 0 0;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 600;
+      }
+
+      .tab.active {
+        background: #3b82f6;
+        color: white;
+        border-color: #3b82f6;
+      }
+
+      .tab:hover:not(.active) {
+        background: rgba(59, 130, 246, 0.2);
+        color: #e6eef8;
+      }
+
+      .tab-content {
+        display: none;
+      }
+
+      .tab-content.active {
+        display: block;
+      }
+
+      .trading-grid {
+        display: grid;
+        grid-template-columns: 1fr 400px;
+        gap: 20px;
+      }
+
+      .card {
+        background: rgba(59, 130, 246, 0.05);
+        border: 1px solid rgba(59, 130, 246, 0.2);
+        border-radius: 12px;
+        padding: 20px;
+      }
+
+      .card h3 {
+        color: #e6eef8;
+        margin-bottom: 1.5rem;
+        font-size: 1.5rem;
+      }
+
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
+
+      .form-group label {
+        display: block;
+        color: #94a3b8;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+      }
+
+      .form-group input, .form-group select {
+        width: 100%;
+        padding: 12px;
+        background: #0f172a;
+        border: 1px solid #334155;
+        border-radius: 8px;
+        color: #e6eef8;
+        font-size: 1rem;
+      }
+
+      .form-group input:focus, .form-group select:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      }
+
+      .button-group {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+      }
+
+      .btn {
+        flex: 1;
+        padding: 14px;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .btn-buy {
+        background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+        color: white;
+      }
+
+      .btn-buy:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+      }
+
+      .btn-sell {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        color: white;
+      }
+
+      .btn-sell:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+      }
+
+      .positions-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+      }
+
+      .positions-table th, .positions-table td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #334155;
+      }
+
+      .positions-table th {
+        color: #94a3b8;
+        font-weight: 600;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+      }
+
+      .positions-table td {
+        color: #e6eef8;
+        font-family: 'Orbitron', monospace;
+      }
+
+      .profit {
+        color: #22c55e;
+      }
+
+      .loss {
+        color: #ef4444;
+      }
+
+      .close-btn {
+        background: #3b82f6;
+        color: white;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.85rem;
+      }
+
+      .close-btn:hover {
+        background: #2563eb;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+        margin-bottom: 20px;
+      }
+
+      .stat-card {
+        background: rgba(59, 130, 246, 0.05);
+        border: 1px solid rgba(59, 130, 246, 0.2);
+        border-radius: 8px;
+        padding: 15px;
+        text-align: center;
+      }
+
+      .stat-card .label {
+        color: #94a3b8;
+        font-size: 0.85rem;
+        margin-bottom: 8px;
+      }
+
+      .stat-card .value {
+        color: #e6eef8;
+        font-size: 1.5rem;
+        font-weight: 700;
+        font-family: 'Orbitron', monospace;
+      }
+
+      @media (max-width: 1024px) {
+        .trading-grid {
+          grid-template-columns: 1fr;
+        }
+        
+        .stats-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="app-title">
+        <div class="brand">
+          <img class="brand-img" src="logo.png" alt="TheOptionTrader logo" />
+          <h1 class="logo">TheOptionTrader</h1>
+        </div>
+      </div>
+      <div class="header-actions">
+        <a class="btn ghost" href="index.html">Home</a>
+        <a class="btn ghost" href="Options360.html">Options 360</a>
+        <a class="btn ghost" href="login.html">Login</a>
+      </div>
+    </header>
+
+    <div class="trading-container" id="tradingApp">
+      <!-- Premium Gate -->
+      <div class="premium-check" id="premiumGate" style="display: none;">
+        <h2>🔒 Premium Feature</h2>
+        <p>Paper trading is available for premium members only. Practice risk-free trading with real-time market data!</p>
+        <button class="upgrade-btn" onclick="window.location.href='login.html'">Upgrade to Premium</button>
+      </div>
+
+      <!-- Trading Interface (Hidden by default) -->
+      <div id="tradingInterface" style="display: none;">
+        <div class="trading-header">
+          <div>
+            <h1>📊 Paper Trading Simulator</h1>
+            <p style="color: #94a3b8; margin: 5px 0 0 0;">Practice trading with virtual money</p>
+          </div>
+          <div class="portfolio-balance">
+            <div class="label">Portfolio Value</div>
+            <div class="amount" id="portfolioValue">₹5,00,000</div>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="label">Total P&L</div>
+            <div class="value profit" id="totalPnL">₹0</div>
+          </div>
+          <div class="stat-card">
+            <div class="label">Active Positions</div>
+            <div class="value" id="activePositions">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="label">Win Rate</div>
+            <div class="value" id="winRate">0%</div>
+          </div>
+        </div>
+
+        <div class="tabs">
+          <div class="tab active" data-tab="options">📈 Options Trading</div>
+          <div class="tab" data-tab="futures">⚡ Futures Trading</div>
+        </div>
+
+        <!-- Options Trading Tab -->
+        <div class="tab-content active" id="options">
+          <div class="trading-grid">
+            <div class="card">
+              <h3>Your Positions</h3>
+              <table class="positions-table">
+                <thead>
+                  <tr>
+                    <th>Symbol</th>
+                    <th>Type</th>
+                    <th>Strike</th>
+                    <th>Qty</th>
+                    <th>Entry</th>
+                    <th>LTP</th>
+                    <th>P&L</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="optionsPositions">
+                  <tr>
+                    <td colspan="8" style="text-align: center; color: #64748b;">No positions yet. Start trading!</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="card">
+              <h3>Place Order</h3>
+              <div class="form-group">
+                <label>Index/Stock</label>
+                <select id="optionSymbol">
+                  <option value="NIFTY">NIFTY</option>
+                  <option value="BANKNIFTY">BANK NIFTY</option>
+                  <option value="FINNIFTY">FIN NIFTY</option>
+                  <option value="SENSEX">SENSEX</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>Option Type</label>
+                <select id="optionType">
+                  <option value="CE">Call (CE)</option>
+                  <option value="PE">Put (PE)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>Strike Price</label>
+                <input type="number" id="strikePrice" placeholder="e.g., 23500" step="50" />
+              </div>
+
+              <div class="form-group">
+                <label>Quantity (Lots)</label>
+                <input type="number" id="optionQuantity" placeholder="1" min="1" value="1" />
+              </div>
+
+              <div class="form-group">
+                <label>Premium Price</label>
+                <input type="number" id="optionPrice" placeholder="e.g., 150.50" step="0.05" />
+              </div>
+
+              <div class="button-group">
+                <button class="btn btn-buy" onclick="placeOptionOrder('BUY')">Buy</button>
+                <button class="btn btn-sell" onclick="placeOptionOrder('SELL')">Sell</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Futures Trading Tab -->
+        <div class="tab-content" id="futures">
+          <div class="trading-grid">
+            <div class="card">
+              <h3>Your Positions</h3>
+              <table class="positions-table">
+                <thead>
+                  <tr>
+                    <th>Symbol</th>
+                    <th>Qty</th>
+                    <th>Entry</th>
+                    <th>LTP</th>
+                    <th>P&L</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="futuresPositions">
+                  <tr>
+                    <td colspan="6" style="text-align: center; color: #64748b;">No positions yet. Start trading!</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="card">
+              <h3>Place Order</h3>
+              <div class="form-group">
+                <label>Future Contract</label>
+                <select id="futureSymbol">
+                  <option value="NIFTY FUT">NIFTY FUTURE</option>
+                  <option value="BANKNIFTY FUT">BANK NIFTY FUTURE</option>
+                  <option value="FINNIFTY FUT">FIN NIFTY FUTURE</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>Quantity (Lots)</label>
+                <input type="number" id="futureQuantity" placeholder="1" min="1" value="1" />
+              </div>
+
+              <div class="form-group">
+                <label>Price</label>
+                <input type="number" id="futurePrice" placeholder="e.g., 23450.75" step="0.05" />
+              </div>
+
+              <div class="button-group">
+                <button class="btn btn-buy" onclick="placeFutureOrder('BUY')">Buy</button>
+                <button class="btn btn-sell" onclick="placeFutureOrder('SELL')">Sell</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer" style="background: #0f172a; text-align: center; padding: 40px 20px; border-top: 1px solid #334155;">
+      <p style="color: #64748b;">&copy; 2026 TheOptionTrader. Paper trading for educational purposes only.</p>
+    </footer>
+
+    <script>
+      // Check premium status
+      const isPremium = localStorage.getItem('isPremium') === 'true';
+      
+      if (isPremium) {
+        document.getElementById('premiumGate').style.display = 'none';
+        document.getElementById('tradingInterface').style.display = 'block';
+        initializePaperTrading();
+      } else {
+        document.getElementById('premiumGate').style.display = 'block';
+        document.getElementById('tradingInterface').style.display = 'none';
+      }
+
+      // Tab switching
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+          document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+          document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+          
+          this.classList.add('active');
+          document.getElementById(this.dataset.tab).classList.add('active');
+        });
+      });
+
+      // Initialize paper trading data
+      let portfolio = {
+        balance: 500000,
+        positions: [],
+        closedTrades: [],
+        totalPnL: 0
+      };
+
+      function initializePaperTrading() {
+        const savedPortfolio = localStorage.getItem('paperTradingPortfolio');
+        if (savedPortfolio) {
+          portfolio = JSON.parse(savedPortfolio);
+          updateUI();
+        }
+      }
+
+      function placeOptionOrder(action) {
+        const symbol = document.getElementById('optionSymbol').value;
+        const type = document.getElementById('optionType').value;
+        const strike = parseFloat(document.getElementById('strikePrice').value);
+        const quantity = parseInt(document.getElementById('optionQuantity').value);
+        const price = parseFloat(document.getElementById('optionPrice').value);
+
+        if (!strike || !quantity || !price) {
+          alert('Please fill all fields');
+          return;
+        }
+
+        const lotSize = symbol === 'NIFTY' ? 50 : symbol === 'BANKNIFTY' ? 25 : 40;
+        const totalQty = quantity * lotSize;
+        const totalValue = totalQty * price;
+
+        if (action === 'BUY' && totalValue > portfolio.balance) {
+          alert('Insufficient balance!');
+          return;
+        }
+
+        const position = {
+          id: Date.now(),
+          symbol: `${symbol} ${strike}${type}`,
+          type: type,
+          strike: strike,
+          quantity: totalQty,
+          entryPrice: price,
+          currentPrice: price,
+          action: action,
+          timestamp: new Date().toLocaleString()
+        };
+
+        portfolio.positions.push(position);
+        
+        if (action === 'BUY') {
+          portfolio.balance -= totalValue;
+        } else {
+          portfolio.balance += totalValue;
+        }
+
+        saveAndUpdate();
+        alert(`${action} order placed successfully!`);
+      }
+
+      function placeFutureOrder(action) {
+        const symbol = document.getElementById('futureSymbol').value;
+        const quantity = parseInt(document.getElementById('futureQuantity').value);
+        const price = parseFloat(document.getElementById('futurePrice').value);
+
+        if (!quantity || !price) {
+          alert('Please fill all fields');
+          return;
+        }
+
+        const lotSize = symbol.includes('NIFTY') ? 50 : 25;
+        const totalQty = quantity * lotSize;
+        const totalValue = totalQty * price;
+
+        const position = {
+          id: Date.now(),
+          symbol: symbol,
+          quantity: totalQty,
+          entryPrice: price,
+          currentPrice: price,
+          action: action,
+          timestamp: new Date().toLocaleString()
+        };
+
+        portfolio.positions.push(position);
+        saveAndUpdate();
+        alert(`${action} order placed successfully!`);
+      }
+
+      function closePosition(positionId) {
+        const position = portfolio.positions.find(p => p.id === positionId);
+        if (!position) return;
+
+        const pnl = calculatePnL(position);
+        portfolio.totalPnL += pnl;
+        portfolio.balance += (position.action === 'BUY' ? position.currentPrice : -position.currentPrice) * position.quantity;
+        
+        portfolio.closedTrades.push({...position, closedAt: new Date().toLocaleString(), pnl: pnl});
+        portfolio.positions = portfolio.positions.filter(p => p.id !== positionId);
+        
+        saveAndUpdate();
+      }
+
+      function calculatePnL(position) {
+        const diff = position.currentPrice - position.entryPrice;
+        return position.action === 'BUY' ? diff * position.quantity : -diff * position.quantity;
+      }
+
+      function updateUI() {
+        document.getElementById('portfolioValue').textContent = `₹${portfolio.balance.toLocaleString()}`;
+        document.getElementById('totalPnL').textContent = `₹${portfolio.totalPnL.toLocaleString()}`;
+        document.getElementById('totalPnL').className = portfolio.totalPnL >= 0 ? 'value profit' : 'value loss';
+        document.getElementById('activePositions').textContent = portfolio.positions.length;
+
+        const winRate = portfolio.closedTrades.length > 0 
+          ? ((portfolio.closedTrades.filter(t => t.pnl > 0).length / portfolio.closedTrades.length) * 100).toFixed(1)
+          : 0;
+        document.getElementById('winRate').textContent = `${winRate}%`;
+
+        // Update positions tables
+        updatePositionsTable();
+      }
+
+      function updatePositionsTable() {
+        const optionsTable = document.getElementById('optionsPositions');
+        const futuresTable = document.getElementById('futuresPositions');
+
+        const optionPositions = portfolio.positions.filter(p => p.type);
+        const futurePositions = portfolio.positions.filter(p => !p.type);
+
+        if (optionPositions.length === 0) {
+          optionsTable.innerHTML = '<tr><td colspan="8" style="text-align: center; color: #64748b;">No positions yet. Start trading!</td></tr>';
+        } else {
+          optionsTable.innerHTML = optionPositions.map(p => {
+            const pnl = calculatePnL(p);
+            return `
+              <tr>
+                <td>${p.symbol}</td>
+                <td>${p.type}</td>
+                <td>${p.strike}</td>
+                <td>${p.quantity}</td>
+                <td>₹${p.entryPrice}</td>
+                <td>₹${p.currentPrice}</td>
+                <td class="${pnl >= 0 ? 'profit' : 'loss'}">₹${pnl.toFixed(2)}</td>
+                <td><button class="close-btn" onclick="closePosition(${p.id})">Close</button></td>
+              </tr>
+            `;
+          }).join('');
+        }
+
+        if (futurePositions.length === 0) {
+          futuresTable.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #64748b;">No positions yet. Start trading!</td></tr>';
+        } else {
+          futuresTable.innerHTML = futurePositions.map(p => {
+            const pnl = calculatePnL(p);
+            return `
+              <tr>
+                <td>${p.symbol}</td>
+                <td>${p.quantity}</td>
+                <td>₹${p.entryPrice}</td>
+                <td>₹${p.currentPrice}</td>
+                <td class="${pnl >= 0 ? 'profit' : 'loss'}">₹${pnl.toFixed(2)}</td>
+                <td><button class="close-btn" onclick="closePosition(${p.id})">Close</button></td>
+              </tr>
+            `;
+          }).join('');
+        }
+      }
+
+      function saveAndUpdate() {
+        localStorage.setItem('paperTradingPortfolio', JSON.stringify(portfolio));
+        updateUI();
+      }
+
+      // Simulate price changes (for demo)
+      if (isPremium) {
+        setInterval(() => {
+          portfolio.positions.forEach(p => {
+            const change = (Math.random() - 0.5) * 10;
+            p.currentPrice = Math.max(0.05, p.currentPrice + change);
+          });
+          updateUI();
+        }, 5000);
+      }
+    </script>
+  </body>
+</html>

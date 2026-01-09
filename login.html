@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Login - TheOptionTrader</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+      body { 
+        font-family: 'Poppins', sans-serif; 
+        background: linear-gradient(135deg, #02101a 0%, #0f172a 100%);
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        min-height: 100vh; 
+        margin: 0;
+        padding: 20px;
+      }
+      
+      .container {
+        background: #fff;
+        padding: 40px;
+        border-radius: 16px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        width: 100%;
+        max-width: 440px;
+      }
+      
+      .header {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+      
+      .header h2 {
+        margin: 0 0 8px 0;
+        color: #1e293b;
+        font-size: 28px;
+      }
+      
+      .header p {
+        margin: 0;
+        color: #64748b;
+        font-size: 14px;
+      }
+      
+      .tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 30px;
+        background: #f1f5f9;
+        padding: 6px;
+        border-radius: 10px;
+      }
+      
+      .tab {
+        flex: 1;
+        padding: 12px;
+        border: none;
+        background: transparent;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 15px;
+        color: #64748b;
+        transition: all 0.3s ease;
+      }
+      
+      .tab.active {
+        background: white;
+        color: #3b82f6;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+      
+      .form-container {
+        display: none;
+      }
+      
+      .form-container.active {
+        display: block;
+      }
+      
+      .form-group {
+        margin-bottom: 20px;
+      }
+      
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #334155;
+      }
+      
+      .form-group input, .form-group select {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 15px;
+        transition: all 0.3s ease;
+        box-sizing: border-box;
+      }
+      
+      .form-group input:focus, .form-group select:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      }
+      
+      .checkbox-group {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+      
+      .checkbox-group input[type="checkbox"] {
+        margin-top: 4px;
+        cursor: pointer;
+      }
+      
+      .checkbox-group label {
+        font-size: 13px;
+        color: #64748b;
+        cursor: pointer;
+      }
+      
+      .submit-btn {
+        width: 100%;
+        padding: 14px;
+        border: none;
+        border-radius: 8px;
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        color: white;
+        font-weight: 600;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      
+      .submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+      }
+      
+      .divider {
+        display: flex;
+        align-items: center;
+        margin: 24px 0;
+        color: #94a3b8;
+        font-size: 13px;
+      }
+      
+      .divider::before,
+      .divider::after {
+        content: '';
+        flex: 1;
+        border-bottom: 1px solid #e2e8f0;
+      }
+      
+      .divider span {
+        padding: 0 12px;
+      }
+      
+      .promo-card {
+        background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+        padding: 20px;
+        border-radius: 12px;
+        margin-top: 20px;
+        text-align: center;
+        color: white;
+      }
+      
+      .promo-card .icon {
+        font-size: 32px;
+        margin-bottom: 8px;
+      }
+      
+      .promo-card h3 {
+        margin: 0 0 8px 0;
+        font-size: 18px;
+      }
+      
+      .promo-card p {
+        margin: 0;
+        font-size: 13px;
+        opacity: 0.95;
+      }
+      
+      .angel-btn {
+        width: 100%;
+        padding: 14px;
+        border: 2px solid #3b82f6;
+        border-radius: 8px;
+        background: white;
+        color: #3b82f6;
+        font-weight: 600;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 15px;
+      }
+      
+      .angel-btn:hover {
+        background: #3b82f6;
+        color: white;
+      }
+      
+      .back-home {
+        text-align: center;
+        margin-top: 20px;
+      }
+      
+      .back-home a {
+        color: #3b82f6;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+      }
+      
+      .back-home a:hover {
+        text-decoration: underline;
+      }
+      
+      .forgot-password {
+        text-align: right;
+        margin-top: -10px;
+        margin-bottom: 20px;
+      }
+      
+      .forgot-password a {
+        color: #3b82f6;
+        text-decoration: none;
+        font-size: 13px;
+      }
+      
+      .forgot-password a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h2>Welcome to TheOptionTrader</h2>
+        <p>Your gateway to professional options trading</p>
+      </div>
+      
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab('login')">Sign In</button>
+        <button class="tab" onclick="switchTab('signup')">Create Account</button>
+      </div>
+      
+      <!-- Login Form -->
+      <div class="form-container active" id="loginForm">
+        <form onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label for="login-email">Email Address</label>
+            <input id="login-email" type="email" placeholder="you@example.com" required />
+          </div>
+          
+          <div class="form-group">
+            <label for="login-password">Password</label>
+            <input id="login-password" type="password" placeholder="Enter your password" required />
+          </div>
+          
+          <div class="forgot-password">
+            <a href="#" onclick="alert('Password reset feature coming soon!'); return false;">Forgot password?</a>
+          </div>
+          
+          <button type="submit" class="submit-btn">Sign In</button>
+        </form>
+        
+        <div class="back-home">
+          <a href="index.html">← Back to Home</a>
+        </div>
+      </div>
+      
+      <!-- Signup Form -->
+      <div class="form-container" id="signupForm">
+        <form onsubmit="handleSignup(event)">
+          <div class="form-group">
+            <label for="signup-name">Full Name</label>
+            <input id="signup-name" type="text" placeholder="John Doe" required />
+          </div>
+          
+          <div class="form-group">
+            <label for="signup-email">Email Address</label>
+            <input id="signup-email" type="email" placeholder="you@example.com" required />
+          </div>
+          
+          <div class="form-group">
+            <label for="signup-phone">Phone Number</label>
+            <input id="signup-phone" type="tel" placeholder="+91 XXXXX XXXXX" required />
+          </div>
+          
+          <div class="form-group">
+            <label for="signup-password">Password</label>
+            <input id="signup-password" type="password" placeholder="Minimum 8 characters" required minlength="8" />
+          </div>
+          
+          <div class="form-group">
+            <label for="signup-confirm-password">Confirm Password</label>
+            <input id="signup-confirm-password" type="password" placeholder="Re-enter password" required />
+          </div>
+          
+          <div class="checkbox-group">
+            <input type="checkbox" id="angel-account" />
+            <label for="angel-account">I want to open an Angel One trading account (Get 1 month FREE premium subscription!)</label>
+          </div>
+          
+          <div class="checkbox-group">
+            <input type="checkbox" id="terms" required />
+            <label for="terms">I agree to the Terms of Service and Privacy Policy</label>
+          </div>
+          
+          <button type="submit" class="submit-btn">Create Account</button>
+        </form>
+        
+        <div class="divider">
+          <span>Special Offer</span>
+        </div>
+        
+        <div class="promo-card">
+          <div class="icon">🎁</div>
+          <h3>Open Angel One Account & Get 1 Month FREE!</h3>
+          <p>Open a trading account with Angel One through us and unlock premium features for 1 month absolutely free</p>
+        </div>
+        
+        <button class="angel-btn" onclick="openAngelAccount()">
+          Open Angel One Account Now
+        </button>
+        
+        <div class="back-home">
+          <a href="index.html">← Back to Home</a>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function switchTab(tab) {
+        // Update tabs
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(t => t.classList.remove('active'));
+        event.target.classList.add('active');
+        
+        // Update forms
+        const forms = document.querySelectorAll('.form-container');
+        forms.forEach(f => f.classList.remove('active'));
+        
+        if (tab === 'login') {
+          document.getElementById('loginForm').classList.add('active');
+        } else {
+          document.getElementById('signupForm').classList.add('active');
+        }
+      }
+      
+      function handleLogin(e) {
+        e.preventDefault();
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
+        
+        // Simple validation
+        localStorage.setItem('user', email);
+        localStorage.setItem('isPremium', 'false');
+        
+        alert('Login successful! Redirecting to dashboard...');
+        window.location.href = 'Options360.html';
+      }
+      
+      function handleSignup(e) {
+        e.preventDefault();
+        
+        const name = document.getElementById('signup-name').value;
+        const email = document.getElementById('signup-email').value;
+        const phone = document.getElementById('signup-phone').value;
+        const password = document.getElementById('signup-password').value;
+        const confirmPassword = document.getElementById('signup-confirm-password').value;
+        const angelAccount = document.getElementById('angel-account').checked;
+        
+        // Validate password match
+        if (password !== confirmPassword) {
+          alert('Passwords do not match!');
+          return;
+        }
+        
+        // Save user data
+        localStorage.setItem('user', email);
+        localStorage.setItem('userName', name);
+        localStorage.setItem('userPhone', phone);
+        
+        // If Angel account is selected, give 1 month premium
+        if (angelAccount) {
+          localStorage.setItem('isPremium', 'true');
+          const expiryDate = new Date();
+          expiryDate.setMonth(expiryDate.getMonth() + 1);
+          localStorage.setItem('premiumExpiry', expiryDate.toISOString());
+          
+          alert('🎉 Account created successfully! You have received 1 month FREE premium subscription with Angel One account. Redirecting...');
+        } else {
+          localStorage.setItem('isPremium', 'false');
+          alert('Account created successfully! Welcome to TheOptionTrader.');
+        }
+        
+        window.location.href = 'Options360.html';
+      }
+      
+      function openAngelAccount() {
+        // In production, this would redirect to Angel One partner link
+        const angelChecked = document.getElementById('angel-account').checked;
+        if (!angelChecked) {
+          document.getElementById('angel-account').checked = true;
+        }
+        alert('Angel One account opening will be integrated. For now, please check the checkbox and complete signup to get 1 month free premium!');
+      }
+    </script>
+  </body>
+</html>

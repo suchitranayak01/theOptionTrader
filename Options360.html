@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TheOptionTrader - Dashboard</title>
+    <link rel="stylesheet" href="style.css" />
+    <!-- Poppins + Inter + Orbitron fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@300;400;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- TradingView Widget Script -->
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+    <script src="alerts.js"></script>
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="app-title">
+        <div class="brand">
+          <img class="brand-img" src="logo.png" alt="TheOptionTrader logo" />
+          <h1 class="logo" aria-label="TheOptionTrader">
+            <span>T</span><span>h</span><span>e</span><span>O</span><span>p</span><span>t</span><span>i</span><span>o</span><span>n</span><span>T</span><span>r</span><span>a</span><span>d</span><span>e</span><span>r</span>
+          </h1>
+        </div>
+        <p class="subtitle">ATM Call + ATM Put (TradingView + Live Data)</p>
+      </div>
+      <div class="header-actions">
+        <a class="btn ghost" href="index.html">Home</a>
+        <div class="live-badge" id="liveBadge" title="Live status">
+          <span class="dot" id="liveDot"></span>
+          <span class="live-text" id="liveText">Offline</span>
+        </div>
+        <a class="btn ghost" href="login.html">Login</a>
+      </div>
+    </header>
+
+    <!-- Live Ticker Section -->
+    <section class="live-ticker">
+      <div class="ticker-container">
+        <div class="ticker-status" id="ticker-status">Demo Mode</div>
+        <div class="ticker-item" id="nifty-ticker">
+          <div class="ticker-name">NIFTY</div>
+          <div class="ticker-value" id="nifty-value">--</div>
+          <div class="ticker-change" id="nifty-change">--</div>
+        </div>
+        <div class="ticker-item" id="sensex-ticker">
+          <div class="ticker-name">SENSEX</div>
+          <div class="ticker-value" id="sensex-value">--</div>
+          <div class="ticker-change" id="sensex-change">--</div>
+        </div>
+        <div class="ticker-item" id="banknifty-ticker">
+          <div class="ticker-name">BANK NIFTY</div>
+          <div class="ticker-value" id="banknifty-value">--</div>
+          <div class="ticker-change" id="banknifty-change">--</div>
+        </div>
+      </div>
+    </section>
+
+    <main class="app-grid">
+      <aside class="sidebar card">
+        <h4>Controls</h4>
+        <div class="controls">
+          <label>
+            <span>Market:</span>
+            <select id="marketType">
+              <option value="equity">Equity</option>
+              <option value="mcx">MCX</option>
+            </select>
+          </label>
+
+          <label>
+            <span>Index:</span>
+            <select id="indexSelect">
+              <option value="nifty">Nifty</option>
+              <option value="sensex">Sensex</option>
+            </select>
+          </label>
+
+          <label>
+            <span>Expiry Date:</span>
+            <select id="expiryDate">
+              <option value="2025-01-02">2025-01-02</option>
+              <option value="2025-01-16">2025-01-16</option>
+              <option value="2026-01-08">2026-01-08</option>
+              <option value="2026-01-15">2026-01-15</option>
+            </select>
+          </label>
+
+          <label>
+            <span>Metric:</span>
+            <select id="metricSelect">
+              <option value="iv">IV</option>
+              <option value="pcr">PCR</option>
+            </select>
+          </label>
+
+          <label>
+            <span>API Key:</span>
+            <input id="apiKey" placeholder="Alpha Vantage API key" />
+          </label>
+
+          <label>
+            <span>Symbol:</span>
+            <input id="symbol" placeholder="symbol" />
+          </label>
+
+          <label>
+            <input type="checkbox" id="useLive" /> Live
+          </label>
+
+          <label>
+            <span>Auto-refresh (s):</span>
+            <input id="liveInterval" type="number" min="5" max="600" value="60" />
+          </label>
+
+          <div class="form-actions">
+            <button id="refreshBtn">Refresh</button>
+          </div>
+        </div>
+
+        <!-- Alert Settings Card -->
+        <div class="card" style="margin-top: 20px; background: rgba(234, 179, 8, 0.05); border-color: rgba(234, 179, 8, 0.3);">
+          <h4 style="color: #eab308; margin-bottom: 1rem;">🔔 Alert Settings</h4>
+          
+          <label>
+            <input type="checkbox" id="enableAlerts" checked /> Enable Alerts
+          </label>
+
+          <h5 style="color: #94a3b8; font-size: 0.9rem; margin: 1rem 0 0.5rem 0;">IV Alerts (when IV > threshold)</h5>
+          <label>
+            <input type="checkbox" id="ivAlertEnabled" checked /> IV Alert
+          </label>
+          <label>
+            <span>IV Threshold (%):</span>
+            <input id="ivThreshold" type="number" value="20" min="0" max="100" />
+          </label>
+
+          <h5 style="color: #94a3b8; font-size: 0.9rem; margin: 1rem 0 0.5rem 0;">PCR Shift Alerts</h5>
+          <label>
+            <input type="checkbox" id="pcrAlertEnabled" checked /> PCR Alert
+          </label>
+          <label>
+            <span>Bullish PCR (>):</span>
+            <input id="pcrBullish" type="number" value="1.0" step="0.1" />
+          </label>
+          <label>
+            <span>Bearish PCR (<):</span>
+            <input id="pcrBearish" type="number" value="1.0" step="0.1" />
+          </label>
+
+          <h5 style="color: #94a3b8; font-size: 0.9rem; margin: 1rem 0 0.5rem 0;">Straddle Premium Jump Alerts</h5>
+          <label>
+            <input type="checkbox" id="straddleAlertEnabled" checked /> Straddle Alert
+          </label>
+          <label>
+            <input type="checkbox" id="alert10Enabled" checked /> 10% Jump Alert
+          </label>
+          <label>
+            <input type="checkbox" id="alert20Enabled" checked /> 20% Jump Alert
+          </label>
+          <label>
+            <input type="checkbox" id="alert30Enabled" checked /> 30% Jump Alert
+          </label>
+
+          <h5 style="color: #94a3b8; font-size: 0.9rem; margin: 1rem 0 0.5rem 0;">Notification Channels</h5>
+          <label>
+            <input type="checkbox" id="soundAlerts" checked /> Sound
+          </label>
+          <label>
+            <input type="checkbox" id="whatsappAlerts" /> WhatsApp
+          </label>
+          <label>
+            <input type="checkbox" id="telegramAlerts" /> Telegram
+          </label>
+          <label>
+            <input type="checkbox" id="instaAlerts" /> Instagram
+          </label>
+
+          <div style="margin-top: 1rem; padding: 10px; background: rgba(59, 130, 246, 0.1); border-radius: 6px; font-size: 0.85rem; color: #94a3b8;">
+            💡 WhatsApp, Telegram & Instagram alerts require setup in settings
+          </div>
+        </div>
+
+        <!-- Live Chat Card -->
+        <div class="card" style="margin-top: 20px; background: rgba(34, 197, 94, 0.05); border-color: rgba(34, 197, 94, 0.3);">
+          <h4 style="color: #22c55e; margin-bottom: 1rem;">💬 Live Discussion</h4>
+          <div id="chatBox" style="background: #0f172a; border-radius: 8px; padding: 10px; height: 200px; overflow-y: auto; margin-bottom: 10px;">
+            <div style="color: #64748b; text-align: center; padding: 20px;">
+              Chat will be available in live mode
+            </div>
+          </div>
+          <div style="display: flex; gap: 10px;">
+            <input type="text" id="chatInput" placeholder="Type your message..." style="flex: 1; padding: 8px; background: #0f172a; border: 1px solid #334155; border-radius: 6px; color: #e6eef8;" />
+            <button onclick="sendChatMessage()" style="background: #22c55e; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;">Send</button>
+          </div>
+        </div>
+      </aside>
+
+      <section class="content">
+        <div class="card metrics-row">
+          <div class="metric">
+            <div class="metric-value" id="metric-iv">IV: --</div>
+            <div class="metric-label">Straddle IV</div>
+          </div>
+          <div class="metric">
+            <div class="metric-value" id="metric-pcr">PCR: --</div>
+            <div class="metric-label">PCR</div>
+          </div>
+          <div class="metric">
+            <div class="metric-value" id="metric-price">Price: --</div>
+            <div class="metric-label">Last Price</div>
+          </div>
+        </div>
+        <div class="card metrics-row">
+          <div class="metric">
+            <div class="metric-value" id="metric-call">Call: --</div>
+            <div class="metric-label">Live Call Premium</div>
+          </div>
+          <div class="metric">
+            <div class="metric-value" id="metric-put">Put: --</div>
+            <div class="metric-label">Live Put Premium</div>
+          </div>
+          <div class="metric">
+            <div class="metric-value" id="metric-straddle">Straddle: --</div>
+            <div class="metric-label">Straddle Price</div>
+          </div>
+          <div class="metric">
+            <div class="metric-value" id="metric-updated">Updated: --</div>
+            <div class="metric-label">Last Updated</div>
+          </div>
+        </div>
+
+        <div class="card chart-card">
+          <div id="status" class="status"></div>
+          <div class="chart-tabs">
+            <button id="chartTabBtn" class="tab-btn active">Price Chart</button>
+            <button id="tvTabBtn" class="tab-btn">TradingView</button>
+          </div>
+          <div id="priceChartContainer">
+            <canvas id="straddleChart" aria-label="Straddle chart" role="img"></canvas>
+          </div>
+          <div id="tradingviewContainer" style="display: none;">
+            <div id="tradingview-widget" style="height: 400px;"></div>
+          </div>
+        </div>
+
+        <div class="card account-card">
+          <h4>Account Options</h4>
+          <p>Open or manage your trading account to access live order placement and premium features.</p>
+          <div class="account-actions">
+            <a class="btn" href="login.html">Open Account</a>
+            <a class="btn ghost" href="#">Learn More</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <small>Demo only. Not trading advice.</small>
+      <br />
+      <small>Developer: TheOptionTrader</small>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
+

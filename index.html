@@ -1,0 +1,600 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TheOptionTrader - Home</title>
+    <link rel="stylesheet" href="style.css" />
+    <!-- Poppins + Inter + Orbitron fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@300;400;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+      .hero {
+        text-align: center;
+        padding: 80px 20px;
+        background: linear-gradient(135deg, #02101a 0%, #0f172a 100%);
+        color: #e6eef8;
+        min-height: 60vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .hero h1 {
+        font-size: 3.5rem;
+        margin-bottom: 1rem;
+        font-weight: 700;
+        color: #e6eef8;
+      }
+
+      .hero p {
+        font-size: 1.3rem;
+        margin-bottom: 2rem;
+        color: #94a3b8;
+        max-width: 600px;
+        line-height: 1.6;
+      }
+
+      .cta-button {
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        color: white;
+        padding: 16px 32px;
+        border: none;
+        border-radius: 8px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+      }
+
+      .cta-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+      }
+
+      .features {
+        padding: 60px 20px;
+        background: #02101a;
+        color: #e6eef8;
+      }
+
+      .features h2 {
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 3rem;
+        color: #e6eef8;
+      }
+
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .feature-card {
+        background: rgba(59, 130, 246, 0.05);
+        border: 1px solid rgba(59, 130, 246, 0.2);
+        border-radius: 12px;
+        padding: 2rem;
+        text-align: center;
+        transition: all 0.3s ease;
+      }
+
+      .feature-card:hover {
+        transform: translateY(-5px);
+        border-color: #3b82f6;
+        box-shadow: 0 10px 30px rgba(59, 130, 246, 0.1);
+      }
+
+      .feature-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        display: block;
+      }
+
+      .feature-card h3 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        color: #e6eef8;
+      }
+
+      .feature-card p {
+        color: #94a3b8;
+        line-height: 1.6;
+      }
+
+      .footer {
+        text-align: center;
+        padding: 40px 20px;
+        background: #0f172a;
+        color: #64748b;
+        border-top: 1px solid #334155;
+      }
+
+      /* Header Tickers */
+      .header-ticker-change.positive {
+        color: #34d399;
+        background: rgba(52, 211, 153, 0.15);
+      }
+
+      .header-ticker-change.negative {
+        color: #ef4444;
+        background: rgba(239, 68, 68, 0.15);
+      }
+
+      .header-ticker-change.neutral {
+        color: #94a3b8;
+        background: rgba(148, 163, 184, 0.15);
+      }
+
+      /* Tools Section */
+      .tools-section {
+        padding: 60px 20px;
+        background: #0f172a;
+      }
+
+      .tools-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        gap: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .tool-card {
+        background: rgba(59, 130, 246, 0.05);
+        border: 1px solid rgba(59, 130, 246, 0.2);
+        border-radius: 12px;
+        padding: 2rem;
+        text-align: center;
+        transition: all 0.3s ease;
+      }
+
+      .tool-card:hover {
+        transform: translateY(-5px);
+        border-color: #3b82f6;
+        box-shadow: 0 10px 30px rgba(59, 130, 246, 0.1);
+      }
+
+      .tool-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+      }
+
+      .tool-card h3 {
+        color: #e6eef8;
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .tool-card p {
+        color: #94a3b8;
+        margin-bottom: 1.5rem;
+        line-height: 1.6;
+      }
+
+      .search-box {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .search-box input {
+        flex: 1;
+        padding: 0.75rem;
+        border: 1px solid #334155;
+        border-radius: 6px;
+        background: #02101a;
+        color: #e6eef8;
+        font-size: 1rem;
+      }
+
+      .search-box input:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+      }
+
+      .search-btn {
+        background: #3b82f6;
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 6px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+
+      .search-btn:hover {
+        background: #2563eb;
+      }
+
+      .search-results {
+        margin-top: 1rem;
+        text-align: left;
+      }
+
+      .search-result-item {
+        background: rgba(59, 130, 246, 0.05);
+        border: 1px solid rgba(59, 130, 246, 0.2);
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 0.5rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .search-result-item:hover {
+        background: rgba(59, 130, 246, 0.1);
+        border-color: #3b82f6;
+      }
+
+      .option-chain-options {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .option-btn {
+        background: #3b82f6;
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 6px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        flex: 1;
+        min-width: 120px;
+      }
+
+      .option-btn:hover {
+        background: #2563eb;
+        transform: translateY(-1px);
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .header-tickers {
+          display: none; /* Hide tickers on mobile for cleaner look */
+        }
+
+        .tools-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .search-box {
+          flex-direction: column;
+        }
+
+        .option-chain-options {
+          flex-direction: column;
+        }
+
+        .option-btn {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header style="background: #02101a; border-bottom: 1px solid #334155;">
+      <!-- Main Header -->
+      <div style="padding: 20px 40px; max-width: 1400px; margin: 0 auto;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <!-- Logo on the left -->
+          <div class="brand" style="display: flex; align-items: center; gap: 12px;">
+            <img class="brand-img" src="logo.png" alt="TheOptionTrader logo" style="height: 45px;" />
+            <h1 class="logo" style="font-size: 28px; margin: 0; color: #e6eef8; letter-spacing: -0.5px;">TheOptionTrader</h1>
+          </div>
+
+          <!-- Clean Navigation -->
+          <nav style="display: flex; align-items: center; gap: 32px; font-size: 15px;">
+            <a href="Options360.html" style="color: #94a3b8; text-decoration: none; transition: color 0.3s; font-weight: 500;" onmouseover="this.style.color='#e6eef8'" onmouseout="this.style.color='#94a3b8'">Platform</a>
+            <a href="learn-options.html" style="color: #94a3b8; text-decoration: none; transition: color 0.3s; font-weight: 500;" onmouseover="this.style.color='#e6eef8'" onmouseout="this.style.color='#94a3b8'">Learn</a>
+            <a href="paper-trading.html" style="color: #94a3b8; text-decoration: none; transition: color 0.3s; font-weight: 500;" onmouseover="this.style.color='#e6eef8'" onmouseout="this.style.color='#94a3b8'">Paper Trade</a>
+            <a href="trend-finder.html" style="color: #94a3b8; text-decoration: none; transition: color 0.3s; font-weight: 500;" onmouseover="this.style.color='#e6eef8'" onmouseout="this.style.color='#94a3b8'">Tools</a>
+            <a href="who-we-are.html" style="color: #94a3b8; text-decoration: none; transition: color 0.3s; font-weight: 500;" onmouseover="this.style.color='#e6eef8'" onmouseout="this.style.color='#94a3b8'">About</a>
+            <a href="login.html" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; padding: 10px 24px; border-radius: 6px; text-decoration: none; font-weight: 600; transition: all 0.3s;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">Login</a>
+        header nav {
+          display: none !important;
+      </div>
+
+      <!-- Live Tickers Row -->
+      <div style="background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(10px); border-top: 1px solid rgba(51, 65, 85, 0.5); padding: 12px 40px;">
+        <div style="max-width: 1400px; margin: 0 auto; display: flex; justify-content: center; gap: 60px;">
+          <div class="header-ticker" id="home-nifty" style="display: flex; align-items: center; gap: 12px;">
+            <div class="header-ticker-symbol" style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;">NIFTY</div>
+            <div class="header-ticker-price" id="home-nifty-price" style="font-size: 16px; font-weight: 700; color: #e6eef8; font-family: 'Orbitron', monospace;">--</div>
+            <div class="header-ticker-change" id="home-nifty-change" style="font-size: 12px; font-weight: 600; padding: 3px 8px; border-radius: 4px;">--</div>
+          </div>
+          <div class="header-ticker" id="home-sensex" style="display: flex; align-items: center; gap: 12px;">
+            <div class="header-ticker-symbol" style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;">SENSEX</div>
+            <div class="header-ticker-price" id="home-sensex-price" style="font-size: 16px; font-weight: 700; color: #e6eef8; font-family: 'Orbitron', monospace;">--</div>
+            <div class="header-ticker-change" id="home-sensex-change" style="font-size: 12px; font-weight: 600; padding: 3px 8px; border-radius: 4px;">--</div>
+          </div>
+          <div class="header-ticker" id="home-banknifty" style="display: flex; align-items: center; gap: 12px;">
+            <div class="header-ticker-symbol" style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;">BANK NIFTY</div>
+            <div class="header-ticker-price" id="home-banknifty-price" style="font-size: 16px; font-weight: 700; color: #e6eef8; font-family: 'Orbitron', monospace;">--</div>
+            <div class="header-ticker-change" id="home-banknifty-change" style="font-size: 12px; font-weight: 600; padding: 3px 8px; border-radius: 4px;">--</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="hero">
+      <h1>TheOptionTrader</h1>
+      <p>Professional options analysis platform with live TradingView integration. Track ATM straddle data, implied volatility, PCR ratios, and more with real-time market insights.</p>
+      <a href="dashboard.html" class="cta-button">Access Dashboard</a>
+    </section>
+
+    <!-- Search and Tools Section -->
+    <section class="tools-section">
+      <div class="container">
+        <div class="tools-grid">
+          <!-- Stock Search -->
+          <div class="tool-card">
+            <div class="tool-icon">🔍</div>
+            <h3>Stock Search</h3>
+            <p>Search and analyze any stock with detailed information and charts.</p>
+            <div class="search-box">
+              <input type="text" id="stock-search" placeholder="Enter stock symbol (e.g., RELIANCE, TCS, HDFC)" />
+              <button id="search-btn" class="search-btn">Search</button>
+            </div>
+            <div id="search-results" class="search-results"></div>
+          </div>
+
+          <!-- Option Chain -->
+          <div class="tool-card">
+            <div class="tool-icon">📋</div>
+            <h3>Option Chain</h3>
+            <p>View detailed option chains for Nifty, Bank Nifty, and other indices.</p>
+            <div class="option-chain-options">
+              <button class="option-btn" data-symbol="^NSEI" data-name="Nifty 50">Nifty 50</button>
+              <button class="option-btn" data-symbol="^NSEBANK" data-name="Bank Nifty">Bank Nifty</button>
+              <button class="option-btn" data-symbol="^NSEI" data-name="Custom">Custom Symbol</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="features">
+      <h2>Key Features</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <span class="feature-icon">📊</span>
+          <h3>Live Market Data</h3>
+          <p>Real-time options data from Yahoo Finance with TradingView chart integration for comprehensive market analysis.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">📈</span>
+          <h3>TradingView Charts</h3>
+          <p>Professional-grade interactive charts powered by TradingView, featuring advanced technical analysis tools.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">⚡</span>
+          <h3>Auto-Refresh</h3>
+          <p>Automatic data updates every minute to keep you informed with the latest market movements and volatility changes.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">🎯</span>
+          <h3>ATM Straddle Analysis</h3>
+          <p>Focus on at-the-money options with detailed IV, PCR, and premium analysis for informed trading decisions.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">📱</span>
+          <h3>Responsive Design</h3>
+          <p>Optimized for all devices - desktop, tablet, and mobile. Access your data anywhere, anytime.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">🔐</span>
+          <h3>Secure Access</h3>
+          <p>Protected platform with login functionality for personalized market analysis and trading insights.</p>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>&copy; 2026 Options360. Professional options analysis platform.</p>
+    </footer>
+
+    <script>
+      // Homepage functionality
+      document.addEventListener('DOMContentLoaded', function() {
+        // Initialize homepage tickers
+        initializeHomepageTickers();
+
+        // Initialize search functionality
+        initializeSearch();
+
+        // Initialize option chain buttons
+        initializeOptionChain();
+      });
+
+      // Live tickers for homepage
+      let homeTickerInterval = null;
+
+      function initializeHomepageTickers() {
+        updateHomepageTickers();
+        homeTickerInterval = setInterval(updateHomepageTickers, 30000); // Update every 30 seconds
+      }
+
+      async function updateHomepageTickers() {
+        try {
+          await Promise.all([
+            updateHomeTicker('^NSEI', 'home-nifty'),
+            updateHomeTicker('^BSESN', 'home-sensex'),
+            updateHomeTicker('^NSEBANK', 'home-banknifty')
+          ]);
+        } catch (error) {
+          console.error('Error updating homepage tickers:', error);
+          // Fallback to demo data
+          updateDemoHomepageTickers();
+        }
+      }
+
+      async function updateHomeTicker(symbol, elementId) {
+        try {
+          const response = await fetch(`https://query1.finance.yahoo.com/v7/finance/quote?symbols=${encodeURIComponent(symbol)}`);
+          const data = await response.json();
+
+          if (data && data.quoteResponse && data.quoteResponse.result && data.quoteResponse.result[0]) {
+            const quote = data.quoteResponse.result[0];
+            const currentPrice = quote.regularMarketPrice;
+            const change = quote.regularMarketChange;
+            const changePercent = quote.regularMarketChangePercent;
+
+            const priceElement = document.getElementById(`${elementId}-price`);
+            const changeElement = document.getElementById(`${elementId}-change`);
+
+            if (priceElement) {
+              priceElement.textContent = currentPrice ? currentPrice.toLocaleString('en-IN', { maximumFractionDigits: 2 }) : '--';
+            }
+
+            if (changeElement) {
+              const changeText = change >= 0 ?
+                `+${change.toFixed(2)} (+${changePercent.toFixed(2)}%)` :
+                `${change.toFixed(2)} (${changePercent.toFixed(2)}%)`;
+
+              changeElement.textContent = changeText;
+              changeElement.className = 'header-ticker-change ' + (change > 0 ? 'positive' : change < 0 ? 'negative' : 'neutral');
+            }
+          }
+        } catch (error) {
+          console.error(`Error updating ${elementId}:`, error);
+          // Fallback to demo data for this ticker
+          updateDemoHomeTicker(elementId);
+        }
+      }
+
+      function updateDemoHomepageTickers() {
+        updateDemoHomeTicker('home-nifty');
+        updateDemoHomeTicker('home-sensex');
+        updateDemoHomeTicker('home-banknifty');
+      }
+
+      function updateDemoHomeTicker(elementId) {
+        const demoData = {
+          'home-nifty': { base: 23500, volatility: 0.003 },
+          'home-sensex': { base: 78500, volatility: 0.002 },
+          'home-banknifty': { base: 48500, volatility: 0.005 }
+        };
+
+        const data = demoData[elementId];
+        if (!data) return;
+
+        const basePrice = data.base;
+        const volatility = data.volatility;
+        const randomChange = (Math.random() - 0.5) * 2 * volatility;
+        const currentPrice = basePrice * (1 + randomChange);
+        const change = currentPrice - basePrice;
+        const changePercent = (change / basePrice) * 100;
+
+        const priceElement = document.getElementById(`${elementId}-price`);
+        const changeElement = document.getElementById(`${elementId}-change`);
+
+        if (priceElement) {
+          priceElement.textContent = currentPrice.toLocaleString('en-IN', { maximumFractionDigits: 2 });
+        }
+
+        if (changeElement) {
+          const changeText = change >= 0 ?
+            `+${change.toFixed(2)} (+${changePercent.toFixed(2)}%)` :
+            `${change.toFixed(2)} (${changePercent.toFixed(2)}%)`;
+
+          changeElement.textContent = changeText;
+          changeElement.className = 'header-ticker-change ' + (change > 0 ? 'positive' : change < 0 ? 'negative' : 'neutral');
+        }
+      }
+
+      // Search functionality
+      function initializeSearch() {
+        const searchInput = document.getElementById('stock-search');
+        const searchBtn = document.getElementById('search-btn');
+        const resultsDiv = document.getElementById('search-results');
+
+        searchBtn.addEventListener('click', () => performSearch());
+        searchInput.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') {
+            performSearch();
+          }
+        });
+
+        async function performSearch() {
+          const query = searchInput.value.trim().toUpperCase();
+          if (!query) return;
+
+          resultsDiv.innerHTML = '<div style="text-align: center; color: #94a3b8;">Searching...</div>';
+
+          try {
+            // Search for Indian stocks
+            const searchUrl = `https://query1.finance.yahoo.com/v1/finance/search?q=${encodeURIComponent(query)}&quotesCount=5&newsCount=0`;
+            const response = await fetch(searchUrl);
+            const data = await response.json();
+
+            if (data && data.quotes && data.quotes.length > 0) {
+              displaySearchResults(data.quotes);
+            } else {
+              resultsDiv.innerHTML = '<div style="text-align: center; color: #ef4444;">No results found</div>';
+            }
+          } catch (error) {
+            console.error('Search error:', error);
+            resultsDiv.innerHTML = '<div style="text-align: center; color: #ef4444;">Search failed. Please try again.</div>';
+          }
+        }
+
+        function displaySearchResults(results) {
+          resultsDiv.innerHTML = '';
+
+          results.forEach(result => {
+            if (result.symbol && result.shortname) {
+              const resultDiv = document.createElement('div');
+              resultDiv.className = 'search-result-item';
+              resultDiv.innerHTML = `
+                <div style="font-weight: 600; color: #e6eef8;">${result.symbol}</div>
+                <div style="color: #94a3b8; font-size: 0.9rem;">${result.shortname}</div>
+                ${result.exchange ? `<div style="color: #64748b; font-size: 0.8rem;">${result.exchange}</div>` : ''}
+              `;
+
+              resultDiv.addEventListener('click', () => {
+                // Redirect to dashboard with the selected stock
+                window.location.href = `dashboard.html?symbol=${encodeURIComponent(result.symbol)}`;
+              });
+
+              resultsDiv.appendChild(resultDiv);
+            }
+          });
+        }
+      }
+
+      // Option chain functionality
+      function initializeOptionChain() {
+        const optionButtons = document.querySelectorAll('.option-btn');
+
+        optionButtons.forEach(button => {
+          button.addEventListener('click', () => {
+            const symbol = button.dataset.symbol;
+            const name = button.dataset.name;
+
+            if (name === 'Custom') {
+              // For custom symbol, redirect to dashboard
+              window.location.href = 'dashboard.html';
+            } else {
+              // Redirect to dashboard with the selected index
+              window.location.href = `dashboard.html?symbol=${encodeURIComponent(symbol)}&name=${encodeURIComponent(name)}`;
+            }
+          });
+        });
+      }
+    </script>
+  </body>
+</html>
+
