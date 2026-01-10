@@ -64,7 +64,7 @@
         <div class="indicator-card vix-card">
           <div class="indicator-header">
             <span class="indicator-icon">⚡</span>
-            <span class="indicator-label">VIX</span>
+            <span class="indicator-label">India VIX</span>
           </div>
           <div class="indicator-value" id="vix-value">--</div>
           <div class="indicator-change" id="vix-change">--</div>
@@ -74,7 +74,7 @@
         <div class="indicator-card pcr-card">
           <div class="indicator-header">
             <span class="indicator-icon">📊</span>
-            <span class="indicator-label">PCR (Put/Call Ratio)</span>
+            <span class="indicator-label">Put-Call Ratio</span>
           </div>
           <div class="indicator-value" id="pcr-value">--</div>
           <div class="indicator-change" id="pcr-change">--</div>
@@ -84,7 +84,7 @@
         <div class="indicator-card iv-card">
           <div class="indicator-header">
             <span class="indicator-icon">📈</span>
-            <span class="indicator-label">IV (Implied Volatility)</span>
+            <span class="indicator-label">Implied Volatility</span>
           </div>
           <div class="indicator-value" id="iv-value">--</div>
           <div class="indicator-change" id="iv-change">--</div>
@@ -94,36 +94,11 @@
         <div class="indicator-card oi-card">
           <div class="indicator-header">
             <span class="indicator-icon">💼</span>
-            <span class="indicator-label">OI (Open Interest)</span>
+            <span class="indicator-label">Open Interest</span>
           </div>
           <div class="indicator-value" id="oi-value">--</div>
           <div class="indicator-change" id="oi-change">--</div>
           <div class="indicator-status" id="oi-status">Loading...</div>
-        </div>
-
-        <div class="indicator-card greeks-card">
-          <div class="indicator-header">
-            <span class="indicator-icon">Δθ</span>
-            <span class="indicator-label">Greeks Summary</span>
-          </div>
-          <div class="greeks-grid">
-            <div class="greek-item">
-              <span class="greek-label">Delta:</span>
-              <span class="greek-value" id="delta-value">--</span>
-            </div>
-            <div class="greek-item">
-              <span class="greek-label">Gamma:</span>
-              <span class="greek-value" id="gamma-value">--</span>
-            </div>
-            <div class="greek-item">
-              <span class="greek-label">Theta:</span>
-              <span class="greek-value" id="theta-value">--</span>
-            </div>
-            <div class="greek-item">
-              <span class="greek-label">Vega:</span>
-              <span class="greek-value" id="vega-value">--</span>
-            </div>
-          </div>
         </div>
       </div>
     </section>
@@ -159,34 +134,16 @@
           </label>
 
           <label>
-            <span>Metric:</span>
-            <select id="metricSelect">
-              <option value="iv">IV</option>
-              <option value="pcr">PCR</option>
-            </select>
+            <input type="checkbox" id="useLive" /> Enable Live Data
           </label>
 
           <label>
-            <span>API Key:</span>
-            <input id="apiKey" placeholder="Alpha Vantage API key" />
-          </label>
-
-          <label>
-            <span>Symbol:</span>
-            <input id="symbol" placeholder="symbol" />
-          </label>
-
-          <label>
-            <input type="checkbox" id="useLive" /> Live
-          </label>
-
-          <label>
-            <span>Auto-refresh (s):</span>
+            <span>Refresh Interval (sec):</span>
             <input id="liveInterval" type="number" min="5" max="600" value="60" />
           </label>
 
           <div class="form-actions">
-            <button id="refreshBtn">Refresh</button>
+            <button id="refreshBtn">Refresh Data</button>
           </div>
         </div>
 
@@ -341,7 +298,34 @@
           <span class="chat-title">💬 Live Trading Chat</span>
           <span class="chat-online-count" id="onlineCount">124 online</span>
         </div>
-        <button id="chatToggle" class="chat-toggle-btn">−</button>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <button id="chatOptions" class="chat-options-btn" title="Chat Options">⋮</button>
+          <button id="chatToggle" class="chat-toggle-btn">−</button>
+        </div>
+      </div>
+      
+      <!-- Chat Options Dropdown -->
+      <div id="chatOptionsMenu" class="chat-options-menu" style="display: none;">
+        <div class="chat-option-item" onclick="clearChatMessages()">
+          <span class="option-icon">🗑️</span>
+          <span>Clear Messages</span>
+        </div>
+        <div class="chat-option-item" onclick="toggleNotifications()">
+          <span class="option-icon">🔔</span>
+          <span id="notifToggleText">Mute Notifications</span>
+        </div>
+        <div class="chat-option-item" onclick="changeTheme()">
+          <span class="option-icon">🎨</span>
+          <span>Change Theme</span>
+        </div>
+        <div class="chat-option-item" onclick="exportChat()">
+          <span class="option-icon">💾</span>
+          <span>Export Chat</span>
+        </div>
+        <div class="chat-option-item" onclick="reportUser()">
+          <span class="option-icon">⚠️</span>
+          <span>Report Issue</span>
+        </div>
       </div>
       
       <div id="chatBody" class="chat-body">
@@ -486,6 +470,60 @@
 
       .chat-toggle-btn:hover {
         background: rgba(255,255,255,0.3);
+      }
+
+      .chat-options-btn {
+        background: rgba(255,255,255,0.2);
+        border: none;
+        color: white;
+        width: 28px;
+        height: 28px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 18px;
+        font-weight: 700;
+        line-height: 1;
+        transition: background 0.2s;
+      }
+
+      .chat-options-btn:hover {
+        background: rgba(255,255,255,0.3);
+      }
+
+      .chat-options-menu {
+        position: absolute;
+        top: 60px;
+        right: 20px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+        border: 1px solid #e2e8f0;
+        min-width: 200px;
+        z-index: 10000;
+        overflow: hidden;
+      }
+
+      .chat-option-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 16px;
+        cursor: pointer;
+        transition: background 0.2s;
+        color: #1e293b;
+        font-size: 14px;
+      }
+
+      .chat-option-item:hover {
+        background: #f1f5f9;
+      }
+
+      .chat-option-item:not(:last-child) {
+        border-bottom: 1px solid #f1f5f9;
+      }
+
+      .option-icon {
+        font-size: 16px;
       }
 
       .chat-body {
@@ -720,12 +758,27 @@
       const emojiPicker = document.getElementById('emojiPicker');
       const emojiButtons = document.querySelectorAll('.emoji-btn');
       const onlineCount = document.getElementById('onlineCount');
+      const chatOptions = document.getElementById('chatOptions');
+      const chatOptionsMenu = document.getElementById('chatOptionsMenu');
 
       // Toggle chat minimize
       chatToggle.addEventListener('click', (e) => {
         e.stopPropagation();
         chatWidget.classList.toggle('minimized');
         chatToggle.textContent = chatWidget.classList.contains('minimized') ? '+' : '−';
+      });
+
+      // Toggle chat options menu
+      chatOptions.addEventListener('click', (e) => {
+        e.stopPropagation();
+        chatOptionsMenu.style.display = chatOptionsMenu.style.display === 'none' ? 'block' : 'none';
+      });
+
+      // Close options menu when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!chatOptionsMenu.contains(e.target) && e.target !== chatOptions) {
+          chatOptionsMenu.style.display = 'none';
+        }
       });
 
       // Toggle emoji picker
@@ -861,6 +914,91 @@
     </script>
 
     <script>
+      // Chat Options Functions
+      let notificationsMuted = false;
+
+      function clearChatMessages() {
+        const chatMessages = document.getElementById('chatMessages');
+        chatMessages.innerHTML = '<div class="chat-message system-message"><p>Chat cleared. Start a new conversation! 💬</p></div>';
+        document.getElementById('chatOptionsMenu').style.display = 'none';
+      }
+
+      function toggleNotifications() {
+        notificationsMuted = !notificationsMuted;
+        const notifText = document.getElementById('notifToggleText');
+        notifText.textContent = notificationsMuted ? 'Unmute Notifications' : 'Mute Notifications';
+        
+        const chatMessages = document.getElementById('chatMessages');
+        const statusMsg = document.createElement('div');
+        statusMsg.className = 'chat-message system-message';
+        statusMsg.innerHTML = `<p>Notifications ${notificationsMuted ? 'muted' : 'enabled'} 🔔</p>`;
+        chatMessages.appendChild(statusMsg);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        
+        document.getElementById('chatOptionsMenu').style.display = 'none';
+      }
+
+      function changeTheme() {
+        const themes = ['default', 'dark', 'blue', 'green'];
+        const currentTheme = chatWidget.getAttribute('data-theme') || 'default';
+        const currentIndex = themes.indexOf(currentTheme);
+        const newTheme = themes[(currentIndex + 1) % themes.length];
+        
+        chatWidget.setAttribute('data-theme', newTheme);
+        
+        const chatMessages = document.getElementById('chatMessages');
+        const statusMsg = document.createElement('div');
+        statusMsg.className = 'chat-message system-message';
+        statusMsg.innerHTML = `<p>Theme changed to ${newTheme} 🎨</p>`;
+        chatMessages.appendChild(statusMsg);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        
+        document.getElementById('chatOptionsMenu').style.display = 'none';
+      }
+
+      function exportChat() {
+        const messages = document.querySelectorAll('.chat-message');
+        let exportText = 'TheOptionTrader - Chat Export\n';
+        exportText += '================================\n\n';
+        
+        messages.forEach(msg => {
+          const sender = msg.querySelector('.chat-message-sender')?.textContent || 'System';
+          const time = msg.querySelector('.chat-message-time')?.textContent || '';
+          const text = msg.querySelector('.chat-message-bubble')?.textContent || msg.querySelector('p')?.textContent || '';
+          exportText += `[${time}] ${sender}: ${text}\n`;
+        });
+        
+        const blob = new Blob([exportText], { type: 'text/plain' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `chat-export-${new Date().toISOString().split('T')[0]}.txt`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+        
+        const chatMessages = document.getElementById('chatMessages');
+        const statusMsg = document.createElement('div');
+        statusMsg.className = 'chat-message system-message';
+        statusMsg.innerHTML = '<p>Chat exported successfully! 💾</p>';
+        chatMessages.appendChild(statusMsg);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        
+        document.getElementById('chatOptionsMenu').style.display = 'none';
+      }
+
+      function reportUser() {
+        const chatMessages = document.getElementById('chatMessages');
+        const statusMsg = document.createElement('div');
+        statusMsg.className = 'chat-message system-message';
+        statusMsg.innerHTML = '<p>Report submitted to moderators. Thank you! ⚠️</p>';
+        chatMessages.appendChild(statusMsg);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        
+        document.getElementById('chatOptionsMenu').style.display = 'none';
+      }
+    </script>
+
+    <script>
       // Market Indicators Functionality
       function updateMarketIndicators() {
         // VIX (Volatility Index) - typically ranges from 10-40
@@ -915,17 +1053,6 @@
         if (oiChange > 10) oiStatus = 'Strong Addition';
         else if (oiChange < -10) oiStatus = 'Unwinding';
         document.getElementById('oi-status').textContent = oiStatus;
-
-        // Greeks
-        const delta = (0.3 + Math.random() * 0.4).toFixed(3);
-        const gamma = (0.001 + Math.random() * 0.009).toFixed(4);
-        const theta = -(0.01 + Math.random() * 0.05).toFixed(3);
-        const vega = (0.05 + Math.random() * 0.15).toFixed(3);
-        
-        document.getElementById('delta-value').textContent = delta;
-        document.getElementById('gamma-value').textContent = gamma;
-        document.getElementById('theta-value').textContent = theta;
-        document.getElementById('vega-value').textContent = vega;
       }
 
       // Update indicators immediately and then every 5 seconds
