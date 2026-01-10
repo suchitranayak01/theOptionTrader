@@ -3,8 +3,11 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <title>TheOptionTrader - Dashboard</title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style.css?v=20260111" />
     <!-- Poppins + Inter + Orbitron fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@300;400;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <!-- Chart.js CDN -->
@@ -273,795 +276,373 @@
           </div>
         </div>
 
-        <div class="card account-card">
-          <h4>Account Options</h4>
-          <p>Open or manage your trading account to access live order placement and premium features.</p>
-          <div class="account-actions">
-            <a class="btn" href="login.html">Open Account</a>
-            <a class="btn ghost" href="#">Learn More</a>
-          </div>
-        </div>
-      </section>
-    </main>
-
-    <footer>
-      <small>Demo only. Not trading advice.</small>
-      <br />
-      <small>Developer: TheOptionTrader</small>
-    </footer>
-
-    <!-- Live Chat Widget -->
-    <div id="chatWidget" class="chat-widget">
-      <div id="chatHeader" class="chat-header">
-        <div class="chat-header-content">
-          <span class="chat-online-indicator"></span>
-          <span class="chat-title">💬 Live Trading Chat</span>
-          <span class="chat-online-count" id="onlineCount">124 online</span>
-        </div>
-        <div style="display: flex; gap: 8px; align-items: center;">
-          <button id="chatOptions" class="chat-options-btn" title="Chat Options">⋮</button>
-          <button id="chatToggle" class="chat-toggle-btn">−</button>
-        </div>
-      </div>
-      
-      <!-- Chat Options Dropdown -->
-      <div id="chatOptionsMenu" class="chat-options-menu" style="display: none;">
-        <div class="chat-option-item" onclick="clearChatMessages()">
-          <span class="option-icon">🗑️</span>
-          <span>Clear Messages</span>
-        </div>
-        <div class="chat-option-item" onclick="toggleNotifications()">
-          <span class="option-icon">🔔</span>
-          <span id="notifToggleText">Mute Notifications</span>
-        </div>
-        <div class="chat-option-item" onclick="changeTheme()">
-          <span class="option-icon">🎨</span>
-          <span>Change Theme</span>
-        </div>
-        <div class="chat-option-item" onclick="exportChat()">
-          <span class="option-icon">💾</span>
-          <span>Export Chat</span>
-        </div>
-        <div class="chat-option-item" onclick="reportUser()">
-          <span class="option-icon">⚠️</span>
-          <span>Report Issue</span>
-        </div>
-      </div>
-      
-      <div id="chatBody" class="chat-body">
-        <div id="chatMessages" class="chat-messages">
-          <!-- Welcome message -->
-          <div class="chat-message system-message">
-            <p>👋 Welcome to TheOptionTrader Live Chat! Share your trading insights and strategies.</p>
-          </div>
-        </div>
-        
-        <div class="chat-input-container">
-          <div id="emojiPicker" class="emoji-picker" style="display: none;">
-            <div class="emoji-grid">
-              <button class="emoji-btn" data-emoji="😀">😀</button>
-              <button class="emoji-btn" data-emoji="😃">😃</button>
-              <button class="emoji-btn" data-emoji="😄">😄</button>
-              <button class="emoji-btn" data-emoji="😁">😁</button>
-              <button class="emoji-btn" data-emoji="🤣">🤣</button>
-              <button class="emoji-btn" data-emoji="😊">😊</button>
-              <button class="emoji-btn" data-emoji="😎">😎</button>
-              <button class="emoji-btn" data-emoji="🤔">🤔</button>
-              <button class="emoji-btn" data-emoji="🤨">🤨</button>
-              <button class="emoji-btn" data-emoji="😮">😮</button>
-              <button class="emoji-btn" data-emoji="😲">😲</button>
-              <button class="emoji-btn" data-emoji="🙄">🙄</button>
-              <button class="emoji-btn" data-emoji="😬">😬</button>
-              <button class="emoji-btn" data-emoji="🤐">🤐</button>
-              <button class="emoji-btn" data-emoji="😢">😢</button>
-              <button class="emoji-btn" data-emoji="😭">😭</button>
-              <button class="emoji-btn" data-emoji="😡">😡</button>
-              <button class="emoji-btn" data-emoji="🤬">🤬</button>
-              <button class="emoji-btn" data-emoji="💪">💪</button>
-              <button class="emoji-btn" data-emoji="👍">👍</button>
-              <button class="emoji-btn" data-emoji="👎">👎</button>
-              <button class="emoji-btn" data-emoji="👏">👏</button>
-              <button class="emoji-btn" data-emoji="🙌">🙌</button>
-              <button class="emoji-btn" data-emoji="🤝">🤝</button>
-              <button class="emoji-btn" data-emoji="🔥">🔥</button>
-              <button class="emoji-btn" data-emoji="⚡">⚡</button>
-              <button class="emoji-btn" data-emoji="💰">💰</button>
-              <button class="emoji-btn" data-emoji="💵">💵</button>
-              <button class="emoji-btn" data-emoji="📈">📈</button>
-              <button class="emoji-btn" data-emoji="📉">📉</button>
-              <button class="emoji-btn" data-emoji="🚀">🚀</button>
-              <button class="emoji-btn" data-emoji="🎯">🎯</button>
-              <button class="emoji-btn" data-emoji="💎">💎</button>
-              <button class="emoji-btn" data-emoji="🏆">🏆</button>
-              <button class="emoji-btn" data-emoji="⭐">⭐</button>
-              <button class="emoji-btn" data-emoji="✅">✅</button>
-              <button class="emoji-btn" data-emoji="❌">❌</button>
-              <button class="emoji-btn" data-emoji="⚠️">⚠️</button>
-              <button class="emoji-btn" data-emoji="💡">💡</button>
-              <button class="emoji-btn" data-emoji="🎉">🎉</button>
+        <!doctype html>
+        <html lang="en">
+        <head>
+          <meta charset="utf-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+          <meta http-equiv="Pragma" content="no-cache" />
+          <meta http-equiv="Expires" content="0" />
+          <title>TheOptionTrader - Options 360</title>
+          <link rel="stylesheet" href="style.css?v=20260111" />
+          <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          <style>
+            :root {
+              --bg: #050b13;
+              --panel: #0b1220;
+              --card: #0f172a;
+              --border: #1e293b;
+              --text: #e6eef8;
+              --muted: #94a3b8;
+              --accent: #3b82f6;
+              --good: #22c55e;
+              --bad: #ef4444;
+            }
+            * { box-sizing: border-box; }
+            body { margin:0; padding:20px; background:var(--bg); color:var(--text); font-family:'Helvetica Neue', Helvetica, Arial, sans-serif; }
+            a { color:inherit; text-decoration:none; }
+            header { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+            .brand { display:flex; align-items:center; gap:12px; font-weight:800; font-size:22px; letter-spacing:0.5px; }
+            .pill { display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border-radius:999px; border:1px solid var(--border); background:rgba(59,130,246,0.12); font-size:12px; }
+            .grid { display:grid; gap:12px; }
+            .card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:14px; }
+            .row { display:flex; gap:12px; align-items:center; }
+            .tickers { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+            .ticker { padding:14px; background:var(--panel); border:1px solid var(--border); border-radius:12px; }
+            .t-name { color:var(--muted); font-size:14px; }
+            .t-value { font-size:26px; font-weight:700; }
+            .t-change { font-weight:600; }
+            .pos { color:var(--good); } .neg { color:var(--bad); }
+            .controls { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+            label { display:flex; flex-direction:column; gap:6px; font-size:13px; color:var(--muted); }
+            select { padding:10px; border-radius:8px; border:1px solid var(--border); background:#0b1220; color:var(--text); }
+            .indicators { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+            .indicator h4 { margin:0 0 6px 0; font-size:14px; color:var(--muted); letter-spacing:0.4px; }
+            .indicator .val { font-size:28px; font-weight:700; }
+            .indicator .sub { font-size:13px; font-weight:600; }
+            .status { display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border-radius:8px; border:1px solid var(--border); font-size:12px; color:var(--muted); margin-top:6px; }
+            .chart-wrap { margin-top:10px; background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:12px; }
+            .chart-toggle { display:flex; gap:16px; align-items:center; margin-bottom:10px; }
+            .subtitle { color:var(--muted); font-size:13px; margin:4px 0 0; }
+            .footer { color:var(--muted); font-size:12px; margin-top:16px; }
+            .badge-green { color:var(--good); } .badge-red { color:var(--bad); }
+            @media(max-width:768px){ body{padding:12px;} header{flex-direction:column; align-items:flex-start;} }
+          </style>
+        </head>
+        <body>
+          <header>
+            <div>
+              <div class="brand">TheOptionTrader · Options 360</div>
+              <div class="subtitle">Live overview for Nifty, Sensex, Bank Nifty</div>
             </div>
-          </div>
-          
-          <div class="chat-input-wrapper">
-            <button id="emojiToggle" class="emoji-toggle-btn" title="Add emoji">😀</button>
-            <input type="text" id="chatInput" class="chat-input" placeholder="Type your message...">
-            <button id="chatSend" class="chat-send-btn">Send</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <style>
-      .chat-widget {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        width: 380px;
-        max-height: 600px;
-        background: white;
-        border-radius: 12px;
-        box-shadow: 0 10px 40px rgba(0,0,0,0.15);
-        display: flex;
-        flex-direction: column;
-        z-index: 9999;
-        font-family: 'Inter', sans-serif;
-        transition: all 0.3s ease;
-      }
-
-      .chat-widget.minimized .chat-body {
-        display: none;
-      }
-
-      .chat-header {
-        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-        color: white;
-        padding: 16px;
-        border-radius: 12px 12px 0 0;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        cursor: pointer;
-        user-select: none;
-      }
-
-      .chat-header-content {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        flex: 1;
-      }
-
-      .chat-online-indicator {
-        width: 10px;
-        height: 10px;
-        background: #10b981;
-        border-radius: 50%;
-        animation: pulse-glow 2s infinite;
-      }
-
-      @keyframes pulse-glow {
-        0%, 100% { opacity: 1; transform: scale(1); }
-        50% { opacity: 0.6; transform: scale(1.2); }
-      }
-
-      .chat-title {
-        font-weight: 600;
-        font-size: 15px;
-      }
-
-      .chat-online-count {
-        font-size: 12px;
-        opacity: 0.9;
-        margin-left: auto;
-      }
-
-      .chat-toggle-btn {
-        background: rgba(255,255,255,0.2);
-        border: none;
-        color: white;
-        width: 28px;
-        height: 28px;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 20px;
-        line-height: 1;
-        transition: background 0.2s;
-      }
-
-      .chat-toggle-btn:hover {
-        background: rgba(255,255,255,0.3);
-      }
-
-      .chat-options-btn {
-        background: rgba(255,255,255,0.2);
-        border: none;
-        color: white;
-        width: 28px;
-        height: 28px;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 18px;
-        font-weight: 700;
-        line-height: 1;
-        transition: background 0.2s;
-      }
-
-      .chat-options-btn:hover {
-        background: rgba(255,255,255,0.3);
-      }
-
-      .chat-options-menu {
-        position: absolute;
-        top: 60px;
-        right: 20px;
-        background: white;
-        border-radius: 8px;
-        box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-        border: 1px solid #e2e8f0;
-        min-width: 200px;
-        z-index: 10000;
-        overflow: hidden;
-      }
-
-      .chat-option-item {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 12px 16px;
-        cursor: pointer;
-        transition: background 0.2s;
-        color: #1e293b;
-        font-size: 14px;
-      }
-
-      .chat-option-item:hover {
-        background: #f1f5f9;
-      }
-
-      .chat-option-item:not(:last-child) {
-        border-bottom: 1px solid #f1f5f9;
-      }
-
-      .option-icon {
-        font-size: 16px;
-      }
-
-      .chat-body {
-        display: flex;
-        flex-direction: column;
-        height: 500px;
-        background: #f8fafc;
-      }
-
-      .chat-messages {
-        flex: 1;
-        overflow-y: auto;
-        padding: 16px;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-      }
-
-      .chat-messages::-webkit-scrollbar {
-        width: 6px;
-      }
-
-      .chat-messages::-webkit-scrollbar-track {
-        background: #f1f5f9;
-      }
-
-      .chat-messages::-webkit-scrollbar-thumb {
-        background: #cbd5e1;
-        border-radius: 3px;
-      }
-
-      .chat-message {
-        max-width: 85%;
-        animation: slideInMessage 0.3s ease;
-      }
-
-      @keyframes slideInMessage {
-        from {
-          opacity: 0;
-          transform: translateY(10px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      .chat-message.own {
-        align-self: flex-end;
-      }
-
-      .chat-message.other {
-        align-self: flex-start;
-      }
-
-      .chat-message.system-message {
-        align-self: center;
-        max-width: 90%;
-        text-align: center;
-      }
-
-      .chat-message-header {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        margin-bottom: 4px;
-        font-size: 12px;
-      }
-
-      .chat-message-sender {
-        font-weight: 600;
-        color: #1e293b;
-      }
-
-      .chat-message-time {
-        color: #64748b;
-        font-size: 11px;
-      }
-
-      .chat-message-bubble {
-        padding: 10px 14px;
-        border-radius: 12px;
-        word-wrap: break-word;
-        font-size: 14px;
-        line-height: 1.5;
-      }
-
-      .chat-message.own .chat-message-bubble {
-        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-        color: white;
-        border-bottom-right-radius: 4px;
-      }
-
-      .chat-message.other .chat-message-bubble {
-        background: white;
-        color: #1e293b;
-        border: 1px solid #e2e8f0;
-        border-bottom-left-radius: 4px;
-      }
-
-      .chat-message.system-message p {
-        background: #fef3c7;
-        color: #92400e;
-        padding: 8px 12px;
-        border-radius: 8px;
-        margin: 0;
-        font-size: 13px;
-        border: 1px solid #fde68a;
-      }
-
-      .chat-input-container {
-        background: white;
-        border-top: 1px solid #e2e8f0;
-        padding: 12px;
-        border-radius: 0 0 12px 12px;
-        position: relative;
-      }
-
-      .emoji-picker {
-        position: absolute;
-        bottom: 100%;
-        left: 12px;
-        right: 12px;
-        background: white;
-        border: 1px solid #e2e8f0;
-        border-radius: 8px;
-        padding: 12px;
-        margin-bottom: 8px;
-        box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
-        max-height: 180px;
-        overflow-y: auto;
-      }
-
-      .emoji-grid {
-        display: grid;
-        grid-template-columns: repeat(8, 1fr);
-        gap: 6px;
-      }
-
-      .emoji-btn {
-        background: none;
-        border: none;
-        font-size: 24px;
-        cursor: pointer;
-        padding: 6px;
-        border-radius: 6px;
-        transition: all 0.2s;
-      }
-
-      .emoji-btn:hover {
-        background: #f1f5f9;
-        transform: scale(1.2);
-      }
-
-      .chat-input-wrapper {
-        display: flex;
-        gap: 8px;
-        align-items: center;
-      }
-
-      .emoji-toggle-btn {
-        background: #f1f5f9;
-        border: none;
-        font-size: 20px;
-        width: 38px;
-        height: 38px;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.2s;
-        flex-shrink: 0;
-      }
-
-      .emoji-toggle-btn:hover {
-        background: #e2e8f0;
-        transform: scale(1.1);
-      }
-
-      .chat-input {
-        flex: 1;
-        padding: 10px 14px;
-        border: 1px solid #e2e8f0;
-        border-radius: 8px;
-        font-size: 14px;
-        font-family: 'Inter', sans-serif;
-        outline: none;
-        transition: border-color 0.2s;
-      }
-
-      .chat-input:focus {
-        border-color: #3b82f6;
-      }
-
-      .chat-send-btn {
-        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 8px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.2s;
-        flex-shrink: 0;
-      }
-
-      .chat-send-btn:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
-      }
-
-      .chat-send-btn:active {
-        transform: translateY(0);
-      }
-
-      @media (max-width: 768px) {
-        .chat-widget {
-          width: calc(100% - 40px);
-          max-width: 380px;
-        }
-      }
-    </style>
-
-    <script>
-      // Live Chat Functionality
-      const chatWidget = document.getElementById('chatWidget');
-      const chatHeader = document.getElementById('chatHeader');
-      const chatToggle = document.getElementById('chatToggle');
-      const chatBody = document.getElementById('chatBody');
-      const chatMessages = document.getElementById('chatMessages');
-      const chatInput = document.getElementById('chatInput');
-      const chatSend = document.getElementById('chatSend');
-      const emojiToggle = document.getElementById('emojiToggle');
-      const emojiPicker = document.getElementById('emojiPicker');
-      const emojiButtons = document.querySelectorAll('.emoji-btn');
-      const onlineCount = document.getElementById('onlineCount');
-      const chatOptions = document.getElementById('chatOptions');
-      const chatOptionsMenu = document.getElementById('chatOptionsMenu');
-
-      // Toggle chat minimize
-      chatToggle.addEventListener('click', (e) => {
-        e.stopPropagation();
-        chatWidget.classList.toggle('minimized');
-        chatToggle.textContent = chatWidget.classList.contains('minimized') ? '+' : '−';
-      });
-
-      // Toggle chat options menu
-      chatOptions.addEventListener('click', (e) => {
-        e.stopPropagation();
-        chatOptionsMenu.style.display = chatOptionsMenu.style.display === 'none' ? 'block' : 'none';
-      });
-
-      // Close options menu when clicking outside
-      document.addEventListener('click', (e) => {
-        if (!chatOptionsMenu.contains(e.target) && e.target !== chatOptions) {
-          chatOptionsMenu.style.display = 'none';
-        }
-      });
-
-      // Toggle emoji picker
-      emojiToggle.addEventListener('click', () => {
-        emojiPicker.style.display = emojiPicker.style.display === 'none' ? 'block' : 'none';
-      });
-
-      // Add emoji to input
-      emojiButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-          const emoji = btn.getAttribute('data-emoji');
-          chatInput.value += emoji;
-          chatInput.focus();
-          emojiPicker.style.display = 'none';
-        });
-      });
-
-      // Close emoji picker when clicking outside
-      document.addEventListener('click', (e) => {
-        if (!emojiPicker.contains(e.target) && e.target !== emojiToggle) {
-          emojiPicker.style.display = 'none';
-        }
-      });
-
-      // Send message function
-      function sendMessage() {
-        const message = chatInput.value.trim();
-        if (!message) return;
-
-        // Get user info
-        const user = AUTH.getUserProfile();
-        const userName = user ? user.name.split(' ')[0] : 'Guest';
-
-        // Create message element
-        const messageDiv = document.createElement('div');
-        messageDiv.className = 'chat-message own';
-        messageDiv.innerHTML = `
-          <div class="chat-message-header">
-            <span class="chat-message-sender">${userName}</span>
-            <span class="chat-message-time">${new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</span>
-          </div>
-          <div class="chat-message-bubble">${escapeHtml(message)}</div>
-        `;
-
-        chatMessages.appendChild(messageDiv);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-
-        // Clear input
-        chatInput.value = '';
-
-        // Simulate response (in real app, this would be WebSocket)
-        setTimeout(() => simulateResponse(), 1000 + Math.random() * 2000);
-      }
-
-      // Simulate chat responses
-      function simulateResponse() {
-        const responses = [
-          { name: 'Raj', text: 'Great analysis! 📈' },
-          { name: 'Priya', text: 'NIFTY looking bullish today 🚀' },
-          { name: 'Amit', text: 'Anyone trading Bank NIFTY options?' },
-          { name: 'Sneha', text: 'Made good profit on calls today 💰' },
-          { name: 'Vikram', text: 'Support at 21,800 holding strong 💪' },
-          { name: 'Pooja', text: 'What\'s your target for tomorrow? 🎯' },
-          { name: 'Karan', text: 'Volatility is high today ⚡' },
-          { name: 'Neha', text: 'Exit your positions before 3:15 PM ⚠️' },
-          { name: 'Rohit', text: 'Thanks for the tip! 🙌' },
-          { name: 'Anjali', text: 'Markets are unpredictable today 🤔' }
-        ];
-
-        const response = responses[Math.floor(Math.random() * responses.length)];
-        
-        const messageDiv = document.createElement('div');
-        messageDiv.className = 'chat-message other';
-        messageDiv.innerHTML = `
-          <div class="chat-message-header">
-            <span class="chat-message-sender">${response.name}</span>
-            <span class="chat-message-time">${new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</span>
-          </div>
-          <div class="chat-message-bubble">${escapeHtml(response.text)}</div>
-        `;
-
-        chatMessages.appendChild(messageDiv);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-      }
-
-      // HTML escape function
-      function escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-      }
-
-      // Send on button click
-      chatSend.addEventListener('click', sendMessage);
-
-      // Send on Enter key
-      chatInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-          sendMessage();
-        }
-      });
-
-      // Simulate online count changes
-      setInterval(() => {
-        const count = 120 + Math.floor(Math.random() * 15);
-        onlineCount.textContent = `${count} online`;
-      }, 10000);
-
-      // Add initial simulated messages
-      setTimeout(() => {
-        const initMessages = [
-          { name: 'Trader_Pro', text: 'Market opened strong today! 📈', time: '09:15 AM' },
-          { name: 'Options_King', text: 'NIFTY resistance at 22,000 🎯', time: '09:18 AM' },
-          { name: 'Shreya', text: 'Good opportunity for call options 🚀', time: '09:22 AM' }
-        ];
-
-        initMessages.forEach((msg, index) => {
-          setTimeout(() => {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = 'chat-message other';
-            messageDiv.innerHTML = `
-              <div class="chat-message-header">
-                <span class="chat-message-sender">${msg.name}</span>
-                <span class="chat-message-time">${msg.time}</span>
+            <div class="row">
+              <span class="pill" id="livePill"><span class="dot" style="width:8px;height:8px;border-radius:50%;background:var(--good);"></span>Live</span>
+              <a class="pill" href="login.html" id="loginLink">Login</a>
+            </div>
+          </header>
+
+          <!-- Tickers -->
+          <section class="grid tickers">
+            <div class="ticker">
+              <div class="t-name">NIFTY 50</div>
+              <div class="t-value" id="niftyVal">--</div>
+              <div class="t-change" id="niftyChg">--</div>
+            </div>
+            <div class="ticker">
+              <div class="t-name">SENSEX</div>
+              <div class="t-value" id="sensexVal">--</div>
+              <div class="t-change" id="sensexChg">--</div>
+            </div>
+            <div class="ticker">
+              <div class="t-name">BANK NIFTY</div>
+              <div class="t-value" id="bankVal">--</div>
+              <div class="t-change" id="bankChg">--</div>
+            </div>
+          </section>
+
+          <!-- Controls -->
+          <section class="card">
+            <div class="grid controls">
+              <label>Market
+                <select id="marketSelect">
+                  <option value="equity">Equity</option>
+                  <option value="commodity">Commodity</option>
+                  <option value="currency">Currency</option>
+                </select>
+              </label>
+              <label>Symbol
+                <select id="symbolSelect"></select>
+              </label>
+              <label>Expiry Date
+                <select id="expirySelect"></select>
+              </label>
+            </div>
+          </section>
+
+          <!-- Indicators -->
+          <section class="grid indicators">
+            <div class="card indicator">
+              <h4>Implied Volatility (IV)</h4>
+              <div class="val" id="ivVal">--</div>
+              <div class="sub" id="ivChg">--</div>
+              <div class="status" id="ivStatus">Monitoring…</div>
+            </div>
+            <div class="card indicator">
+              <h4>Put/Call Ratio (PCR)</h4>
+              <div class="val" id="pcrVal">--</div>
+              <div class="sub" id="pcrChg">--</div>
+              <div class="status" id="pcrStatus">Neutral</div>
+            </div>
+            <div class="card indicator">
+              <h4>VIX</h4>
+              <div class="val" id="vixVal">--</div>
+              <div class="sub" id="vixChg">--</div>
+              <div class="status" id="vixStatus">Calm</div>
+            </div>
+            <div class="card indicator">
+              <h4>Straddle Premium</h4>
+              <div class="val" id="straddleVal">--</div>
+              <div class="sub" id="straddleSub">--</div>
+              <div class="status" id="straddleStatus">Monitoring…</div>
+            </div>
+            <div class="card indicator">
+              <h4>ATM Call Premium</h4>
+              <div class="val" id="callVal">--</div>
+              <div class="sub" id="callSub">--</div>
+              <div class="status">ATM Call</div>
+            </div>
+            <div class="card indicator">
+              <h4>ATM Put Premium</h4>
+              <div class="val" id="putVal">--</div>
+              <div class="sub" id="putSub">--</div>
+              <div class="status">ATM Put</div>
+            </div>
+            <div class="card indicator">
+              <h4>Last Updated</h4>
+              <div class="val" id="lastUpdated">--:--:--</div>
+              <div class="sub">Auto-refreshing every 5s</div>
+              <div class="status">System Clock</div>
+            </div>
+          </section>
+
+          <!-- Straddle Chart -->
+          <section class="card chart-wrap">
+            <div class="row" style="justify-content:space-between; align-items:center;">
+              <div>
+                <div style="font-weight:700;">Straddle Premium Chart</div>
+                <div class="subtitle">Live line or candle view</div>
               </div>
-              <div class="chat-message-bubble">${msg.text}</div>
-            `;
-            chatMessages.appendChild(messageDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-          }, index * 800);
-        });
-      }, 1000);
-    </script>
+              <div class="chart-toggle">
+                <label><input type="radio" name="chartMode" value="live" checked /> Live</label>
+                <label><input type="radio" name="chartMode" value="candle" /> Candle</label>
+              </div>
+            </div>
+            <canvas id="straddleChart" height="140"></canvas>
+          </section>
 
-    <script>
-      // Chat Options Functions
-      let notificationsMuted = false;
+          <div class="footer">Demo only. Not trading advice.</div>
 
-      function clearChatMessages() {
-        const chatMessages = document.getElementById('chatMessages');
-        chatMessages.innerHTML = '<div class="chat-message system-message"><p>Chat cleared. Start a new conversation! 💬</p></div>';
-        document.getElementById('chatOptionsMenu').style.display = 'none';
+          <script>
+            // Symbol lists
+            const symbols = {
+              equity: ['Nifty', 'Sensex', 'Bank Nifty'],
+              commodity: ['Gold', 'Goldm', 'Silver', 'Silverm'],
+              currency: ['USDINR']
+            };
+
+            // State
+            const state = {
+              dayLowStraddle: null,
+              chart: null,
+              chartMode: 'live',
+              alertsEnabled: true
+            };
+
+            const marketSelect = document.getElementById('marketSelect');
+            const symbolSelect = document.getElementById('symbolSelect');
+            const expirySelect = document.getElementById('expirySelect');
+
+            // Populate dropdowns
+            function populateSymbols() {
+              const market = marketSelect.value;
+              symbolSelect.innerHTML = symbols[market].map(s => `<option value="${s}">${s}</option>`).join('');
+            }
+
+            function populateExpiry() {
+              const today = new Date();
+              const options = [];
+              for (let i = 1; i <= 4; i++) {
+                const d = new Date(today.getTime() + i * 7 * 24 * 3600 * 1000);
+                options.push(d.toISOString().split('T')[0]);
+              }
+              expirySelect.innerHTML = options.map(o => `<option value="${o}">${o}</option>`).join('');
+            }
+
+            marketSelect.addEventListener('change', populateSymbols);
+            populateSymbols();
+            populateExpiry();
+
+            // Play alert tone
+            function playBeep(f=880, dur=180) {
+              const ctx = new (window.AudioContext || window.webkitAudioContext)();
+              const osc = ctx.createOscillator();
+              const gain = ctx.createGain();
+              osc.frequency.value = f;
+              osc.type = 'sine';
+              gain.gain.setValueAtTime(0.15, ctx.currentTime);
+              gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + dur/1000);
+              osc.connect(gain).connect(ctx.destination);
+              osc.start();
+              osc.stop(ctx.currentTime + dur/1000);
+            }
+
+            // Chart setup
+            const ctxChart = document.getElementById('straddleChart').getContext('2d');
+            state.chart = new Chart(ctxChart, {
+              type: 'line',
+              data: { labels: [], datasets: [{ label:'Straddle Premium', data: [], borderColor: '#3b82f6', backgroundColor:'rgba(59,130,246,0.2)', tension:0.2 }] },
+              options: { responsive:true, animation:false, plugins:{legend:{display:false}}, scales:{x:{display:false}, y:{ticks:{color:'#cbd5e1'}, grid:{color:'rgba(148,163,184,0.2)'}}, x:{grid:{color:'rgba(148,163,184,0.2)'}}} }
+            });
+
+            document.querySelectorAll('input[name="chartMode"]').forEach(r => {
+              r.addEventListener('change', e => {
+                state.chartMode = e.target.value;
+                updateChartAppearance();
+              });
+            });
+
+            function updateChartAppearance() {
+              const ds = state.chart.data.datasets[0];
+              if (state.chartMode === 'candle') {
+                ds.type = 'bar';
+                ds.backgroundColor = 'rgba(234,179,8,0.25)';
+                ds.borderColor = '#eab308';
+              } else {
+                ds.type = 'line';
+                ds.backgroundColor = 'rgba(59,130,246,0.2)';
+                ds.borderColor = '#3b82f6';
+              }
+              state.chart.update();
+            }
+
+            // Data simulation
+            function randBetween(min, max) { return min + Math.random() * (max - min); }
+
+            function generateSnapshot() {
+              return {
+                nifty: { price: randBetween(21500, 22000), chg: randBetween(-1.2, 1.2) },
+                sensex: { price: randBetween(72000, 74000), chg: randBetween(-1.0, 1.0) },
+                bank: { price: randBetween(45500, 46500), chg: randBetween(-1.5, 1.5) },
+                iv: { val: randBetween(12, 35), chg: randBetween(-12, 14) },
+                pcr: { val: randBetween(0.7, 1.3), chg: randBetween(-0.1, 0.1) },
+                vix: { val: randBetween(12, 25), chg: randBetween(-12, 14) },
+                atmCall: randBetween(80, 180),
+                atmPut: randBetween(70, 170)
+              };
+            }
+
+            // Update UI
+            function setTicker(idVal, idChg, obj) {
+              document.getElementById(idVal).textContent = obj.price.toFixed(2);
+              const el = document.getElementById(idChg);
+              el.textContent = `${obj.chg >=0 ? '+' : ''}${obj.chg.toFixed(2)}%`;
+              el.className = 't-change ' + (obj.chg >=0 ? 'pos' : 'neg');
+            }
+
+            function updateIndicators() {
+              const snap = generateSnapshot();
+
+              // tickers
+              setTicker('niftyVal','niftyChg', snap.nifty);
+              setTicker('sensexVal','sensexChg', snap.sensex);
+              setTicker('bankVal','bankChg', snap.bank);
+
+              // IV
+              document.getElementById('ivVal').textContent = snap.iv.val.toFixed(2) + '%';
+              const ivChg = snap.iv.chg;
+              const ivChgEl = document.getElementById('ivChg');
+              ivChgEl.textContent = `${ivChg>=0?'+':''}${ivChg.toFixed(2)}%`;
+              ivChgEl.className = 'sub ' + (Math.abs(ivChg) > 10 ? 'badge-red' : 'badge-green');
+              document.getElementById('ivStatus').textContent = Math.abs(ivChg) > 10 ? 'High IV move' : 'Stable';
+              if (Math.abs(ivChg) > 10) playBeep(1100, 180);
+
+              // PCR
+              document.getElementById('pcrVal').textContent = snap.pcr.val.toFixed(2);
+              const pcrChg = snap.pcr.chg;
+              const pcrEl = document.getElementById('pcrChg');
+              pcrEl.textContent = `${pcrChg>=0?'+':''}${pcrChg.toFixed(2)}`;
+              pcrEl.className = 'sub ' + (pcrChg>=0 ? 'badge-green' : '');
+              document.getElementById('pcrStatus').textContent = snap.pcr.val > 1.1 ? 'Bullish skew' : snap.pcr.val < 0.9 ? 'Bearish skew' : 'Neutral';
+
+              // VIX
+              document.getElementById('vixVal').textContent = snap.vix.val.toFixed(2);
+              const vixChg = snap.vix.chg;
+              const vixEl = document.getElementById('vixChg');
+              vixEl.textContent = `${vixChg>=0?'+':''}${vixChg.toFixed(2)}%`;
+              vixEl.className = 'sub ' + (Math.abs(vixChg) > 10 ? 'badge-red' : 'badge-green');
+              document.getElementById('vixStatus').textContent = Math.abs(vixChg) > 10 ? 'Vol spike' : 'Calm';
+              if (Math.abs(vixChg) > 10) playBeep(900, 200);
+
+              // premiums
+              document.getElementById('callVal').textContent = snap.atmCall.toFixed(2);
+              document.getElementById('putVal').textContent = snap.atmPut.toFixed(2);
+              document.getElementById('callSub').textContent = 'ATM Call premium';
+              document.getElementById('putSub').textContent = 'ATM Put premium';
+
+              const straddle = snap.atmCall + snap.atmPut;
+              if (state.dayLowStraddle === null) state.dayLowStraddle = straddle;
+              if (straddle < state.dayLowStraddle) state.dayLowStraddle = straddle;
+              const fromLowPct = ((straddle - state.dayLowStraddle) / state.dayLowStraddle) * 100;
+
+              document.getElementById('straddleVal').textContent = straddle.toFixed(2);
+              const straddleSub = document.getElementById('straddleSub');
+              straddleSub.textContent = `From day low: ${fromLowPct>=0?'+':''}${fromLowPct.toFixed(2)}%`;
+              const straddleStatus = document.getElementById('straddleStatus');
+              straddleStatus.textContent = 'Day low: ' + state.dayLowStraddle.toFixed(2);
+
+              if (fromLowPct > 20) {
+                straddleSub.className = 'sub badge-red';
+                state.chart.data.datasets[0].borderColor = '#ef4444';
+                state.chart.data.datasets[0].backgroundColor = 'rgba(239,68,68,0.2)';
+                playBeep(700, 220);
+              } else if (fromLowPct > 10) {
+                straddleSub.className = 'sub badge-red';
+                state.chart.data.datasets[0].borderColor = '#f59e0b';
+                state.chart.data.datasets[0].backgroundColor = 'rgba(245,158,11,0.2)';
+                playBeep(800, 180);
+              } else {
+                straddleSub.className = 'sub badge-green';
+                state.chart.data.datasets[0].borderColor = '#3b82f6';
+                state.chart.data.datasets[0].backgroundColor = state.chartMode === 'candle' ? 'rgba(234,179,8,0.25)' : 'rgba(59,130,246,0.2)';
+              }
+
+              // update chart
+              const now = new Date();
+              state.chart.data.labels.push(now.toLocaleTimeString());
+              state.chart.data.datasets[0].data.push(straddle.toFixed(2));
+              if (state.chart.data.labels.length > 40) { state.chart.data.labels.shift(); state.chart.data.datasets[0].data.shift(); }
+              updateChartAppearance();
+              state.chart.update();
+
+              // last updated
+              document.getElementById('lastUpdated').textContent = now.toLocaleTimeString();
+            }
+
+            updateIndicators();
+            setInterval(updateIndicators, 5000);
+
+            // Auth profile swap
+            window.addEventListener('DOMContentLoaded', () => {
+              if (window.AUTH && AUTH.initializeProfileDropdown) {
+                AUTH.initializeProfileDropdown();
+              }
+            });
+          </script>
+
+          <script src="auth.js?v=20260111"></script>
+        </body>
+        </html>
       }
 
-      function toggleNotifications() {
-        notificationsMuted = !notificationsMuted;
-        const notifText = document.getElementById('notifToggleText');
-        notifText.textContent = notificationsMuted ? 'Unmute Notifications' : 'Mute Notifications';
-        
-        const chatMessages = document.getElementById('chatMessages');
-        const statusMsg = document.createElement('div');
-        statusMsg.className = 'chat-message system-message';
-        statusMsg.innerHTML = `<p>Notifications ${notificationsMuted ? 'muted' : 'enabled'} 🔔</p>`;
-        chatMessages.appendChild(statusMsg);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-        
-        document.getElementById('chatOptionsMenu').style.display = 'none';
-      }
-
-      function changeTheme() {
-        const themes = ['default', 'dark', 'blue', 'green'];
-        const currentTheme = chatWidget.getAttribute('data-theme') || 'default';
-        const currentIndex = themes.indexOf(currentTheme);
-        const newTheme = themes[(currentIndex + 1) % themes.length];
-        
-        chatWidget.setAttribute('data-theme', newTheme);
-        
-        const chatMessages = document.getElementById('chatMessages');
-        const statusMsg = document.createElement('div');
-        statusMsg.className = 'chat-message system-message';
-        statusMsg.innerHTML = `<p>Theme changed to ${newTheme} 🎨</p>`;
-        chatMessages.appendChild(statusMsg);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-        
-        document.getElementById('chatOptionsMenu').style.display = 'none';
-      }
-
-      function exportChat() {
-        const messages = document.querySelectorAll('.chat-message');
-        let exportText = 'TheOptionTrader - Chat Export\n';
-        exportText += '================================\n\n';
-        
-        messages.forEach(msg => {
-          const sender = msg.querySelector('.chat-message-sender')?.textContent || 'System';
-          const time = msg.querySelector('.chat-message-time')?.textContent || '';
-          const text = msg.querySelector('.chat-message-bubble')?.textContent || msg.querySelector('p')?.textContent || '';
-          exportText += `[${time}] ${sender}: ${text}\n`;
-        });
-        
-        const blob = new Blob([exportText], { type: 'text/plain' });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `chat-export-${new Date().toISOString().split('T')[0]}.txt`;
-        a.click();
-        window.URL.revokeObjectURL(url);
-        
-        const chatMessages = document.getElementById('chatMessages');
-        const statusMsg = document.createElement('div');
-        statusMsg.className = 'chat-message system-message';
-        statusMsg.innerHTML = '<p>Chat exported successfully! 💾</p>';
-        chatMessages.appendChild(statusMsg);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-        
-        document.getElementById('chatOptionsMenu').style.display = 'none';
-      }
-
-      function reportUser() {
-        const chatMessages = document.getElementById('chatMessages');
-        const statusMsg = document.createElement('div');
-        statusMsg.className = 'chat-message system-message';
-        statusMsg.innerHTML = '<p>Report submitted to moderators. Thank you! ⚠️</p>';
-        chatMessages.appendChild(statusMsg);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-        
-        document.getElementById('chatOptionsMenu').style.display = 'none';
-      }
-    </script>
-
-    <script>
-      // Market Indicators Functionality
-      function updateMarketIndicators() {
-        // VIX (Volatility Index) - typically ranges from 10-40
-        const vix = (12 + Math.random() * 18).toFixed(2);
-        const vixChange = (Math.random() * 4 - 2).toFixed(2);
-        document.getElementById('vix-value').textContent = vix;
-        document.getElementById('vix-change').textContent = vixChange >= 0 ? `+${vixChange}%` : `${vixChange}%`;
-        document.getElementById('vix-change').className = `indicator-change ${vixChange >= 0 ? 'positive' : 'negative'}`;
-        
-        // VIX Status
-        let vixStatus = 'Low Volatility';
-        if (vix > 20) vixStatus = 'High Volatility';
-        else if (vix > 15) vixStatus = 'Moderate';
-        document.getElementById('vix-status').textContent = vixStatus;
-
-        // PCR (Put Call Ratio) - typically ranges from 0.6 to 1.5
-        const pcr = (0.7 + Math.random() * 0.8).toFixed(2);
-        const pcrChange = (Math.random() * 0.2 - 0.1).toFixed(2);
-        document.getElementById('pcr-value').textContent = pcr;
-        document.getElementById('pcr-change').textContent = pcrChange >= 0 ? `+${pcrChange}` : `${pcrChange}`;
-        document.getElementById('pcr-change').className = `indicator-change ${pcrChange >= 0 ? 'positive' : 'negative'}`;
-        
-        // PCR Status
-        let pcrStatus = 'Neutral';
-        if (pcr > 1.2) pcrStatus = 'Bullish (High Put Buying)';
-        else if (pcr < 0.8) pcrStatus = 'Bearish (High Call Buying)';
-        document.getElementById('pcr-status').textContent = pcrStatus;
-
-        // IV (Implied Volatility) - percentage
-        const iv = (15 + Math.random() * 25).toFixed(2);
-        const ivChange = (Math.random() * 6 - 3).toFixed(2);
-        document.getElementById('iv-value').textContent = `${iv}%`;
-        document.getElementById('iv-change').textContent = ivChange >= 0 ? `+${ivChange}%` : `${ivChange}%`;
-        document.getElementById('iv-change').className = `indicator-change ${ivChange >= 0 ? 'positive' : 'negative'}`;
-        
-        // IV Status
-        let ivStatus = 'Moderate';
-        if (iv > 30) ivStatus = 'Very High';
-        else if (iv > 25) ivStatus = 'High';
-        else if (iv < 18) ivStatus = 'Low';
-        document.getElementById('iv-status').textContent = ivStatus;
-
-        // OI (Open Interest) - in lakhs
-        const oi = (150 + Math.random() * 350).toFixed(2);
-        const oiChange = (Math.random() * 20 - 10).toFixed(2);
-        document.getElementById('oi-value').textContent = `${oi}L`;
-        document.getElementById('oi-change').textContent = oiChange >= 0 ? `+${oiChange}%` : `${oiChange}%`;
-        document.getElementById('oi-change').className = `indicator-change ${oiChange >= 0 ? 'positive' : 'negative'}`;
-        
-        // OI Status
-        let oiStatus = 'Building';
-        if (oiChange > 10) oiStatus = 'Strong Addition';
-        else if (oiChange < -10) oiStatus = 'Unwinding';
-        document.getElementById('oi-status').textContent = oiStatus;
-      }
-
-      // Update indicators immediately and then every 5 seconds
-      updateMarketIndicators();
-      setInterval(updateMarketIndicators, 5000);
-    </script>
-
-    <script src="auth.js"></script>
-    <script src="app.js"></script>
-  </body>
-</html>
 
