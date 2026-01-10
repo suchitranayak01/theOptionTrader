@@ -58,6 +58,76 @@
       </div>
     </section>
 
+    <!-- Market Indicators Section -->
+    <section class="market-indicators">
+      <div class="indicators-container">
+        <div class="indicator-card vix-card">
+          <div class="indicator-header">
+            <span class="indicator-icon">⚡</span>
+            <span class="indicator-label">VIX</span>
+          </div>
+          <div class="indicator-value" id="vix-value">--</div>
+          <div class="indicator-change" id="vix-change">--</div>
+          <div class="indicator-status" id="vix-status">Calculating...</div>
+        </div>
+
+        <div class="indicator-card pcr-card">
+          <div class="indicator-header">
+            <span class="indicator-icon">📊</span>
+            <span class="indicator-label">PCR (Put/Call Ratio)</span>
+          </div>
+          <div class="indicator-value" id="pcr-value">--</div>
+          <div class="indicator-change" id="pcr-change">--</div>
+          <div class="indicator-status" id="pcr-status">Neutral</div>
+        </div>
+
+        <div class="indicator-card iv-card">
+          <div class="indicator-header">
+            <span class="indicator-icon">📈</span>
+            <span class="indicator-label">IV (Implied Volatility)</span>
+          </div>
+          <div class="indicator-value" id="iv-value">--</div>
+          <div class="indicator-change" id="iv-change">--</div>
+          <div class="indicator-status" id="iv-status">Moderate</div>
+        </div>
+
+        <div class="indicator-card oi-card">
+          <div class="indicator-header">
+            <span class="indicator-icon">💼</span>
+            <span class="indicator-label">OI (Open Interest)</span>
+          </div>
+          <div class="indicator-value" id="oi-value">--</div>
+          <div class="indicator-change" id="oi-change">--</div>
+          <div class="indicator-status" id="oi-status">Loading...</div>
+        </div>
+
+        <div class="indicator-card greeks-card">
+          <div class="indicator-header">
+            <span class="indicator-icon">Δθ</span>
+            <span class="indicator-label">Greeks Summary</span>
+          </div>
+          <div class="greeks-grid">
+            <div class="greek-item">
+              <span class="greek-label">Delta:</span>
+              <span class="greek-value" id="delta-value">--</span>
+            </div>
+            <div class="greek-item">
+              <span class="greek-label">Gamma:</span>
+              <span class="greek-value" id="gamma-value">--</span>
+            </div>
+            <div class="greek-item">
+              <span class="greek-label">Theta:</span>
+              <span class="greek-value" id="theta-value">--</span>
+            </div>
+            <div class="greek-item">
+              <span class="greek-label">Vega:</span>
+              <span class="greek-value" id="vega-value">--</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <main class="app-grid">
       <aside class="sidebar card">
         <h4>Controls</h4>
@@ -262,6 +332,606 @@
       <br />
       <small>Developer: TheOptionTrader</small>
     </footer>
+
+    <!-- Live Chat Widget -->
+    <div id="chatWidget" class="chat-widget">
+      <div id="chatHeader" class="chat-header">
+        <div class="chat-header-content">
+          <span class="chat-online-indicator"></span>
+          <span class="chat-title">💬 Live Trading Chat</span>
+          <span class="chat-online-count" id="onlineCount">124 online</span>
+        </div>
+        <button id="chatToggle" class="chat-toggle-btn">−</button>
+      </div>
+      
+      <div id="chatBody" class="chat-body">
+        <div id="chatMessages" class="chat-messages">
+          <!-- Welcome message -->
+          <div class="chat-message system-message">
+            <p>👋 Welcome to TheOptionTrader Live Chat! Share your trading insights and strategies.</p>
+          </div>
+        </div>
+        
+        <div class="chat-input-container">
+          <div id="emojiPicker" class="emoji-picker" style="display: none;">
+            <div class="emoji-grid">
+              <button class="emoji-btn" data-emoji="😀">😀</button>
+              <button class="emoji-btn" data-emoji="😃">😃</button>
+              <button class="emoji-btn" data-emoji="😄">😄</button>
+              <button class="emoji-btn" data-emoji="😁">😁</button>
+              <button class="emoji-btn" data-emoji="🤣">🤣</button>
+              <button class="emoji-btn" data-emoji="😊">😊</button>
+              <button class="emoji-btn" data-emoji="😎">😎</button>
+              <button class="emoji-btn" data-emoji="🤔">🤔</button>
+              <button class="emoji-btn" data-emoji="🤨">🤨</button>
+              <button class="emoji-btn" data-emoji="😮">😮</button>
+              <button class="emoji-btn" data-emoji="😲">😲</button>
+              <button class="emoji-btn" data-emoji="🙄">🙄</button>
+              <button class="emoji-btn" data-emoji="😬">😬</button>
+              <button class="emoji-btn" data-emoji="🤐">🤐</button>
+              <button class="emoji-btn" data-emoji="😢">😢</button>
+              <button class="emoji-btn" data-emoji="😭">😭</button>
+              <button class="emoji-btn" data-emoji="😡">😡</button>
+              <button class="emoji-btn" data-emoji="🤬">🤬</button>
+              <button class="emoji-btn" data-emoji="💪">💪</button>
+              <button class="emoji-btn" data-emoji="👍">👍</button>
+              <button class="emoji-btn" data-emoji="👎">👎</button>
+              <button class="emoji-btn" data-emoji="👏">👏</button>
+              <button class="emoji-btn" data-emoji="🙌">🙌</button>
+              <button class="emoji-btn" data-emoji="🤝">🤝</button>
+              <button class="emoji-btn" data-emoji="🔥">🔥</button>
+              <button class="emoji-btn" data-emoji="⚡">⚡</button>
+              <button class="emoji-btn" data-emoji="💰">💰</button>
+              <button class="emoji-btn" data-emoji="💵">💵</button>
+              <button class="emoji-btn" data-emoji="📈">📈</button>
+              <button class="emoji-btn" data-emoji="📉">📉</button>
+              <button class="emoji-btn" data-emoji="🚀">🚀</button>
+              <button class="emoji-btn" data-emoji="🎯">🎯</button>
+              <button class="emoji-btn" data-emoji="💎">💎</button>
+              <button class="emoji-btn" data-emoji="🏆">🏆</button>
+              <button class="emoji-btn" data-emoji="⭐">⭐</button>
+              <button class="emoji-btn" data-emoji="✅">✅</button>
+              <button class="emoji-btn" data-emoji="❌">❌</button>
+              <button class="emoji-btn" data-emoji="⚠️">⚠️</button>
+              <button class="emoji-btn" data-emoji="💡">💡</button>
+              <button class="emoji-btn" data-emoji="🎉">🎉</button>
+            </div>
+          </div>
+          
+          <div class="chat-input-wrapper">
+            <button id="emojiToggle" class="emoji-toggle-btn" title="Add emoji">😀</button>
+            <input type="text" id="chatInput" class="chat-input" placeholder="Type your message...">
+            <button id="chatSend" class="chat-send-btn">Send</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <style>
+      .chat-widget {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 380px;
+        max-height: 600px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+        display: flex;
+        flex-direction: column;
+        z-index: 9999;
+        font-family: 'Inter', sans-serif;
+        transition: all 0.3s ease;
+      }
+
+      .chat-widget.minimized .chat-body {
+        display: none;
+      }
+
+      .chat-header {
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        color: white;
+        padding: 16px;
+        border-radius: 12px 12px 0 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        user-select: none;
+      }
+
+      .chat-header-content {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex: 1;
+      }
+
+      .chat-online-indicator {
+        width: 10px;
+        height: 10px;
+        background: #10b981;
+        border-radius: 50%;
+        animation: pulse-glow 2s infinite;
+      }
+
+      @keyframes pulse-glow {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.6; transform: scale(1.2); }
+      }
+
+      .chat-title {
+        font-weight: 600;
+        font-size: 15px;
+      }
+
+      .chat-online-count {
+        font-size: 12px;
+        opacity: 0.9;
+        margin-left: auto;
+      }
+
+      .chat-toggle-btn {
+        background: rgba(255,255,255,0.2);
+        border: none;
+        color: white;
+        width: 28px;
+        height: 28px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 20px;
+        line-height: 1;
+        transition: background 0.2s;
+      }
+
+      .chat-toggle-btn:hover {
+        background: rgba(255,255,255,0.3);
+      }
+
+      .chat-body {
+        display: flex;
+        flex-direction: column;
+        height: 500px;
+        background: #f8fafc;
+      }
+
+      .chat-messages {
+        flex: 1;
+        overflow-y: auto;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .chat-messages::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      .chat-messages::-webkit-scrollbar-track {
+        background: #f1f5f9;
+      }
+
+      .chat-messages::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 3px;
+      }
+
+      .chat-message {
+        max-width: 85%;
+        animation: slideInMessage 0.3s ease;
+      }
+
+      @keyframes slideInMessage {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .chat-message.own {
+        align-self: flex-end;
+      }
+
+      .chat-message.other {
+        align-self: flex-start;
+      }
+
+      .chat-message.system-message {
+        align-self: center;
+        max-width: 90%;
+        text-align: center;
+      }
+
+      .chat-message-header {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 4px;
+        font-size: 12px;
+      }
+
+      .chat-message-sender {
+        font-weight: 600;
+        color: #1e293b;
+      }
+
+      .chat-message-time {
+        color: #64748b;
+        font-size: 11px;
+      }
+
+      .chat-message-bubble {
+        padding: 10px 14px;
+        border-radius: 12px;
+        word-wrap: break-word;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      .chat-message.own .chat-message-bubble {
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        color: white;
+        border-bottom-right-radius: 4px;
+      }
+
+      .chat-message.other .chat-message-bubble {
+        background: white;
+        color: #1e293b;
+        border: 1px solid #e2e8f0;
+        border-bottom-left-radius: 4px;
+      }
+
+      .chat-message.system-message p {
+        background: #fef3c7;
+        color: #92400e;
+        padding: 8px 12px;
+        border-radius: 8px;
+        margin: 0;
+        font-size: 13px;
+        border: 1px solid #fde68a;
+      }
+
+      .chat-input-container {
+        background: white;
+        border-top: 1px solid #e2e8f0;
+        padding: 12px;
+        border-radius: 0 0 12px 12px;
+        position: relative;
+      }
+
+      .emoji-picker {
+        position: absolute;
+        bottom: 100%;
+        left: 12px;
+        right: 12px;
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 12px;
+        margin-bottom: 8px;
+        box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+        max-height: 180px;
+        overflow-y: auto;
+      }
+
+      .emoji-grid {
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+        gap: 6px;
+      }
+
+      .emoji-btn {
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        padding: 6px;
+        border-radius: 6px;
+        transition: all 0.2s;
+      }
+
+      .emoji-btn:hover {
+        background: #f1f5f9;
+        transform: scale(1.2);
+      }
+
+      .chat-input-wrapper {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .emoji-toggle-btn {
+        background: #f1f5f9;
+        border: none;
+        font-size: 20px;
+        width: 38px;
+        height: 38px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s;
+        flex-shrink: 0;
+      }
+
+      .emoji-toggle-btn:hover {
+        background: #e2e8f0;
+        transform: scale(1.1);
+      }
+
+      .chat-input {
+        flex: 1;
+        padding: 10px 14px;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 14px;
+        font-family: 'Inter', sans-serif;
+        outline: none;
+        transition: border-color 0.2s;
+      }
+
+      .chat-input:focus {
+        border-color: #3b82f6;
+      }
+
+      .chat-send-btn {
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        flex-shrink: 0;
+      }
+
+      .chat-send-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+      }
+
+      .chat-send-btn:active {
+        transform: translateY(0);
+      }
+
+      @media (max-width: 768px) {
+        .chat-widget {
+          width: calc(100% - 40px);
+          max-width: 380px;
+        }
+      }
+    </style>
+
+    <script>
+      // Live Chat Functionality
+      const chatWidget = document.getElementById('chatWidget');
+      const chatHeader = document.getElementById('chatHeader');
+      const chatToggle = document.getElementById('chatToggle');
+      const chatBody = document.getElementById('chatBody');
+      const chatMessages = document.getElementById('chatMessages');
+      const chatInput = document.getElementById('chatInput');
+      const chatSend = document.getElementById('chatSend');
+      const emojiToggle = document.getElementById('emojiToggle');
+      const emojiPicker = document.getElementById('emojiPicker');
+      const emojiButtons = document.querySelectorAll('.emoji-btn');
+      const onlineCount = document.getElementById('onlineCount');
+
+      // Toggle chat minimize
+      chatToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        chatWidget.classList.toggle('minimized');
+        chatToggle.textContent = chatWidget.classList.contains('minimized') ? '+' : '−';
+      });
+
+      // Toggle emoji picker
+      emojiToggle.addEventListener('click', () => {
+        emojiPicker.style.display = emojiPicker.style.display === 'none' ? 'block' : 'none';
+      });
+
+      // Add emoji to input
+      emojiButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const emoji = btn.getAttribute('data-emoji');
+          chatInput.value += emoji;
+          chatInput.focus();
+          emojiPicker.style.display = 'none';
+        });
+      });
+
+      // Close emoji picker when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!emojiPicker.contains(e.target) && e.target !== emojiToggle) {
+          emojiPicker.style.display = 'none';
+        }
+      });
+
+      // Send message function
+      function sendMessage() {
+        const message = chatInput.value.trim();
+        if (!message) return;
+
+        // Get user info
+        const user = AUTH.getUserProfile();
+        const userName = user ? user.name.split(' ')[0] : 'Guest';
+
+        // Create message element
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'chat-message own';
+        messageDiv.innerHTML = `
+          <div class="chat-message-header">
+            <span class="chat-message-sender">${userName}</span>
+            <span class="chat-message-time">${new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</span>
+          </div>
+          <div class="chat-message-bubble">${escapeHtml(message)}</div>
+        `;
+
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        // Clear input
+        chatInput.value = '';
+
+        // Simulate response (in real app, this would be WebSocket)
+        setTimeout(() => simulateResponse(), 1000 + Math.random() * 2000);
+      }
+
+      // Simulate chat responses
+      function simulateResponse() {
+        const responses = [
+          { name: 'Raj', text: 'Great analysis! 📈' },
+          { name: 'Priya', text: 'NIFTY looking bullish today 🚀' },
+          { name: 'Amit', text: 'Anyone trading Bank NIFTY options?' },
+          { name: 'Sneha', text: 'Made good profit on calls today 💰' },
+          { name: 'Vikram', text: 'Support at 21,800 holding strong 💪' },
+          { name: 'Pooja', text: 'What\'s your target for tomorrow? 🎯' },
+          { name: 'Karan', text: 'Volatility is high today ⚡' },
+          { name: 'Neha', text: 'Exit your positions before 3:15 PM ⚠️' },
+          { name: 'Rohit', text: 'Thanks for the tip! 🙌' },
+          { name: 'Anjali', text: 'Markets are unpredictable today 🤔' }
+        ];
+
+        const response = responses[Math.floor(Math.random() * responses.length)];
+        
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'chat-message other';
+        messageDiv.innerHTML = `
+          <div class="chat-message-header">
+            <span class="chat-message-sender">${response.name}</span>
+            <span class="chat-message-time">${new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</span>
+          </div>
+          <div class="chat-message-bubble">${escapeHtml(response.text)}</div>
+        `;
+
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+
+      // HTML escape function
+      function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+      }
+
+      // Send on button click
+      chatSend.addEventListener('click', sendMessage);
+
+      // Send on Enter key
+      chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          sendMessage();
+        }
+      });
+
+      // Simulate online count changes
+      setInterval(() => {
+        const count = 120 + Math.floor(Math.random() * 15);
+        onlineCount.textContent = `${count} online`;
+      }, 10000);
+
+      // Add initial simulated messages
+      setTimeout(() => {
+        const initMessages = [
+          { name: 'Trader_Pro', text: 'Market opened strong today! 📈', time: '09:15 AM' },
+          { name: 'Options_King', text: 'NIFTY resistance at 22,000 🎯', time: '09:18 AM' },
+          { name: 'Shreya', text: 'Good opportunity for call options 🚀', time: '09:22 AM' }
+        ];
+
+        initMessages.forEach((msg, index) => {
+          setTimeout(() => {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'chat-message other';
+            messageDiv.innerHTML = `
+              <div class="chat-message-header">
+                <span class="chat-message-sender">${msg.name}</span>
+                <span class="chat-message-time">${msg.time}</span>
+              </div>
+              <div class="chat-message-bubble">${msg.text}</div>
+            `;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+          }, index * 800);
+        });
+      }, 1000);
+    </script>
+
+    <script>
+      // Market Indicators Functionality
+      function updateMarketIndicators() {
+        // VIX (Volatility Index) - typically ranges from 10-40
+        const vix = (12 + Math.random() * 18).toFixed(2);
+        const vixChange = (Math.random() * 4 - 2).toFixed(2);
+        document.getElementById('vix-value').textContent = vix;
+        document.getElementById('vix-change').textContent = vixChange >= 0 ? `+${vixChange}%` : `${vixChange}%`;
+        document.getElementById('vix-change').className = `indicator-change ${vixChange >= 0 ? 'positive' : 'negative'}`;
+        
+        // VIX Status
+        let vixStatus = 'Low Volatility';
+        if (vix > 20) vixStatus = 'High Volatility';
+        else if (vix > 15) vixStatus = 'Moderate';
+        document.getElementById('vix-status').textContent = vixStatus;
+
+        // PCR (Put Call Ratio) - typically ranges from 0.6 to 1.5
+        const pcr = (0.7 + Math.random() * 0.8).toFixed(2);
+        const pcrChange = (Math.random() * 0.2 - 0.1).toFixed(2);
+        document.getElementById('pcr-value').textContent = pcr;
+        document.getElementById('pcr-change').textContent = pcrChange >= 0 ? `+${pcrChange}` : `${pcrChange}`;
+        document.getElementById('pcr-change').className = `indicator-change ${pcrChange >= 0 ? 'positive' : 'negative'}`;
+        
+        // PCR Status
+        let pcrStatus = 'Neutral';
+        if (pcr > 1.2) pcrStatus = 'Bullish (High Put Buying)';
+        else if (pcr < 0.8) pcrStatus = 'Bearish (High Call Buying)';
+        document.getElementById('pcr-status').textContent = pcrStatus;
+
+        // IV (Implied Volatility) - percentage
+        const iv = (15 + Math.random() * 25).toFixed(2);
+        const ivChange = (Math.random() * 6 - 3).toFixed(2);
+        document.getElementById('iv-value').textContent = `${iv}%`;
+        document.getElementById('iv-change').textContent = ivChange >= 0 ? `+${ivChange}%` : `${ivChange}%`;
+        document.getElementById('iv-change').className = `indicator-change ${ivChange >= 0 ? 'positive' : 'negative'}`;
+        
+        // IV Status
+        let ivStatus = 'Moderate';
+        if (iv > 30) ivStatus = 'Very High';
+        else if (iv > 25) ivStatus = 'High';
+        else if (iv < 18) ivStatus = 'Low';
+        document.getElementById('iv-status').textContent = ivStatus;
+
+        // OI (Open Interest) - in lakhs
+        const oi = (150 + Math.random() * 350).toFixed(2);
+        const oiChange = (Math.random() * 20 - 10).toFixed(2);
+        document.getElementById('oi-value').textContent = `${oi}L`;
+        document.getElementById('oi-change').textContent = oiChange >= 0 ? `+${oiChange}%` : `${oiChange}%`;
+        document.getElementById('oi-change').className = `indicator-change ${oiChange >= 0 ? 'positive' : 'negative'}`;
+        
+        // OI Status
+        let oiStatus = 'Building';
+        if (oiChange > 10) oiStatus = 'Strong Addition';
+        else if (oiChange < -10) oiStatus = 'Unwinding';
+        document.getElementById('oi-status').textContent = oiStatus;
+
+        // Greeks
+        const delta = (0.3 + Math.random() * 0.4).toFixed(3);
+        const gamma = (0.001 + Math.random() * 0.009).toFixed(4);
+        const theta = -(0.01 + Math.random() * 0.05).toFixed(3);
+        const vega = (0.05 + Math.random() * 0.15).toFixed(3);
+        
+        document.getElementById('delta-value').textContent = delta;
+        document.getElementById('gamma-value').textContent = gamma;
+        document.getElementById('theta-value').textContent = theta;
+        document.getElementById('vega-value').textContent = vega;
+      }
+
+      // Update indicators immediately and then every 5 seconds
+      updateMarketIndicators();
+      setInterval(updateMarketIndicators, 5000);
+    </script>
 
     <script src="auth.js"></script>
     <script src="app.js"></script>
