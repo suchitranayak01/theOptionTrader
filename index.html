@@ -29,22 +29,23 @@
         left: 0;
         right: 0;
         bottom: 0;
-        opacity: 0.15;
+        opacity: 0.2;
         display: flex;
         justify-content: center;
         align-items: flex-end;
-        gap: 8px;
+        gap: 12px;
         padding: 40px;
         z-index: 0;
       }
 
       .candle {
         position: relative;
-        width: 20px;
+        width: 24px;
         display: flex;
         flex-direction: column;
         align-items: center;
         animation: candleGrow 2s ease-in-out infinite;
+        color: #e6eef8;
       }
 
       .candle:nth-child(1) { animation-delay: 0s; }
@@ -61,37 +62,25 @@
       .wick {
         width: 2px;
         background: currentColor;
-        opacity: 0.6;
+        opacity: 0.5;
       }
 
       .body {
         width: 100%;
         border: 2px solid currentColor;
-        background: currentColor;
-        margin: 2px 0;
-        box-shadow: 0 0 10px currentColor;
-      }
-
-      .candle.bullish {
-        color: #22c55e;
-      }
-
-      .candle.bearish {
-        color: #ef4444;
-      }
-
-      .candle.bullish .body {
         background: transparent;
+        margin: 2px 0;
+        box-shadow: 0 0 8px rgba(230, 238, 248, 0.3);
       }
 
       @keyframes candleGrow {
         0%, 100% {
-          transform: scaleY(1);
-          opacity: 0.5;
+          transform: scaleY(0.9) translateY(10px);
+          opacity: 0.4;
         }
         50% {
-          transform: scaleY(1.2);
-          opacity: 1;
+          transform: scaleY(1.1) translateY(-10px);
+          opacity: 0.8;
         }
       }
 
@@ -102,7 +91,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        opacity: 0.05;
+        opacity: 0.03;
       }
 
       .grid-line {
@@ -110,7 +99,7 @@
         left: 0;
         right: 0;
         height: 1px;
-        background: #3b82f6;
+        background: #e6eef8;
       }
 
       .hero-content {
@@ -452,52 +441,52 @@
       </div>
       
       <div class="candle-container">
-        <div class="candle bullish">
+        <div class="candle">
           <div class="wick" style="height: 60px;"></div>
           <div class="body" style="height: 100px;"></div>
           <div class="wick" style="height: 40px;"></div>
         </div>
-        <div class="candle bearish">
+        <div class="candle">
           <div class="wick" style="height: 50px;"></div>
           <div class="body" style="height: 120px;"></div>
           <div class="wick" style="height: 30px;"></div>
         </div>
-        <div class="candle bullish">
+        <div class="candle">
           <div class="wick" style="height: 70px;"></div>
           <div class="body" style="height: 90px;"></div>
           <div class="wick" style="height: 50px;"></div>
         </div>
-        <div class="candle bullish">
+        <div class="candle">
           <div class="wick" style="height: 40px;"></div>
           <div class="body" style="height: 110px;"></div>
           <div class="wick" style="height: 35px;"></div>
         </div>
-        <div class="candle bearish">
+        <div class="candle">
           <div class="wick" style="height: 55px;"></div>
           <div class="body" style="height: 130px;"></div>
           <div class="wick" style="height: 45px;"></div>
         </div>
-        <div class="candle bullish">
+        <div class="candle">
           <div class="wick" style="height: 65px;"></div>
           <div class="body" style="height: 95px;"></div>
           <div class="wick" style="height: 40px;"></div>
         </div>
-        <div class="candle bearish">
+        <div class="candle">
           <div class="wick" style="height: 45px;"></div>
           <div class="body" style="height: 105px;"></div>
           <div class="wick" style="height: 50px;"></div>
         </div>
-        <div class="candle bullish">
+        <div class="candle">
           <div class="wick" style="height: 60px;"></div>
           <div class="body" style="height: 115px;"></div>
           <div class="wick" style="height: 42px;"></div>
         </div>
-        <div class="candle bearish">
+        <div class="candle">
           <div class="wick" style="height: 52px;"></div>
           <div class="body" style="height: 125px;"></div>
           <div class="wick" style="height: 38px;"></div>
         </div>
-        <div class="candle bullish">
+        <div class="candle">
           <div class="wick" style="height: 58px;"></div>
           <div class="body" style="height: 100px;"></div>
           <div class="wick" style="height: 48px;"></div>
