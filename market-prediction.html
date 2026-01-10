@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Market Prediction - TheOptionTrader</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .prediction-container {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+
+    .prediction-card {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 20px;
+    }
+
+    .prediction-result {
+      text-align: center;
+      padding: 40px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+    }
+
+    .prediction-result.BULLISH {
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.05));
+      border: 2px solid #22c55e;
+    }
+
+    .prediction-result.BEARISH {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.05));
+      border: 2px solid #ef4444;
+    }
+
+    .prediction-result.NEUTRAL {
+      background: linear-gradient(135deg, rgba(148, 163, 184, 0.2), rgba(148, 163, 184, 0.05));
+      border: 2px solid #94a3b8;
+    }
+
+    .prediction-label {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .BULLISH .prediction-label { color: #22c55e; }
+    .BEARISH .prediction-label { color: #ef4444; }
+    .NEUTRAL .prediction-label { color: #94a3b8; }
+
+    .confidence-meter {
+      width: 100%;
+      height: 30px;
+      background: rgba(51, 65, 85, 0.5);
+      border-radius: 15px;
+      overflow: hidden;
+      margin: 20px 0;
+    }
+
+    .confidence-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #3b82f6, #22c55e);
+      transition: width 0.5s ease;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 10px;
+      color: white;
+      font-weight: 600;
+    }
+
+    .signals-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .signal-item {
+      background: rgba(51, 65, 85, 0.3);
+      padding: 15px;
+      border-radius: 8px;
+      border-left: 4px solid #3b82f6;
+    }
+
+    .signal-label {
+      font-size: 0.9rem;
+      color: #94a3b8;
+      margin-bottom: 5px;
+    }
+
+    .signal-value {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #e6eef8;
+    }
+
+    .analysis-section {
+      margin-top: 30px;
+    }
+
+    .insight {
+      background: rgba(59, 130, 246, 0.1);
+      padding: 12px 15px;
+      margin: 8px 0;
+      border-radius: 6px;
+      border-left: 3px solid #3b82f6;
+      color: #e6eef8;
+    }
+
+    .input-section {
+      background: rgba(30, 41, 59, 0.6);
+      padding: 25px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+    }
+
+    .input-group {
+      margin: 15px 0;
+    }
+
+    .input-group label {
+      display: block;
+      color: #94a3b8;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 12px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid #334155;
+      border-radius: 6px;
+      color: #e6eef8;
+      font-size: 1rem;
+    }
+
+    .btn {
+      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+      color: white;
+      padding: 12px 32px;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+    }
+
+    .demo-data-btn {
+      background: rgba(59, 130, 246, 0.2);
+      border: 1px solid #3b82f6;
+      color: #3b82f6;
+      margin-left: 10px;
+    }
+  </style>
+</head>
+<body style="background: linear-gradient(135deg, #02101a 0%, #0f172a 100%); color: #e6eef8; min-height: 100vh;">
+  
+  <header class="app-header">
+    <div class="app-title">
+      <a href="index.html" style="text-decoration: none;">
+        <div class="brand" style="cursor: pointer;">
+          <img src="logo.svg" alt="TheOptionTrader" style="width: 68px; height: 68px;" class="logo-image"/>
+          <h1 class="logo">TheOptionTrader</h1>
+        </div>
+      </a>
+    </div>
+    <div class="header-actions">
+      <a class="btn ghost" href="index.html">Home</a>
+      <a class="btn ghost" href="Options360.html">Options 360</a>
+      <a class="btn ghost" href="login.html">Login</a>
+    </div>
+  </header>
+
+  <div class="prediction-container">
+    <h1 style="text-align: center; margin-bottom: 40px;">🤖 AI Market Prediction Engine</h1>
+    
+    <div class="input-section prediction-card">
+      <h3>Input Market Data</h3>
+      <div class="input-group">
+        <label>Current PCR (Put-Call Ratio)</label>
+        <input type="number" id="pcrInput" placeholder="e.g., 0.85" step="0.01" value="0.85">
+      </div>
+      <div class="input-group">
+        <label>Price Data (comma-separated, last 20 values)</label>
+        <input type="text" id="priceInput" placeholder="e.g., 23500,23520,23480,23550..." 
+               value="23500,23520,23480,23550,23590,23610,23580,23600,23650,23700,23680,23720,23750,23780,23800,23820,23850,23880,23900,23920">
+      </div>
+      <button class="btn" onclick="runPrediction()">🔮 Analyze & Predict</button>
+      <button class="btn demo-data-btn" onclick="loadDemoData('bullish')">Load Bullish Demo</button>
+      <button class="btn demo-data-btn" onclick="loadDemoData('bearish')">Load Bearish Demo</button>
+    </div>
+
+    <div id="resultContainer" style="display: none;">
+      <div id="predictionResult" class="prediction-result">
+        <div class="prediction-label" id="predictionLabel">-</div>
+        <div style="font-size: 1.2rem; color: #94a3b8; margin-bottom: 10px;">
+          Score: <span id="predictionScore">0</span>
+        </div>
+        <div class="confidence-meter">
+          <div class="confidence-fill" id="confidenceFill">
+            <span id="confidenceText">0%</span>
+          </div>
+        </div>
+        <div style="color: #94a3b8; margin-top: 10px;">
+          Confidence Level
+        </div>
+      </div>
+
+      <div class="prediction-card">
+        <h3>📊 Technical Signals</h3>
+        <div class="signals-grid" id="signalsGrid"></div>
+      </div>
+
+      <div class="prediction-card">
+        <h3>📈 Key Indicators</h3>
+        <div class="signals-grid" id="indicatorsGrid"></div>
+      </div>
+
+      <div class="prediction-card analysis-section">
+        <h3>🧠 AI Analysis</h3>
+        <div id="analysisContainer"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="prediction-engine.js"></script>
+  <script>
+    const engine = new PredictionEngine();
+
+    function runPrediction() {
+      const pcrValue = parseFloat(document.getElementById('pcrInput').value);
+      const priceInput = document.getElementById('priceInput').value;
+      
+      if (!pcrValue || !priceInput) {
+        alert('Please enter both PCR and price data');
+        return;
+      }
+
+      // Parse price data
+      const prices = priceInput.split(',').map(p => parseFloat(p.trim())).filter(p => !isNaN(p));
+      
+      if (prices.length < 10) {
+        alert('Please provide at least 10 price values');
+        return;
+      }
+
+      // Create price data with timestamps
+      const priceData = prices.map((price, index) => ({
+        price: price,
+        timestamp: new Date(Date.now() - (prices.length - index) * 300000) // 5 min intervals
+      }));
+
+      // Run prediction
+      const result = engine.predict(priceData, pcrValue);
+      
+      // Display results
+      displayResults(result);
+    }
+
+    function displayResults(result) {
+      document.getElementById('resultContainer').style.display = 'block';
+      
+      const resultDiv = document.getElementById('predictionResult');
+      resultDiv.className = 'prediction-result ' + result.prediction;
+      
+      document.getElementById('predictionLabel').textContent = result.prediction;
+      document.getElementById('predictionScore').textContent = result.score;
+      document.getElementById('confidenceText').textContent = result.confidence + '%';
+      document.getElementById('confidenceFill').style.width = result.confidence + '%';
+
+      // Display signals
+      const signalsGrid = document.getElementById('signalsGrid');
+      signalsGrid.innerHTML = '';
+      Object.entries(result.signals).forEach(([key, value]) => {
+        signalsGrid.innerHTML += `
+          <div class="signal-item">
+            <div class="signal-label">${key.toUpperCase()}</div>
+            <div class="signal-value">${value}</div>
+          </div>
+        `;
+      });
+
+      // Display indicators
+      const indicatorsGrid = document.getElementById('indicatorsGrid');
+      indicatorsGrid.innerHTML = '';
+      Object.entries(result.indicators).forEach(([key, value]) => {
+        indicatorsGrid.innerHTML += `
+          <div class="signal-item">
+            <div class="signal-label">${key.toUpperCase()}</div>
+            <div class="signal-value">${typeof value === 'number' ? value.toFixed(2) : value}</div>
+          </div>
+        `;
+      });
+
+      // Display analysis
+      const analysisContainer = document.getElementById('analysisContainer');
+      analysisContainer.innerHTML = result.analysis.map(insight => 
+        `<div class="insight">${insight}</div>`
+      ).join('');
+
+      // Scroll to results
+      document.getElementById('resultContainer').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function loadDemoData(type) {
+      if (type === 'bullish') {
+        document.getElementById('pcrInput').value = '0.65';
+        document.getElementById('priceInput').value = 
+          '23200,23250,23220,23280,23350,23400,23420,23480,23520,23550,23580,23620,23650,23700,23750,23780,23820,23850,23900,23950';
+      } else {
+        document.getElementById('pcrInput').value = '1.45';
+        document.getElementById('priceInput').value = 
+          '24000,23950,23980,23920,23880,23850,23820,23780,23750,23700,23680,23650,23600,23550,23520,23480,23450,23400,23350,23300';
+      }
+      runPrediction();
+    }
+
+    // Auto-load demo data on page load
+    window.onload = function() {
+      loadDemoData('bullish');
+    };
+  </script>
+
+</body>
+</html>
