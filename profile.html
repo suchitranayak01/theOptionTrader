@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>My Profile - TheOptionTrader</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      body {
+        background: linear-gradient(135deg, #02101a 0%, #0f172a 100%);
+        min-height: 100vh;
+        font-family: 'Poppins', sans-serif;
+      }
+      
+      .profile-container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 0 20px;
+      }
+      
+      .profile-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+      }
+      
+      .profile-header {
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        padding: 40px 30px;
+        color: white;
+        text-align: center;
+      }
+      
+      .profile-avatar {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: white;
+        color: #3b82f6;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 42px;
+        font-weight: 700;
+        margin: 0 auto 16px;
+        border: 4px solid rgba(255, 255, 255, 0.3);
+      }
+      
+      .profile-header h1 {
+        margin: 0 0 8px 0;
+        font-size: 28px;
+      }
+      
+      .profile-header p {
+        margin: 0;
+        opacity: 0.9;
+        font-size: 14px;
+      }
+      
+      .premium-badge {
+        display: inline-block;
+        background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 600;
+        margin-top: 12px;
+      }
+      
+      .profile-body {
+        padding: 30px;
+      }
+      
+      .section-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #e2e8f0;
+      }
+      
+      .form-group {
+        margin-bottom: 24px;
+      }
+      
+      .form-group label {
+        display: block;
+        font-size: 14px;
+        font-weight: 500;
+        color: #475569;
+        margin-bottom: 8px;
+      }
+      
+      .form-group input,
+      .form-group select {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 15px;
+        transition: all 0.3s ease;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+      }
+      
+      .form-group input:focus,
+      .form-group select:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      }
+      
+      .form-group input:disabled {
+        background: #f1f5f9;
+        cursor: not-allowed;
+      }
+      
+      .btn-group {
+        display: flex;
+        gap: 12px;
+        margin-top: 30px;
+      }
+      
+      .btn {
+        flex: 1;
+        padding: 14px;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 15px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      
+      .btn-primary {
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        color: white;
+      }
+      
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+      }
+      
+      .btn-secondary {
+        background: #f1f5f9;
+        color: #64748b;
+      }
+      
+      .btn-secondary:hover {
+        background: #e2e8f0;
+      }
+      
+      .info-box {
+        background: #f0f9ff;
+        border: 1px solid #bae6fd;
+        border-radius: 8px;
+        padding: 16px;
+        margin-top: 20px;
+      }
+      
+      .info-box-title {
+        font-weight: 600;
+        color: #0369a1;
+        margin-bottom: 8px;
+      }
+      
+      .info-box-text {
+        font-size: 13px;
+        color: #075985;
+        line-height: 1.6;
+      }
+      
+      .stat-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+        margin-bottom: 30px;
+      }
+      
+      .stat-card {
+        background: #f8fafc;
+        padding: 20px;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+      }
+      
+      .stat-label {
+        font-size: 13px;
+        color: #64748b;
+        margin-bottom: 4px;
+      }
+      
+      .stat-value {
+        font-size: 20px;
+        font-weight: 700;
+        color: #1e293b;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="app-header" style="background: #02101a; border-bottom: 1px solid #334155; padding: 20px 40px;">
+      <div style="max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
+        <a href="index.html" style="text-decoration: none; color: #e6eef8; font-size: 24px; font-weight: 700;">TheOptionTrader</a>
+        <div style="display: flex; gap: 20px; align-items: center;">
+          <a href="Options360.html" style="color: #94a3b8; text-decoration: none;">Dashboard</a>
+          <a href="index.html" style="color: #94a3b8; text-decoration: none;">Home</a>
+        </div>
+      </div>
+    </header>
+
+    <div class="profile-container">
+      <div class="profile-card">
+        <div class="profile-header">
+          <div class="profile-avatar" id="profileAvatar">?</div>
+          <h1 id="profileName">Loading...</h1>
+          <p id="profileEmail">—</p>
+          <div id="premiumBadge"></div>
+        </div>
+        
+        <div class="profile-body">
+          <div class="stat-grid" id="statsGrid">
+            <div class="stat-card">
+              <div class="stat-label">Member Since</div>
+              <div class="stat-value" id="memberSince">—</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Account Type</div>
+              <div class="stat-value" id="accountType">—</div>
+            </div>
+          </div>
+
+          <h2 class="section-title">Personal Information</h2>
+          
+          <form id="profileForm" onsubmit="saveProfile(event)">
+            <div class="form-group">
+              <label for="name">Full Name *</label>
+              <input type="text" id="name" required />
+            </div>
+            
+            <div class="form-group">
+              <label for="email">Email Address *</label>
+              <input type="email" id="email" disabled />
+            </div>
+            
+            <div class="form-group">
+              <label for="mobile">Mobile Number *</label>
+              <input type="tel" id="mobile" placeholder="+91 XXXXX XXXXX" required />
+            </div>
+            
+            <div class="form-group">
+              <label for="traderType">Type of Trader *</label>
+              <select id="traderType" required>
+                <option value="">Select...</option>
+                <option value="buyer">Option Buyer</option>
+                <option value="seller">Option Seller</option>
+                <option value="both">Both (Buyer & Seller)</option>
+              </select>
+            </div>
+            
+            <div class="btn-group">
+              <button type="submit" class="btn btn-primary">Save Changes</button>
+              <button type="button" class="btn btn-secondary" onclick="window.location.href='Options360.html'">Cancel</button>
+            </div>
+          </form>
+          
+          <div class="info-box">
+            <div class="info-box-title">🔒 Your Data is Secure</div>
+            <div class="info-box-text">
+              All your personal information is stored securely and never shared with third parties. Your session automatically expires at midnight for added security.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script>
+      // Check if user is logged in
+      if (!AUTH.isLoggedIn()) {
+        alert('Please login to view your profile');
+        window.location.href = 'login.html';
+      }
+
+      // Load and display user profile
+      function loadProfile() {
+        const profile = AUTH.getUserProfile();
+        if (!profile) {
+          window.location.href = 'login.html';
+          return;
+        }
+
+        // Update header
+        const initials = profile.name.split(' ').map(n => n[0]).join('').toUpperCase();
+        document.getElementById('profileAvatar').textContent = initials;
+        document.getElementById('profileName').textContent = profile.name;
+        document.getElementById('profileEmail').textContent = profile.email;
+
+        // Show premium badge if applicable
+        if (profile.isPremium) {
+          const expiryDate = new Date(profile.premiumExpiry);
+          const now = new Date();
+          if (expiryDate > now) {
+            document.getElementById('premiumBadge').innerHTML = 
+              '<span class="premium-badge">⭐ PREMIUM MEMBER</span>';
+          }
+        }
+
+        // Update stats
+        const createdDate = new Date(profile.createdAt);
+        document.getElementById('memberSince').textContent = createdDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+        document.getElementById('accountType').textContent = profile.isPremium ? 'Premium' : 'Free';
+
+        // Fill form
+        document.getElementById('name').value = profile.name;
+        document.getElementById('email').value = profile.email;
+        document.getElementById('mobile').value = profile.mobile || '';
+        document.getElementById('traderType').value = profile.traderType || '';
+      }
+
+      // Save profile changes
+      function saveProfile(e) {
+        e.preventDefault();
+
+        const updates = {
+          name: document.getElementById('name').value,
+          mobile: document.getElementById('mobile').value,
+          traderType: document.getElementById('traderType').value
+        };
+
+        const result = AUTH.updateProfile(updates);
+
+        if (result.success) {
+          alert('✅ ' + result.message);
+          loadProfile(); // Reload to show updated data
+        } else {
+          alert('❌ ' + result.message);
+        }
+      }
+
+      // Initialize
+      loadProfile();
+    </script>
+  </body>
+</html>

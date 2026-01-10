@@ -304,6 +304,16 @@
             <input id="signup-confirm-password" type="password" placeholder="Re-enter password" required />
           </div>
           
+          <div class="form-group">
+            <label for="signup-trader-type">Type of Trader</label>
+            <select id="signup-trader-type" required>
+              <option value="">Select...</option>
+              <option value="buyer">Option Buyer</option>
+              <option value="seller">Option Seller</option>
+              <option value="both">Both (Buyer & Seller)</option>
+            </select>
+          </div>
+          
           <div class="checkbox-group">
             <input type="checkbox" id="angel-account" />
             <label for="angel-account">I want to open an Angel One trading account (Get 1 month FREE premium subscription!)</label>
@@ -337,7 +347,13 @@
       </div>
     </div>
 
+    <script src="auth.js"></script>
     <script>
+      // Redirect if already logged in
+      if (AUTH.isLoggedIn()) {
+        window.location.href = 'Options360.html';
+      }
+
       function switchTab(tab) {
         // Update tabs
         const tabs = document.querySelectorAll('.tab');
@@ -360,53 +376,52 @@
         const email = document.getElementById('login-email').value;
         const password = document.getElementById('login-password').value;
         
-        // Simple validation
-        localStorage.setItem('user', email);
-        localStorage.setItem('isPremium', 'false');
+        const result = AUTH.login(email, password);
         
-        alert('Login successful! Redirecting to dashboard...');
-        window.location.href = 'Options360.html';
+        if (result.success) {
+          alert('✅ ' + result.message);
+          window.location.href = 'Options360.html';
+        } else {
+          alert('❌ ' + result.message);
+        }
       }
       
       function handleSignup(e) {
         e.preventDefault();
         
-        const name = document.getElementById('signup-name').value;
-        const email = document.getElementById('signup-email').value;
-        const phone = document.getElementById('signup-phone').value;
         const password = document.getElementById('signup-password').value;
         const confirmPassword = document.getElementById('signup-confirm-password').value;
-        const angelAccount = document.getElementById('angel-account').checked;
         
         // Validate password match
         if (password !== confirmPassword) {
-          alert('Passwords do not match!');
+          alert('❌ Passwords do not match!');
           return;
         }
         
-        // Save user data
-        localStorage.setItem('user', email);
-        localStorage.setItem('userName', name);
-        localStorage.setItem('userPhone', phone);
+        const userData = {
+          name: document.getElementById('signup-name').value,
+          email: document.getElementById('signup-email').value,
+          mobile: document.getElementById('signup-phone').value,
+          password: password,
+          traderType: document.getElementById('signup-trader-type').value,
+          angelAccount: document.getElementById('angel-account').checked
+        };
         
-        // If Angel account is selected, give 1 month premium
-        if (angelAccount) {
-          localStorage.setItem('isPremium', 'true');
-          const expiryDate = new Date();
-          expiryDate.setMonth(expiryDate.getMonth() + 1);
-          localStorage.setItem('premiumExpiry', expiryDate.toISOString());
-          
-          alert('🎉 Account created successfully! You have received 1 month FREE premium subscription with Angel One account. Redirecting...');
+        const result = AUTH.signup(userData);
+        
+        if (result.success) {
+          if (userData.angelAccount) {
+            alert('🎉 ' + result.message + ' You have received 1 month FREE premium subscription with Angel One account.');
+          } else {
+            alert('✅ ' + result.message);
+          }
+          window.location.href = 'Options360.html';
         } else {
-          localStorage.setItem('isPremium', 'false');
-          alert('Account created successfully! Welcome to TheOptionTrader.');
+          alert('❌ ' + result.message);
         }
-        
-        window.location.href = 'Options360.html';
       }
       
       function openAngelAccount() {
-        // In production, this would redirect to Angel One partner link
         const angelChecked = document.getElementById('angel-account').checked;
         if (!angelChecked) {
           document.getElementById('angel-account').checked = true;
