@@ -531,6 +531,25 @@
       </div>
     </section>
 
+    <!-- Live Feed Section -->
+    <section style="padding: 60px 20px; background: #02101a; color: #e6eef8;">
+      <h2 style="text-align: center; font-size: 2.5rem; margin-bottom: 3rem; color: #e6eef8;">📡 Live Market Feed</h2>
+      <div style="max-width: 1200px; margin: 0 auto;">
+        <div style="background: rgba(59, 130, 246, 0.05); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px; padding: 2rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; border-bottom: 1px solid rgba(59, 130, 246, 0.2); padding-bottom: 1rem;">
+            <h3 style="margin: 0; color: #e6eef8;">Real-Time Market Data</h3>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span id="live-feed-status-dot" style="width: 10px; height: 10px; border-radius: 50%; background: #fbbf24;"></span>
+              <span id="live-feed-status-text" style="color: #94a3b8; font-size: 0.9rem;">Connecting...</span>
+            </div>
+          </div>
+          <div id="live-feed-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+            <!-- Live feed items will be populated here -->
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="features">
       <h2>Key Features</h2>
       <div class="features-grid">
@@ -574,7 +593,11 @@
     <script>
       // Homepage functionality
       document.addEventListener('DOMContentLoaded', function() {
-        // Initialize homepage tickers
+        // Start polling True Data server
+        updateDemoHomepageTickers();
+        fetchInterval = setInterval(updateDemoHomepageTickers, 2000); // Poll every 2 seconds
+        
+        // Initialize homepage tickers with Yahoo fallback
         initializeHomepageTickers();
 
         // Initialize search functionality
@@ -640,9 +663,10 @@
         }
       }
 
-      // Zerodha Live Data Integration
-      const SERVER_URL = 'http://localhost:5001';
+      // True Data Server Integration (via Python backend)
+      const TRUE_DATA_SERVER = 'http://localhost:5002';
       let usingLiveData = false;
+      let fetchInterval = null;
 
       // Initialize data
       let lastPrices = {
@@ -651,33 +675,113 @@
         'home-banknifty': { base: 48932, current: 48932, previous: 48932 }
       };
 
-      async function fetchLiveIndices() {
+      // Fetch data from True Data server
+      async function fetchTrueDataIndices() {
         try {
-          const response = await fetch(`${SERVER_URL}/api/indices`, { 
+          const response = await fetch(`${TRUE_DATA_SERVER}/api/indices`, {
             method: 'GET',
-            signal: AbortSignal.timeout(2000) // 2 second timeout
+            signal: AbortSignal.timeout(3000)
           });
+          
           if (!response.ok) throw new Error('Server not available');
+          
           const data = await response.json();
           usingLiveData = true;
           return data;
         } catch (error) {
-          // Silently fall back to simulated data
           usingLiveData = false;
           return null;
         }
       }
+      
+      async function fetchTrueDataStatus() {
+        try {
+          const response = await fetch(`${TRUE_DATA_SERVER}/api/status`, {
+            method: 'GET',
+            signal: AbortSignal.timeout(2000)
+          });
+          
+          if (!response.ok) return null;
+          return await response.json();
+        } catch (error) {
+          return null;
+        }
+      }
+      
+      function handleTrueDataUpdate(data) {
+        if (!data) return;
+        
+        // Update tickers
+        if (data.NIFTY) updateTickerFromTrueData('home-nifty', data.NIFTY, 'NIFTY');
+        if (data.SENSEX) updateTickerFromTrueData('home-sensex', data.SENSEX, 'SENSEX');
+        if (data.BANKNIFTY) updateTickerFromTrueData('home-banknifty', data.BANKNIFTY, 'BANKNIFTY');
+        
+        // Update live feed
+        updateLiveFeedFromData(data);
+      }
+      
+      function updateTickerFromTrueData(elementId, data, symbol) {
+        const priceElement = document.getElementById(`${elementId}-price`);
+        const changeElement = document.getElementById(`${elementId}-change`);
+
+        if (priceElement && data.ltp) {
+          priceElement.textContent = data.ltp.toLocaleString('en-IN', { maximumFractionDigits: 2 });
+        }
+
+        if (changeElement && typeof data.change !== 'undefined') {
+          const change = data.change;
+          const changePercent = data.changePct || 0;
+          
+          const changeText = change >= 0 ?
+            `+${change.toFixed(2)} (+${changePercent.toFixed(2)}%)` :
+            `${change.toFixed(2)} (${changePercent.toFixed(2)}%)`;
+
+          changeElement.textContent = changeText;
+          changeElement.className = 'header-ticker-change ' + (change > 0 ? 'positive' : change < 0 ? 'negative' : 'neutral');
+        }
+      }
+      
+      // Live feed display
+      const liveFeedData = {};
+      
+      function updateLiveFeedFromData(data) {
+        Object.assign(liveFeedData, data);
+        renderLiveFeed();
+      }
+      
+      function renderLiveFeed() {
+        const container = document.getElementById('live-feed-container');
+        if (!container) return;
+        
+        container.innerHTML = '';
+        
+        Object.entries(liveFeedData).forEach(([symbol, data]) => {
+          if (!data || typeof data !== 'object') return;
+          
+          const change = data.change || 0;
+          const changePercent = data.changePct || 0;
+          const toneClass = change > 0 ? 'positive' : change < 0 ? 'negative' : 'neutral';
+          
+          const feedItem = document.createElement('div');
+          feedItem.style.cssText = 'background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 8px; padding: 1rem;';
+          feedItem.innerHTML = `
+            <div style="font-size: 0.9rem; font-weight: 600; color: #64748b; margin-bottom: 0.5rem;">${symbol}</div>
+            <div style="font-size: 1.8rem; font-weight: 700; color: #e6eef8; font-family: 'Orbitron', monospace; margin-bottom: 0.5rem;">${(data.ltp || 0).toLocaleString('en-IN', { maximumFractionDigits: 2 })}</div>
+            <div class="header-ticker-change ${toneClass}" style="display: inline-block; font-size: 0.85rem; padding: 4px 8px; border-radius: 4px;">${change >= 0 ? '+' : ''}${change.toFixed(2)} (${changePercent >= 0 ? '+' : ''}${changePercent.toFixed(2)}%)</div>
+            ${data.volume ? `<div style="font-size: 0.8rem; color: #64748b; margin-top: 0.5rem;">Vol: ${data.volume.toLocaleString('en-IN')}</div>` : ''}
+            ${data.high ? `<div style="font-size: 0.75rem; color: #64748b; margin-top: 0.25rem;">H: ${data.high.toFixed(2)} L: ${data.low.toFixed(2)}</div>` : ''}
+          `;
+          container.appendChild(feedItem);
+        });
+      }
 
       async function updateDemoHomepageTickers() {
-        // Try to fetch live data first
-        const liveData = await fetchLiveIndices();
+        // Try to fetch live data from True Data server
+        const liveData = await fetchTrueDataIndices();
         
         if (liveData && Object.keys(liveData).length > 0) {
-          // Update with live data from Angel One
-          updateTickerFromLiveData('home-nifty', liveData['NIFTY 50']);
-          updateTickerFromLiveData('home-sensex', liveData['SENSEX']);
-          updateTickerFromLiveData('home-banknifty', liveData['BANK NIFTY']);
-          updateDataSourceIndicator(true);
+          handleTrueDataUpdate(liveData);
+          updateDataSourceIndicator(true, 'True Data');
         } else {
           // Fallback to realistic simulated data
           updateRealisticTicker('home-nifty');
@@ -687,20 +791,39 @@
         }
       }
 
-      function updateDataSourceIndicator(isLive) {
+      function updateDataSourceIndicator(isLive, source = 'True Data') {
         const dot = document.getElementById('data-status-dot');
         const text = document.getElementById('data-status-text');
+        const liveDot = document.getElementById('live-feed-status-dot');
+        const liveText = document.getElementById('live-feed-status-text');
         
         if (isLive) {
           dot.style.background = '#22c55e';
-          text.textContent = 'Live Data • Angel One';
+          text.textContent = `Live Data • ${source}`;
           text.style.color = '#22c55e';
+          if (liveDot) liveDot.style.background = '#22c55e';
+          if (liveText) {
+            liveText.textContent = `Connected to ${source}`;
+            liveText.style.color = '#22c55e';
+          }
         } else {
           dot.style.background = '#fbbf24';
           text.textContent = 'Simulated Data';
           text.style.color = '#64748b';
+          if (liveDot) liveDot.style.background = '#fbbf24';
+          if (liveText) {
+            liveText.textContent = 'Using simulated data';
+            liveText.style.color = '#64748b';
+          }
         }
       }
+      
+      // Cleanup on page unload
+      window.addEventListener('beforeunload', () => {
+        if (fetchInterval) {
+          clearInterval(fetchInterval);
+        }
+      });
 
       function updateTickerFromLiveData(elementId, data) {
         if (!data) return;

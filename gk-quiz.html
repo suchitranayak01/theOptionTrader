@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GK Quiz - Class 2 ICSE</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .quiz-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .quiz-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .quiz-header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+
+        .quiz-header p {
+            margin: 10px 0 0 0;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .quiz-content {
+            padding: 40px 30px;
+            min-height: 400px;
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        .start-screen {
+            text-align: center;
+        }
+
+        .start-screen h2 {
+            color: #333;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        .start-screen p {
+            color: #666;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .features-list {
+            text-align: left;
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .features-list li {
+            margin: 10px 0;
+            color: #555;
+            font-size: 1rem;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            font-weight: 600;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .back-btn {
+            background: #f0f0f0;
+            color: #333;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .back-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .progress-bar {
+            background: #e0e0e0;
+            height: 8px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            height: 100%;
+            transition: width 0.3s;
+            width: 0;
+        }
+
+        .question-number {
+            color: #999;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .question-text {
+            font-size: 1.3rem;
+            color: #333;
+            margin-bottom: 25px;
+            font-weight: 600;
+            animation: slideInDown 0.5s ease-out;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .option {
+            padding: 15px 20px;
+            background: #f5f5f5;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.05rem;
+            color: #333;
+            transition: all 0.3s;
+            text-align: left;
+            animation: slideInUp 0.4s ease-out backwards;
+        }
+
+        .option:nth-child(1) { animation-delay: 0.1s; }
+        .option:nth-child(2) { animation-delay: 0.2s; }
+        .option:nth-child(3) { animation-delay: 0.3s; }
+        .option:nth-child(4) { animation-delay: 0.4s; }
+
+        .option:hover {
+            background: #e8e8ff;
+            border-color: #667eea;
+        }
+
+        .option.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .option.correct {
+            background: #4CAF50;
+            color: white;
+            border-color: #4CAF50;
+            animation: bounce 0.6s ease;
+        }
+
+        .option.incorrect {
+            background: #f44336;
+            color: white;
+            border-color: #f44336;
+            animation: shake 0.5s ease;
+        }
+
+        .option.disabled {
+            cursor: not-allowed;
+        }
+
+        .next-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.2s;
+            width: 100%;
+        }
+
+        .next-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .next-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .score-number {
+            font-size: 3rem;
+            font-weight: 700;
+        }
+
+        .score-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .results-message {
+            font-size: 1.5rem;
+            color: #333;
+            margin: 20px 0;
+            font-weight: 600;
+        }
+
+        .results-description {
+            color: #666;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .medal {
+            font-size: 4rem;
+            text-align: center;
+            margin: 20px 0;
+            animation: pulse 1s ease infinite;
+        }
+
+        .grade-badge {
+            display: inline-block;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin: 15px 0;
+            animation: slideInDown 0.6s ease-out;
+        }
+
+        .grade-a-plus { background: linear-gradient(135deg, #FFD700, #FFA500); color: #333; }
+        .grade-a { background: linear-gradient(135deg, #4CAF50, #45a049); color: white; }
+        .grade-b { background: linear-gradient(135deg, #2196F3, #1976D2); color: white; }
+        .grade-c { background: linear-gradient(135deg, #FF9800, #F57C00); color: white; }
+        .grade-d { background: linear-gradient(135deg, #f44336, #d32f2f); color: white; }
+
+        .results-details {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+            color: #555;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .result-actions .btn {
+            flex: 1;
+            margin: 0;
+        }
+
+        @media (max-width: 600px) {
+            .quiz-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .question-text {
+                font-size: 1.1rem;
+            }
+
+            .quiz-content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <h1>🧠 GK Quiz</h1>
+            <p>Class 2 - ICSE Board</p>
+        </div>
+
+        <div class="quiz-content">
+            <!-- Start Screen -->
+            <div id="startScreen" class="screen active">
+                <div class="start-screen">
+                    <h2>Welcome! 👋</h2>
+                    <p>Test your General Knowledge with fun and interesting questions!</p>
+                    
+                    <div class="features-list">
+                        <ul>
+                            <li>✅ 100 Challenging Questions</li>
+                            <li>🎯 Multiple Choice Answers</li>
+                            <li>🖼️ Questions with Images</li>
+                            <li>⏱️ Instant Feedback</li>
+                            <li>🏆 See Your Score</li>
+                        </ul>
+                    </div>
+
+                    <p style="color: #666; font-size: 0.95rem;">Choose the correct answer for each question. Let's start!</p>
+                    
+                    <button class="btn" onclick="startQuiz()">Start Quiz 🚀</button>
+                </div>
+            </div>
+
+            <!-- Quiz Screen -->
+            <div id="quizScreen" class="screen">
+                <button class="back-btn" onclick="goBack()">← Back</button>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+
+                <div class="question-number" id="questionNumber"></div>
+                <div class="question-text" id="questionText"></div>
+                <div class="options" id="optionsContainer"></div>
+                <button class="next-btn" id="nextBtn" onclick="nextQuestion()" disabled>Next Question →</button>
+            </div>
+
+            <!-- Results Screen -->
+            <div id="resultsScreen" class="screen">
+                <button class="back-btn" onclick="goBack()">← Back</button>
+                
+                <div style="text-align: center;">
+                    <div class="score-circle">
+                        <div class="score-number" id="scoreNumber">0</div>
+                        <div class="score-label">/ 100</div>
+                    </div>
+
+                    <div class="medal" id="medal"></div>
+                    <div class="grade-badge" id="gradeBadge"></div>
+                    <div class="results-message" id="resultMessage"></div>
+                    <div class="results-description" id="resultDescription"></div>
+
+                    <div class="results-details">
+                        <div class="result-item">
+                            <span>Questions Answered:</span>
+                            <strong>100</strong>
+                        </div>
+                        <div class="result-item">
+                            <span>Correct Answers:</span>
+                            <strong id="correctCount">0</strong>
+                        </div>
+                        <div class="result-item">
+                            <span>Your Percentage:</span>
+                            <strong id="percentage">0%</strong>
+                        </div>
+                    </div>
+
+                    <div class="result-actions">
+                        <button class="btn" onclick="restartQuiz()">Try Again 🔄</button>
+                        <button class="btn" style="background: #f0f0f0; color: #333;" onclick="goHome()">Home 🏠</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const quizData = [
+            // Animals (1-20)
+            {
+                question: "Which is the largest land animal?",
+                options: ["Lion", "Elephant", "Giraffe", "Rhino"],
+                correct: 1,
+                emoji: "🐘"
+            },
+            {
+                question: "Which bird cannot fly?",
+                options: ["Eagle", "Parrot", "Penguin", "Sparrow"],
+                correct: 2,
+                emoji: "🐧"
+            },
+            {
+                question: "Which animal is known as the 'Ship of the Desert'?",
+                options: ["Horse", "Camel", "Donkey", "Elephant"],
+                correct: 1,
+                emoji: "🐪"
+            },
+            {
+                question: "How many legs does a spider have?",
+                options: ["6", "8", "10", "12"],
+                correct: 1,
+                emoji: "🕷️"
+            },
+            {
+                question: "Which animal gives us milk?",
+                options: ["Hen", "Goat", "Dog", "Cat"],
+                correct: 1,
+                emoji: "🐐"
+            },
+            {
+                question: "What does a caterpillar turn into?",
+                options: ["Bee", "Butterfly", "Bird", "Beetle"],
+                correct: 1,
+                emoji: "🦋"
+            },
+            {
+                question: "Which is the fastest land animal?",
+                options: ["Lion", "Tiger", "Cheetah", "Leopard"],
+                correct: 2,
+                emoji: "🐆"
+            },
+            {
+                question: "What is a baby lion called?",
+                options: ["Puppy", "Kitten", "Cub", "Calf"],
+                correct: 2,
+                emoji: "🦁"
+            },
+            {
+                question: "Which animal has a trunk?",
+                options: ["Rhino", "Hippo", "Elephant", "Buffalo"],
+                correct: 2,
+                emoji: "🐘"
+            },
+            {
+                question: "What sound does a cow make?",
+                options: ["Meow", "Woof", "Moo", "Quack"],
+                correct: 2,
+                emoji: "🐄"
+            },
+            {
+                question: "Which animal lives in water and on land?",
+                options: ["Fish", "Frog", "Shark", "Whale"],
+                correct: 1,
+                emoji: "🐸"
+            },
+            {
+                question: "Which animal has a long neck?",
+                options: ["Elephant", "Giraffe", "Zebra", "Horse"],
+                correct: 1,
+                emoji: "🦒"
+            },
+            {
+                question: "What is a baby dog called?",
+                options: ["Kitten", "Puppy", "Calf", "Chick"],
+                correct: 1,
+                emoji: "🐕"
+            },
+            {
+                question: "Which animal has black and white stripes?",
+                options: ["Tiger", "Lion", "Zebra", "Leopard"],
+                correct: 2,
+                emoji: "🦓"
+            },
+            {
+                question: "Which animal gives us wool?",
+                options: ["Cow", "Sheep", "Goat", "Horse"],
+                correct: 1,
+                emoji: "🐑"
+            },
+            {
+                question: "Which is the king of the jungle?",
+                options: ["Tiger", "Lion", "Elephant", "Bear"],
+                correct: 1,
+                emoji: "🦁"
+            },
+            {
+                question: "Which animal hops and carries babies in a pouch?",
+                options: ["Rabbit", "Kangaroo", "Squirrel", "Koala"],
+                correct: 1,
+                emoji: "🦘"
+            },
+            {
+                question: "What do bees make?",
+                options: ["Milk", "Honey", "Butter", "Cheese"],
+                correct: 1,
+                emoji: "🐝"
+            },
+            {
+                question: "Which animal has a shell on its back?",
+                options: ["Snake", "Lizard", "Turtle", "Frog"],
+                correct: 2,
+                emoji: "🐢"
+            },
+            {
+                question: "What do chickens lay?",
+                options: ["Milk", "Eggs", "Honey", "Seeds"],
+                correct: 1,
+                emoji: "🐔"
+            },
+
+            // Nature & Plants (21-30)
+            {
+                question: "What do plants need from the sun?",
+                options: ["Water", "Light", "Soil", "Air"],
+                correct: 1,
+                emoji: "🌞"
+            },
+            {
+                question: "Which season comes after winter?",
+                options: ["Summer", "Autumn", "Spring", "Rainy"],
+                correct: 2,
+                emoji: "🌸"
+            },
+            {
+                question: "What color are most leaves?",
+                options: ["Red", "Blue", "Green", "Yellow"],
+                correct: 2,
+                emoji: "🍃"
+            },
+            {
+                question: "What falls from the sky when it rains?",
+                options: ["Snow", "Water", "Hail", "Leaves"],
+                correct: 1,
+                emoji: "🌧️"
+            },
+            {
+                question: "Which part of the plant grows underground?",
+                options: ["Leaf", "Flower", "Root", "Stem"],
+                correct: 2,
+                emoji: "🌱"
+            },
+            {
+                question: "What do we call frozen rain?",
+                options: ["Dew", "Fog", "Snow", "Mist"],
+                correct: 2,
+                emoji: "❄️"
+            },
+            {
+                question: "What appears in the sky after rain?",
+                options: ["Sun", "Moon", "Rainbow", "Stars"],
+                correct: 2,
+                emoji: "🌈"
+            },
+            {
+                question: "Which is the hottest season?",
+                options: ["Winter", "Summer", "Spring", "Autumn"],
+                correct: 1,
+                emoji: "☀️"
+            },
+            {
+                question: "What do flowers need to grow?",
+                options: ["Only soil", "Only water", "Water and sunlight", "Only air"],
+                correct: 2,
+                emoji: "🌺"
+            },
+            {
+                question: "What do we see in the sky at night?",
+                options: ["Sun", "Rainbow", "Moon and stars", "Clouds only"],
+                correct: 2,
+                emoji: "🌙"
+            },
+
+            // Fruits & Food (31-40)
+            {
+                question: "Which fruit is red and keeps the doctor away?",
+                options: ["Banana", "Orange", "Apple", "Grape"],
+                correct: 2,
+                emoji: "🍎"
+            },
+            {
+                question: "Which fruit is yellow and monkeys love it?",
+                options: ["Apple", "Banana", "Mango", "Grape"],
+                correct: 1,
+                emoji: "🍌"
+            },
+            {
+                question: "What do we get from cows?",
+                options: ["Eggs", "Milk", "Honey", "Wool"],
+                correct: 1,
+                emoji: "🥛"
+            },
+            {
+                question: "Which vegetable makes you cry when you cut it?",
+                options: ["Potato", "Tomato", "Onion", "Carrot"],
+                correct: 2,
+                emoji: "🧅"
+            },
+            {
+                question: "What is made from wheat?",
+                options: ["Rice", "Bread", "Milk", "Sugar"],
+                correct: 1,
+                emoji: "🍞"
+            },
+            {
+                question: "Which fruit is orange in color?",
+                options: ["Apple", "Banana", "Orange", "Grape"],
+                correct: 2,
+                emoji: "🍊"
+            },
+            {
+                question: "What vegetable is orange and rabbits love?",
+                options: ["Potato", "Tomato", "Carrot", "Cabbage"],
+                correct: 2,
+                emoji: "🥕"
+            },
+            {
+                question: "What do we drink in the morning that is hot?",
+                options: ["Juice", "Milk", "Tea or Coffee", "Water"],
+                correct: 2,
+                emoji: "☕"
+            },
+            {
+                question: "Which is the king of fruits?",
+                options: ["Apple", "Mango", "Orange", "Banana"],
+                correct: 1,
+                emoji: "🥭"
+            },
+            {
+                question: "What is ice cream made from?",
+                options: ["Water", "Milk", "Juice", "Tea"],
+                correct: 1,
+                emoji: "🍦"
+            },
+
+            // Numbers & Math (41-50)
+            {
+                question: "What comes after 10?",
+                options: ["9", "11", "12", "13"],
+                correct: 1,
+                emoji: "🔢"
+            },
+            {
+                question: "How many days are in a week?",
+                options: ["5", "6", "7", "8"],
+                correct: 2,
+                emoji: "📅"
+            },
+            {
+                question: "What is 10 + 10?",
+                options: ["15", "20", "25", "30"],
+                correct: 1,
+                emoji: "➕"
+            },
+            {
+                question: "How many months are in a year?",
+                options: ["10", "11", "12", "13"],
+                correct: 2,
+                emoji: "📆"
+            },
+            {
+                question: "What is 5 + 5?",
+                options: ["8", "9", "10", "11"],
+                correct: 2,
+                emoji: "🔟"
+            },
+            {
+                question: "How many fingers do you have on both hands?",
+                options: ["5", "10", "15", "20"],
+                correct: 1,
+                emoji: "✋"
+            },
+            {
+                question: "What is half of 10?",
+                options: ["3", "4", "5", "6"],
+                correct: 2,
+                emoji: "➗"
+            },
+            {
+                question: "How many wheels does a bicycle have?",
+                options: ["1", "2", "3", "4"],
+                correct: 1,
+                emoji: "🚲"
+            },
+            {
+                question: "What comes before 20?",
+                options: ["18", "19", "21", "22"],
+                correct: 1,
+                emoji: "🔢"
+            },
+            {
+                question: "How many sides does a square have?",
+                options: ["3", "4", "5", "6"],
+                correct: 1,
+                emoji: "⬛"
+            },
+
+            // Body Parts & Health (51-60)
+            {
+                question: "What do we use to see?",
+                options: ["Ears", "Eyes", "Nose", "Mouth"],
+                correct: 1,
+                emoji: "👁️"
+            },
+            {
+                question: "What do we use to hear?",
+                options: ["Eyes", "Ears", "Nose", "Mouth"],
+                correct: 1,
+                emoji: "👂"
+            },
+            {
+                question: "How many teeth should you brush every day?",
+                options: ["None", "Some", "All", "Only front"],
+                correct: 2,
+                emoji: "🦷"
+            },
+            {
+                question: "What protects our brain?",
+                options: ["Hair", "Skull", "Skin", "Nose"],
+                correct: 1,
+                emoji: "🧠"
+            },
+            {
+                question: "What pumps blood in our body?",
+                options: ["Lungs", "Stomach", "Heart", "Liver"],
+                correct: 2,
+                emoji: "❤️"
+            },
+            {
+                question: "What should you do before eating?",
+                options: ["Play", "Wash hands", "Watch TV", "Sleep"],
+                correct: 1,
+                emoji: "🧼"
+            },
+            {
+                question: "How many eyes do we have?",
+                options: ["1", "2", "3", "4"],
+                correct: 1,
+                emoji: "👀"
+            },
+            {
+                question: "What helps us breathe?",
+                options: ["Heart", "Lungs", "Stomach", "Liver"],
+                correct: 1,
+                emoji: "🫁"
+            },
+            {
+                question: "What do we use to taste food?",
+                options: ["Nose", "Ears", "Tongue", "Teeth"],
+                correct: 2,
+                emoji: "👅"
+            },
+            {
+                question: "What should you do to stay healthy?",
+                options: ["Eat junk food", "Exercise and eat healthy", "Sleep all day", "Watch TV only"],
+                correct: 1,
+                emoji: "🏃"
+            },
+
+            // Colors & Shapes (61-70)
+            {
+                question: "What color is the sun?",
+                options: ["Blue", "Yellow", "Green", "Red"],
+                correct: 1,
+                emoji: "☀️"
+            },
+            {
+                question: "How many sides does a triangle have?",
+                options: ["2", "3", "4", "5"],
+                correct: 1,
+                emoji: "🔺"
+            },
+            {
+                question: "What color do you get when you mix red and yellow?",
+                options: ["Green", "Orange", "Purple", "Brown"],
+                correct: 1,
+                emoji: "🎨"
+            },
+            {
+                question: "What shape is a ball?",
+                options: ["Square", "Triangle", "Circle", "Rectangle"],
+                correct: 2,
+                emoji: "⚽"
+            },
+            {
+                question: "What color are clouds?",
+                options: ["Black", "White", "Blue", "Green"],
+                correct: 1,
+                emoji: "☁️"
+            },
+            {
+                question: "Which shape has no corners?",
+                options: ["Square", "Triangle", "Circle", "Rectangle"],
+                correct: 2,
+                emoji: "⭕"
+            },
+            {
+                question: "What color is grass?",
+                options: ["Red", "Blue", "Green", "Yellow"],
+                correct: 2,
+                emoji: "🌿"
+            },
+            {
+                question: "How many corners does a rectangle have?",
+                options: ["2", "3", "4", "5"],
+                correct: 2,
+                emoji: "▭"
+            },
+            {
+                question: "What is the color of night sky?",
+                options: ["White", "Blue", "Black", "Red"],
+                correct: 2,
+                emoji: "🌃"
+            },
+            {
+                question: "What shape is a book?",
+                options: ["Circle", "Triangle", "Rectangle", "Oval"],
+                correct: 2,
+                emoji: "📖"
+            },
+
+            // Transportation (71-78)
+            {
+                question: "What flies in the sky and carries people?",
+                options: ["Car", "Train", "Airplane", "Ship"],
+                correct: 2,
+                emoji: "✈️"
+            },
+            {
+                question: "What runs on tracks?",
+                options: ["Car", "Bus", "Train", "Bike"],
+                correct: 2,
+                emoji: "🚂"
+            },
+            {
+                question: "What do we use to cross a river?",
+                options: ["Car", "Boat", "Bicycle", "Train"],
+                correct: 1,
+                emoji: "⛵"
+            },
+            {
+                question: "How many wheels does a car have?",
+                options: ["2", "3", "4", "6"],
+                correct: 2,
+                emoji: "🚗"
+            },
+            {
+                question: "What vehicle takes sick people to hospital?",
+                options: ["Bus", "Taxi", "Ambulance", "Truck"],
+                correct: 2,
+                emoji: "🚑"
+            },
+            {
+                question: "What vehicle puts out fires?",
+                options: ["Police car", "Fire truck", "Ambulance", "Bus"],
+                correct: 1,
+                emoji: "🚒"
+            },
+            {
+                question: "What do we ride that has two wheels and pedals?",
+                options: ["Car", "Motorcycle", "Bicycle", "Scooter"],
+                correct: 2,
+                emoji: "🚴"
+            },
+            {
+                question: "What vehicle carries many children to school?",
+                options: ["Car", "School bus", "Train", "Airplane"],
+                correct: 1,
+                emoji: "🚌"
+            },
+
+            // Professions (79-85)
+            {
+                question: "Who teaches students in school?",
+                options: ["Doctor", "Teacher", "Farmer", "Pilot"],
+                correct: 1,
+                emoji: "👩‍🏫"
+            },
+            {
+                question: "Who treats sick people?",
+                options: ["Teacher", "Doctor", "Farmer", "Chef"],
+                correct: 1,
+                emoji: "👨‍⚕️"
+            },
+            {
+                question: "Who grows crops and vegetables?",
+                options: ["Doctor", "Teacher", "Farmer", "Pilot"],
+                correct: 2,
+                emoji: "👨‍🌾"
+            },
+            {
+                question: "Who cooks food in a restaurant?",
+                options: ["Teacher", "Chef", "Doctor", "Driver"],
+                correct: 1,
+                emoji: "👨‍🍳"
+            },
+            {
+                question: "Who flies an airplane?",
+                options: ["Driver", "Pilot", "Sailor", "Farmer"],
+                correct: 1,
+                emoji: "👨‍✈️"
+            },
+            {
+                question: "Who delivers letters and packages?",
+                options: ["Teacher", "Postman", "Doctor", "Chef"],
+                correct: 1,
+                emoji: "📮"
+            },
+            {
+                question: "Who protects us from crime?",
+                options: ["Teacher", "Doctor", "Police officer", "Farmer"],
+                correct: 2,
+                emoji: "👮"
+            },
+
+            // General Knowledge (86-100)
+            {
+                question: "What is the capital of India?",
+                options: ["Mumbai", "Delhi", "Kolkata", "Chennai"],
+                correct: 1,
+                emoji: "🇮🇳"
+            },
+            {
+                question: "Which festival is called the festival of lights?",
+                options: ["Holi", "Diwali", "Christmas", "Eid"],
+                correct: 1,
+                emoji: "🪔"
+            },
+            {
+                question: "What do we write with?",
+                options: ["Eraser", "Pencil", "Scale", "Book"],
+                correct: 1,
+                emoji: "✏️"
+            },
+            {
+                question: "Where do we keep our books at home?",
+                options: ["Kitchen", "Bathroom", "Bookshelf", "Garden"],
+                correct: 2,
+                emoji: "📚"
+            },
+            {
+                question: "What do we use to cut paper?",
+                options: ["Pencil", "Eraser", "Scissors", "Scale"],
+                correct: 2,
+                emoji: "✂️"
+            },
+            {
+                question: "Which is the first month of the year?",
+                options: ["December", "January", "March", "April"],
+                correct: 1,
+                emoji: "🗓️"
+            },
+            {
+                question: "What gives us light at night in our house?",
+                options: ["Sun", "Bulb", "Moon", "Candle"],
+                correct: 1,
+                emoji: "💡"
+            },
+            {
+                question: "Where do fish live?",
+                options: ["Land", "Trees", "Water", "Sky"],
+                correct: 2,
+                emoji: "🐟"
+            },
+            {
+                question: "What do we use to tell time?",
+                options: ["Calendar", "Clock", "Book", "Pencil"],
+                correct: 1,
+                emoji: "🕐"
+            },
+            {
+                question: "What is the opposite of day?",
+                options: ["Morning", "Evening", "Night", "Afternoon"],
+                correct: 2,
+                emoji: "🌃"
+            },
+            {
+                question: "Which direction does the sun rise?",
+                options: ["West", "East", "North", "South"],
+                correct: 1,
+                emoji: "🌅"
+            },
+            {
+                question: "How many hours are in a day?",
+                options: ["12", "24", "36", "48"],
+                correct: 1,
+                emoji: "⏰"
+            },
+            {
+                question: "What is the national bird of India?",
+                options: ["Parrot", "Peacock", "Eagle", "Sparrow"],
+                correct: 1,
+                emoji: "🦚"
+            },
+            {
+                question: "What is the national animal of India?",
+                options: ["Lion", "Elephant", "Tiger", "Leopard"],
+                correct: 2,
+                emoji: "🐅"
+            },
+            {
+                question: "Which sport uses a bat and ball?",
+                options: ["Football", "Cricket", "Hockey", "Tennis"],
+                correct: 1,
+                emoji: "🏏"
+            },
+
+            // Funny Questions (96-100)
+            {
+                question: "What do you call a bear with no teeth?",
+                options: ["A grizzly bear", "A gummy bear", "A scary bear", "A baby bear"],
+                correct: 1,
+                emoji: "🧸"
+            },
+            {
+                question: "Why did the chicken cross the playground?",
+                options: ["To play", "To eat", "To get to the other slide", "To meet friends"],
+                correct: 2,
+                emoji: "🐔"
+            },
+            {
+                question: "What do you call a sleeping bull?",
+                options: ["A bulldozer", "A nightmare", "A snoring bull", "A tired cow"],
+                correct: 0,
+                emoji: "🐂"
+            },
+            {
+                question: "What has hands but cannot clap?",
+                options: ["A statue", "A clock", "A robot", "A doll"],
+                correct: 1,
+                emoji: "🕐"
+            },
+            {
+                question: "Why was 6 afraid of 7?",
+                options: ["7 was bigger", "Because 7 8 (ate) 9", "7 was mean", "6 was silly"],
+                correct: 1,
+                emoji: "🔢"
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let selectedAnswers = [];
+
+        function startQuiz() {
+            document.getElementById('startScreen').classList.remove('active');
+            document.getElementById('quizScreen').classList.add('active');
+            currentQuestion = 0;
+            score = 0;
+            selectedAnswers = [];
+            displayQuestion();
+        }
+
+        function displayQuestion() {
+            if (currentQuestion >= quizData.length) {
+                showResults();
+                return;
+            }
+
+            const question = quizData[currentQuestion];
+            
+            // Update progress
+            const progress = ((currentQuestion + 1) / quizData.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+
+            // Update question
+            document.getElementById('questionNumber').textContent = `Question ${currentQuestion + 1} of ${quizData.length}`;
+            document.getElementById('questionText').textContent = `${question.emoji} ${question.question}`;
+
+            // Update options
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+
+            question.options.forEach((option, index) => {
+                const optionBtn = document.createElement('div');
+                optionBtn.className = 'option';
+                optionBtn.textContent = option;
+                optionBtn.onclick = () => selectOption(index);
+                optionsContainer.appendChild(optionBtn);
+            });
+
+            // Disable next button
+            document.getElementById('nextBtn').disabled = true;
+        }
+
+        function selectOption(index) {
+            const options = document.querySelectorAll('.option');
+            const question = quizData[currentQuestion];
+            
+            // Only allow one selection per question
+            if (selectedAnswers[currentQuestion] !== undefined) {
+                return;
+            }
+
+            selectedAnswers[currentQuestion] = index;
+            
+            options.forEach((opt, i) => {
+                opt.classList.add('disabled');
+                if (i === question.correct) {
+                    opt.classList.add('correct');
+                    if (index === question.correct) {
+                        score++;
+                    }
+                } else if (i === index && index !== question.correct) {
+                    opt.classList.add('incorrect');
+                }
+            });
+
+            document.getElementById('nextBtn').disabled = false;
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            displayQuestion();
+        }
+
+        function showResults() {
+            document.getElementById('quizScreen').classList.remove('active');
+            document.getElementById('resultsScreen').classList.add('active');
+
+            const percentage = (score / quizData.length) * 100;
+            document.getElementById('scoreNumber').textContent = score;
+            document.getElementById('correctCount').textContent = score;
+            document.getElementById('percentage').textContent = percentage.toFixed(0) + '%';
+
+            let message = '';
+            let description = '';
+            let medal = '';
+            let grade = '';
+            let gradeClass = '';
+
+            // Enhanced Grading System
+            if (percentage >= 95) {
+                message = '🌟 Outstanding! Perfect Score!';
+                description = 'Wow! You are a GK Genius! Absolutely amazing performance!';
+                medal = '🏆';
+                grade = 'A+';
+                gradeClass = 'grade-a-plus';
+            } else if (percentage >= 85) {
+                message = '🎉 Excellent Performance!';
+                description = 'Superb! You have outstanding general knowledge!';
+                medal = '🥇';
+                grade = 'A';
+                gradeClass = 'grade-a';
+            } else if (percentage >= 75) {
+                message = '👏 Great Job!';
+                description = 'Very good! You are doing really well. Keep it up!';
+                medal = '🥈';
+                grade = 'B+';
+                gradeClass = 'grade-b';
+            } else if (percentage >= 60) {
+                message = '👍 Good Effort!';
+                description = 'Good work! Keep learning and you will improve!';
+                medal = '🥉';
+                grade = 'B';
+                gradeClass = 'grade-b';
+            } else if (percentage >= 50) {
+                message = '📚 Fair Performance';
+                description = 'Not bad! You need to read more. Practice makes perfect!';
+                medal = '📗';
+                grade = 'C';
+                gradeClass = 'grade-c';
+            } else if (percentage >= 35) {
+                message = '💪 Keep Trying!';
+                description = 'You can do better! Study harder and try again!';
+                medal = '📕';
+                grade = 'D';
+                gradeClass = 'grade-d';
+            } else {
+                message = '📖 Need More Practice';
+                description = 'Don\'t worry! Learning takes time. Keep studying and try again!';
+                medal = '📘';
+                grade = 'E';
+                gradeClass = 'grade-d';
+            }
+
+            document.getElementById('resultMessage').textContent = message;
+            document.getElementById('resultDescription').textContent = description;
+            document.getElementById('medal').textContent = medal;
+            
+                    const gradeBadge = document.getElementById('gradeBadge');
+                    gradeBadge.textContent = 'Grade: ' + grade;
+                    gradeBadge.className = 'grade-badge ' + gradeClass;
+        }
+
+        function restartQuiz() {
+            document.getElementById('resultsScreen').classList.remove('active');
+            document.getElementById('quizScreen').classList.add('active');
+            currentQuestion = 0;
+            score = 0;
+            selectedAnswers = [];
+            displayQuestion();
+        }
+
+        function goBack() {
+            document.getElementById('quizScreen').classList.remove('active');
+            document.getElementById('resultsScreen').classList.remove('active');
+            document.getElementById('startScreen').classList.add('active');
+            currentQuestion = 0;
+            score = 0;
+            selectedAnswers = [];
+        }
+
+        function goHome() {
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>

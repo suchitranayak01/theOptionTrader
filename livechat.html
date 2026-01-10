@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Live Chat Support</title>
+    <style>
+      body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; background:#0f172a; color:#e6eef8; }
+      .wrap { max-width: 860px; margin: 0 auto; padding: 32px; }
+      header { display:flex; align-items:center; gap:12px; margin-bottom: 12px; }
+      header h1 { margin:0; font-size: 1.6rem; }
+      .info { color:#94a3b8; margin-bottom: 16px; }
+      .box { background:#0b1220; border:1px solid #334155; border-radius:12px; padding:16px; }
+      a { color:#60a5fa; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <h1>💬 Live Chat</h1>
+      </header>
+      <p class="info">Use the widget in the bottom-right to chat with us. If scripts are blocked, use the fallback link below.</p>
+      <div class="box">
+        <!-- Start of LiveChat (www.livechat.com) code -->
+        <script>
+            window.__lc = window.__lc || {};
+            window.__lc.license = 19447573;
+            window.__lc.integration_name = "manual_onboarding";
+            window.__lc.product_name = "livechat";
+            ;(function(n,t,c){function i(n){return e._h?e._h.apply(null,n):e._q.push(n)}var e={_q:[],_h:null,_v:"2.0",on:function(){i(["on",c.call(arguments)])},once:function(){i(["once",c.call(arguments)])},off:function(){i(["off",c.call(arguments)])},get:function(){if(!e._h)throw new Error("[LiveChatWidget] You can't use getters before load.");return i(["get",c.call(arguments)])},call:function(){i(["call",c.call(arguments)])},init:function(){var n=t.createElement("script");n.async=!0,n.type="text/javascript",n.src="https://cdn.livechatinc.com/tracking.js",t.head.appendChild(n)}};!n.__lc.asyncInit&&e.init(),n.LiveChatWidget=n.LiveChatWidget||e}(window,document,[].slice))
+        </script>
+        <noscript><a href="https://www.livechat.com/chat-with/19447573/" rel="nofollow">Chat with us</a>, powered by <a href="https://www.livechat.com/?welcome" rel="noopener nofollow" target="_blank">LiveChat</a></noscript>
+        <!-- End of LiveChat code -->
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,5 +1,9 @@
 // app.js
 
+// True Data Server Configuration
+const TRUE_DATA_SERVER = 'http://localhost:5002';
+let usingTrueData = false;
+
 // URL parameter handling
 function handleUrlParameters() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -44,6 +48,136 @@ function handleUrlParameters() {
 // Live ticker functionality
 let tickerUpdateInterval = null;
 let demoMode = false; // Set to true for demo data when API fails
+
+function initializeLiveTickers() {
+  // Start with demo mode for immediate visual feedback
+  demoMode = true;
+  updateTickerStatus('Connecting...');
+  updateDemoTickers();
+
+  // Set up demo updates every 5 seconds
+  tickerUpdateInterval = setInterval(updateDemoTickers, 5000);
+
+  // Try to get True Data first, then fall back to Yahoo
+  checkTrueDataConnection();
+
+  // Cleanup on page unload
+  window.addEventListener('beforeunload', () => {
+    if (tickerUpdateInterval) {
+      clearInterval(tickerUpdateInterval);
+      tickerUpdateInterval = null;
+    }
+  });
+}
+
+// Check if True Data server is available
+async function checkTrueDataConnection() {
+  try {
+    const response = await fetch(`${TRUE_DATA_SERVER}/api/status`, {
+      method: 'GET',
+      signal: AbortSignal.timeout(2000)
+    });
+    
+    if (response.ok) {
+      const status = await response.json();
+      if (status.authenticated) {
+        // Switch to True Data mode
+        usingTrueData = true;
+        demoMode = false;
+        updateTickerStatus('Live Data • True Data');
+        
+        // Clear demo interval and set up True Data polling
+        if (tickerUpdateInterval) {
+          clearInterval(tickerUpdateInterval);
+        }
+        
+        updateTrueDataTickers();
+        tickerUpdateInterval = setInterval(updateTrueDataTickers, 2000);
+        
+        console.log('Connected to True Data server');
+        return;
+      }
+    }
+  } catch (error) {
+    console.log('True Data server not available, trying Yahoo Finance...');
+  }
+  
+  // Fallback to Yahoo Finance
+  updateLiveTickers();
+}
+
+// Fetch data from True Data server
+async function updateTrueDataTickers() {
+  try {
+    const response = await fetch(`${TRUE_DATA_SERVER}/api/indices`, {
+      method: 'GET',
+      signal: AbortSignal.timeout(3000)
+    });
+    
+    if (!response.ok) throw new Error('Server not available');
+    
+    const data = await response.json();
+    
+    // Update tickers with True Data
+    if (data.NIFTY) updateTickerDisplay('nifty', data.NIFTY);
+    if (data.SENSEX) updateTickerDisplay('sensex', data.SENSEX);
+    if (data.BANKNIFTY) updateTickerDisplay('banknifty', data.BANKNIFTY);
+    
+    // Update live badge
+    updateLiveBadge(true, 'True Data');
+    
+  } catch (error) {
+    console.error('Error fetching True Data:', error);
+    // Fall back to demo mode
+    if (!demoMode) {
+      demoMode = true;
+      updateTickerStatus('Demo Mode (Server Offline)');
+      if (tickerUpdateInterval) {
+        clearInterval(tickerUpdateInterval);
+      }
+      tickerUpdateInterval = setInterval(updateDemoTickers, 5000);
+    }
+  }
+}
+
+function updateTickerDisplay(index, data) {
+  const valueEl = document.getElementById(`${index}-value`);
+  const changeEl = document.getElementById(`${index}-change`);
+  
+  if (valueEl && data.ltp) {
+    valueEl.textContent = data.ltp.toLocaleString('en-IN', { maximumFractionDigits: 2 });
+  }
+  
+  if (changeEl && typeof data.change !== 'undefined') {
+    const change = data.change;
+    const changePct = data.changePct || 0;
+    
+    const changeText = change >= 0 ?
+      `+${change.toFixed(2)} (+${changePct.toFixed(2)}%)` :
+      `${change.toFixed(2)} (${changePct.toFixed(2)}%)`;
+    
+    changeEl.textContent = changeText;
+    changeEl.className = change >= 0 ? 'ticker-change positive' : 'ticker-change negative';
+  }
+}
+
+function updateLiveBadge(isLive, source = '') {
+  const badge = document.getElementById('liveBadge');
+  const dot = document.getElementById('liveDot');
+  const text = document.getElementById('liveText');
+  
+  if (badge && dot && text) {
+    if (isLive) {
+      badge.classList.add('live');
+      badge.classList.remove('offline');
+      text.textContent = source ? `Live • ${source}` : 'Live';
+    } else {
+      badge.classList.remove('live');
+      badge.classList.add('offline');
+      text.textContent = 'Offline';
+    }
+  }
+}
 
 function initializeLiveTickers() {
   // Start with demo mode for immediate visual feedback
