@@ -310,9 +310,9 @@
             .row { display:flex; gap:12px; align-items:center; }
             .tickers { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
             .ticker { padding:14px; background:var(--panel); border:1px solid var(--border); border-radius:12px; }
-            .t-name { color:var(--muted); font-size:14px; }
-            .t-value { font-size:26px; font-weight:700; }
-            .t-change { font-weight:600; }
+            .t-name { color:var(--muted); font-size:16px; font-weight:600; }
+            .t-value { font-size:32px; font-weight:700; }
+            .t-change { font-size:16px; font-weight:600; }
             .pos { color:var(--good); } .neg { color:var(--bad); }
             .controls { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
             label { display:flex; flex-direction:column; gap:6px; font-size:13px; color:var(--muted); }
@@ -328,7 +328,25 @@
             .subtitle { color:var(--muted); font-size:13px; margin:4px 0 0; }
             .footer { color:var(--muted); font-size:12px; margin-top:16px; }
             .badge-green { color:var(--good); } .badge-red { color:var(--bad); }
-            @media(max-width:768px){ body{padding:12px;} header{flex-direction:column; align-items:flex-start;} }
+            #chatWidget { position:fixed; bottom:20px; right:20px; width:360px; max-height:500px; background:var(--card); border:2px solid var(--border); border-radius:16px; box-shadow:0 8px 32px rgba(0,0,0,0.4); z-index:999; display:flex; flex-direction:column; transition:all 0.3s ease; }
+            #chatWidget.minimized { max-height:50px; }
+            .chat-header { display:flex; justify-content:space-between; align-items:center; padding:12px 16px; border-bottom:1px solid var(--border); background:var(--panel); border-radius:14px 14px 0 0; cursor:pointer; }
+            .chat-header h3 { margin:0; font-size:15px; font-weight:700; }
+            .chat-controls { display:flex; gap:8px; }
+            .chat-controls button { background:transparent; border:none; color:var(--muted); cursor:pointer; font-size:16px; padding:4px 8px; border-radius:6px; }
+            .chat-controls button:hover { background:var(--border); }
+            .chat-body { flex:1; overflow-y:auto; padding:12px; display:flex; flex-direction:column; gap:8px; max-height:350px; }
+            #chatWidget.minimized .chat-body { display:none; }
+            .chat-message { padding:8px 12px; border-radius:8px; background:var(--panel); font-size:13px; }
+            .chat-message.own { background:rgba(59,130,246,0.2); margin-left:40px; }
+            .chat-message .user { font-weight:700; font-size:12px; color:var(--accent); margin-bottom:4px; }
+            .chat-message .time { font-size:11px; color:var(--muted); margin-left:8px; }
+            .chat-input-wrap { padding:12px; border-top:1px solid var(--border); display:flex; gap:8px; }
+            #chatWidget.minimized .chat-input-wrap { display:none; }
+            .chat-input-wrap input { flex:1; padding:8px 12px; border-radius:8px; border:1px solid var(--border); background:var(--panel); color:var(--text); font-size:13px; }
+            .chat-input-wrap button { padding:8px 16px; border-radius:8px; border:none; background:var(--accent); color:white; font-weight:600; cursor:pointer; }
+            .chat-input-wrap button:hover { background:#2563eb; }
+            @media(max-width:768px){ body{padding:12px;} header{flex-direction:column; align-items:flex-start;} #chatWidget{width:calc(100% - 40px); right:20px;} }
           </style>
         </head>
         <body>
@@ -377,6 +395,9 @@
               </label>
               <label>Expiry Date
                 <select id="expirySelect"></select>
+              </label>
+              <label>Strike Price
+                <select id="strikeSelect"></select>
               </label>
             </div>
           </section>
@@ -444,6 +465,34 @@
 
           <div class="footer">Demo only. Not trading advice.</div>
 
+          <!-- Floating Chat Widget -->
+          <div id="chatWidget">
+            <div class="chat-header" onclick="toggleChat()">
+              <h3>💬 Live Discussion</h3>
+              <div class="chat-controls">
+                <button id="minimizeBtn" onclick="event.stopPropagation(); toggleChat();">−</button>
+              </div>
+            </div>
+            <div class="chat-body" id="chatBody">
+              <div class="chat-message">
+                <div class="user">Trader1<span class="time">12:45 PM</span></div>
+                <div>Nifty showing strong support at 21800</div>
+              </div>
+              <div class="chat-message own">
+                <div class="user">You<span class="time">12:46 PM</span></div>
+                <div>Agreed! IV is also dropping</div>
+              </div>
+              <div class="chat-message">
+                <div class="user">Trader2<span class="time">12:47 PM</span></div>
+                <div>Good time for straddle entry?</div>
+              </div>
+            </div>
+            <div class="chat-input-wrap">
+              <input type="text" id="chatInput" placeholder="Type your message..." onkeypress="if(event.key==='Enter')sendMessage()" />
+              <button onclick="sendMessage()">Send</button>
+            </div>
+          </div>
+
           <script>
             // Symbol lists
             const symbols = {
@@ -457,12 +506,15 @@
               dayLowStraddle: null,
               chart: null,
               chartMode: 'live',
-              alertsEnabled: true
+              alertsEnabled: true,
+              selectedStrike: null,
+              ohlcData: []
             };
 
             const marketSelect = document.getElementById('marketSelect');
             const symbolSelect = document.getElementById('symbolSelect');
             const expirySelect = document.getElementById('expirySelect');
+            const strikeSelect = document.getElementById('strikeSelect');
 
             // Populate dropdowns
             function populateSymbols() {
@@ -480,9 +532,22 @@
               expirySelect.innerHTML = options.map(o => `<option value="${o}">${o}</option>`).join('');
             }
 
+            function populateStrikes() {
+              const basePrice = parseFloat(document.getElementById('niftyVal').textContent) || 21800;
+              const nearestStrike = Math.round(basePrice / 50) * 50;
+              const strikes = [];
+              for (let i = -5; i <= 5; i++) {
+                strikes.push(nearestStrike + i * 50);
+              }
+              strikeSelect.innerHTML = strikes.map(s => `<option value="${s}" ${s === nearestStrike ? 'selected' : ''}>${s} ${s === nearestStrike ? '(ATM)' : ''}</option>`).join('');
+              state.selectedStrike = nearestStrike;
+            }
+
             marketSelect.addEventListener('change', populateSymbols);
+            symbolSelect.addEventListener('change', populateStrikes);
             populateSymbols();
             populateExpiry();
+            setTimeout(populateStrikes, 1000);
 
             // Play alert tone
             function playBeep(f=880, dur=180) {
@@ -509,22 +574,26 @@
             document.querySelectorAll('input[name="chartMode"]').forEach(r => {
               r.addEventListener('change', e => {
                 state.chartMode = e.target.value;
-                updateChartAppearance();
+                updateChartType();
               });
             });
 
-            function updateChartAppearance() {
+            function updateChartType() {
+              state.chart.destroy();
               const ds = state.chart.data.datasets[0];
               if (state.chartMode === 'candle') {
-                ds.type = 'bar';
-                ds.backgroundColor = 'rgba(234,179,8,0.25)';
-                ds.borderColor = '#eab308';
+                state.chart = new Chart(ctxChart, {
+                  type: 'candlestick',
+                  data: { datasets: [{ label: 'Straddle', data: state.ohlcData, borderColor: '#eab308', backgroundColor: 'rgba(234,179,8,0.25)' }] },
+                  options: { responsive: true, maintainAspectRatio: false, animation: false, plugins: { legend: { display: false } }, scales: { x: { type: 'time', time: { unit: 'minute' }, display: true, ticks: { color: '#cbd5e1' }, grid: { color: 'rgba(148,163,184,0.2)' } }, y: { ticks: { color: '#cbd5e1' }, grid: { color: 'rgba(148,163,184,0.2)' } } } }
+                });
               } else {
-                ds.type = 'line';
-                ds.backgroundColor = 'rgba(59,130,246,0.2)';
-                ds.borderColor = '#3b82f6';
+                state.chart = new Chart(ctxChart, {
+                  type: 'line',
+                  data: { labels: state.chart.data.labels, datasets: [{ label: 'Straddle Premium', data: ds.data, borderColor: '#3b82f6', backgroundColor: 'rgba(59,130,246,0.2)', tension: 0.2 }] },
+                  options: { responsive: true, maintainAspectRatio: false, animation: false, plugins: { legend: { display: false } }, scales: { x: { display: false, grid: { color: 'rgba(148,163,184,0.2)' } }, y: { ticks: { color: '#cbd5e1' }, grid: { color: 'rgba(148,163,184,0.2)' } } } }
+                });
               }
-              state.chart.update();
             }
 
             // Data simulation
@@ -622,8 +691,13 @@
               const now = new Date();
               state.chart.data.labels.push(now.toLocaleTimeString());
               state.chart.data.datasets[0].data.push(straddle.toFixed(2));
-              if (state.chart.data.labels.length > 40) { state.chart.data.labels.shift(); state.chart.data.datasets[0].data.shift(); }
-              updateChartAppearance();
+              const ohlc = { x: now, o: straddle - randBetween(1, 3), h: straddle + randBetween(0, 2), l: straddle - randBetween(0, 2), c: straddle };
+              state.ohlcData.push(ohlc);
+              if (state.chart.data.labels.length > 40) {
+                state.chart.data.labels.shift();
+                state.chart.data.datasets[0].data.shift();
+                state.ohlcData.shift();
+              }
               state.chart.update();
 
               // last updated
@@ -632,6 +706,28 @@
 
             updateIndicators();
             setInterval(updateIndicators, 5000);
+
+            // Chat widget functions
+            function toggleChat() {
+              const widget = document.getElementById('chatWidget');
+              const btn = document.getElementById('minimizeBtn');
+              widget.classList.toggle('minimized');
+              btn.textContent = widget.classList.contains('minimized') ? '+' : '−';
+            }
+
+            function sendMessage() {
+              const input = document.getElementById('chatInput');
+              const msg = input.value.trim();
+              if (!msg) return;
+              const chatBody = document.getElementById('chatBody');
+              const now = new Date();
+              const div = document.createElement('div');
+              div.className = 'chat-message own';
+              div.innerHTML = `<div class="user">You<span class="time">${now.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })}</span></div><div>${msg}</div>`;
+              chatBody.appendChild(div);
+              chatBody.scrollTop = chatBody.scrollHeight;
+              input.value = '';
+            }
 
             // Auth profile swap
             window.addEventListener('DOMContentLoaded', () => {

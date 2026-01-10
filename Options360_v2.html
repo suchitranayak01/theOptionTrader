@@ -22,9 +22,9 @@
     .row { display:flex; gap:12px; align-items:center; }
     .tickers { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
     .ticker { padding:14px; background:var(--panel); border:1px solid var(--border); border-radius:12px; }
-    .t-name { color:var(--muted); font-size:14px; }
-    .t-value { font-size:26px; font-weight:700; }
-    .t-change { font-weight:600; }
+    .t-name { color:var(--muted); font-size:16px; font-weight:600; }
+    .t-value { font-size:32px; font-weight:700; }
+    .t-change { font-size:16px; font-weight:600; }
     .pos { color:var(--good); } .neg { color:var(--bad); }
     .controls { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
     label { display:flex; flex-direction:column; gap:6px; font-size:13px; color:var(--muted); }
@@ -40,7 +40,25 @@
     .subtitle { color:var(--muted); font-size:13px; margin:4px 0 0; }
     .footer { color:var(--muted); font-size:12px; margin-top:16px; }
     .badge-green { color:var(--good); } .badge-red { color:var(--bad); }
-    @media(max-width:768px){ body{padding:12px;} header{flex-direction:column; align-items:flex-start;} }
+    #chatWidget { position:fixed; bottom:20px; right:20px; width:360px; max-height:500px; background:var(--card); border:2px solid var(--border); border-radius:16px; box-shadow:0 8px 32px rgba(0,0,0,0.4); z-index:999; display:flex; flex-direction:column; transition:all 0.3s ease; }
+    #chatWidget.minimized { max-height:50px; }
+    .chat-header { display:flex; justify-content:space-between; align-items:center; padding:12px 16px; border-bottom:1px solid var(--border); background:var(--panel); border-radius:14px 14px 0 0; cursor:pointer; }
+    .chat-header h3 { margin:0; font-size:15px; font-weight:700; }
+    .chat-controls { display:flex; gap:8px; }
+    .chat-controls button { background:transparent; border:none; color:var(--muted); cursor:pointer; font-size:16px; padding:4px 8px; border-radius:6px; }
+    .chat-controls button:hover { background:var(--border); }
+    .chat-body { flex:1; overflow-y:auto; padding:12px; display:flex; flex-direction:column; gap:8px; max-height:350px; }
+    #chatWidget.minimized .chat-body { display:none; }
+    .chat-message { padding:8px 12px; border-radius:8px; background:var(--panel); font-size:13px; }
+    .chat-message.own { background:rgba(59,130,246,0.2); margin-left:40px; }
+    .chat-message .user { font-weight:700; font-size:12px; color:var(--accent); margin-bottom:4px; }
+    .chat-message .time { font-size:11px; color:var(--muted); margin-left:8px; }
+    .chat-input-wrap { padding:12px; border-top:1px solid var(--border); display:flex; gap:8px; }
+    #chatWidget.minimized .chat-input-wrap { display:none; }
+    .chat-input-wrap input { flex:1; padding:8px 12px; border-radius:8px; border:1px solid var(--border); background:var(--panel); color:var(--text); font-size:13px; }
+    .chat-input-wrap button { padding:8px 16px; border-radius:8px; border:none; background:var(--accent); color:white; font-weight:600; cursor:pointer; }
+    .chat-input-wrap button:hover { background:#2563eb; }
+    @media(max-width:768px){ body{padding:12px;} header{flex-direction:column; align-items:flex-start;} #chatWidget{width:calc(100% - 40px); right:20px;} }
   </style>
 </head>
 <body>
@@ -76,6 +94,9 @@
       <label>Expiry Date
         <select id="expirySelect"></select>
       </label>
+      <label>Strike Price
+        <select id="strikeSelect"></select>
+      </label>
     </div>
   </section>
 
@@ -102,19 +123,50 @@
 
   <div class="footer">Demo only. Not trading advice.</div>
 
+  <!-- Floating Chat Widget -->
+  <div id="chatWidget">
+    <div class="chat-header" onclick="toggleChat()">
+      <h3>💬 Live Discussion</h3>
+      <div class="chat-controls">
+        <button id="minimizeBtn" onclick="event.stopPropagation(); toggleChat();">−</button>
+      </div>
+    </div>
+    <div class="chat-body" id="chatBody">
+      <div class="chat-message">
+        <div class="user">Trader1<span class="time">12:45 PM</span></div>
+        <div>Nifty showing strong support at 21800</div>
+      </div>
+      <div class="chat-message own">
+        <div class="user">You<span class="time">12:46 PM</span></div>
+        <div>Agreed! IV is also dropping</div>
+      </div>
+      <div class="chat-message">
+        <div class="user">Trader2<span class="time">12:47 PM</span></div>
+        <div>Good time for straddle entry?</div>
+      </div>
+    </div>
+    <div class="chat-input-wrap">
+      <input type="text" id="chatInput" placeholder="Type your message..." onkeypress="if(event.key==='Enter')sendMessage()" />
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+
   <script>
     const symbols = { equity: ['Nifty','Sensex','Bank Nifty'], commodity: ['Gold','Goldm','Silver','Silverm'], currency: ['USDINR'] };
-    const state = { dayLowStraddle:null, chart:null, chartMode:'live', alertsEnabled:true };
+    const state = { dayLowStraddle:null, chart:null, chartMode:'live', alertsEnabled:true, selectedStrike:null, ohlcData:[] };
     const marketSelect = document.getElementById('marketSelect');
     const symbolSelect = document.getElementById('symbolSelect');
     const expirySelect = document.getElementById('expirySelect');
+    const strikeSelect = document.getElementById('strikeSelect');
     function populateSymbols(){ const m=marketSelect.value; symbolSelect.innerHTML = symbols[m].map(s=>`<option value="${s}">${s}</option>`).join(''); }
     function populateExpiry(){ const t=new Date(); const opts=[]; for(let i=1;i<=4;i++){ const d=new Date(t.getTime()+i*7*24*3600*1000); opts.push(d.toISOString().split('T')[0]); } expirySelect.innerHTML=opts.map(o=>`<option value="${o}">${o}</option>`).join(''); }
-    marketSelect.addEventListener('change', populateSymbols); populateSymbols(); populateExpiry();
+    function populateStrikes(){ const basePrice=parseFloat(document.getElementById('niftyVal').textContent)||21800; const nearestStrike=Math.round(basePrice/50)*50; const strikes=[]; for(let i=-5;i<=5;i++){ strikes.push(nearestStrike+i*50); } strikeSelect.innerHTML=strikes.map(s=>`<option value="${s}" ${s===nearestStrike?'selected':''}>${s} ${s===nearestStrike?'(ATM)':''}</option>`).join(''); state.selectedStrike=nearestStrike; }
+    marketSelect.addEventListener('change', populateSymbols); symbolSelect.addEventListener('change', populateStrikes); populateSymbols(); populateExpiry(); setTimeout(populateStrikes,1000);
     function playBeep(f=880,d=180){ const ctx=new (window.AudioContext||window.webkitAudioContext)(); const osc=ctx.createOscillator(); const g=ctx.createGain(); osc.frequency.value=f; osc.type='sine'; g.gain.setValueAtTime(0.15,ctx.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,ctx.currentTime+d/1000); osc.connect(g).connect(ctx.destination); osc.start(); osc.stop(ctx.currentTime+d/1000); }
     const ctxChart=document.getElementById('straddleChart').getContext('2d');
     state.chart=new Chart(ctxChart,{ type:'line', data:{ labels:[], datasets:[{ label:'Straddle Premium', data:[], borderColor:'#3b82f6', backgroundColor:'rgba(59,130,246,0.2)', tension:0.2 }]}, options:{ responsive:true, maintainAspectRatio:false, animation:false, plugins:{legend:{display:false}}, scales:{x:{display:false, grid:{color:'rgba(148,163,184,0.2)'}}, y:{ticks:{color:'#cbd5e1'}, grid:{color:'rgba(148,163,184,0.2)'}} } }});
-    document.querySelectorAll('input[name="chartMode"]').forEach(r=>r.addEventListener('change',e=>{ state.chartMode=e.target.value; const ds=state.chart.data.datasets[0]; if(state.chartMode==='candle'){ ds.type='bar'; ds.backgroundColor='rgba(234,179,8,0.25)'; ds.borderColor='#eab308'; } else { ds.type='line'; ds.backgroundColor='rgba(59,130,246,0.2)'; ds.borderColor='#3b82f6'; } state.chart.update(); }));
+    document.querySelectorAll('input[name="chartMode"]').forEach(r=>r.addEventListener('change',e=>{ state.chartMode=e.target.value; updateChartType(); }));
+    function updateChartType(){ state.chart.destroy(); const ds=state.chart.data.datasets[0]; if(state.chartMode==='candle'){ state.chart=new Chart(ctxChart,{ type:'candlestick', data:{ datasets:[{ label:'Straddle', data:state.ohlcData, borderColor:'#eab308', backgroundColor:'rgba(234,179,8,0.25)' }]}, options:{ responsive:true, maintainAspectRatio:false, animation:false, plugins:{legend:{display:false}}, scales:{x:{type:'time',time:{unit:'minute'},display:true,ticks:{color:'#cbd5e1'},grid:{color:'rgba(148,163,184,0.2)'}}, y:{ticks:{color:'#cbd5e1'}, grid:{color:'rgba(148,163,184,0.2)'}} } }); } else { state.chart=new Chart(ctxChart,{ type:'line', data:{ labels:state.chart.data.labels, datasets:[{ label:'Straddle Premium', data:ds.data, borderColor:'#3b82f6', backgroundColor:'rgba(59,130,246,0.2)', tension:0.2 }]}, options:{ responsive:true, maintainAspectRatio:false, animation:false, plugins:{legend:{display:false}}, scales:{x:{display:false, grid:{color:'rgba(148,163,184,0.2)'}}, y:{ticks:{color:'#cbd5e1'}, grid:{color:'rgba(148,163,184,0.2)'}} } }); } }
     function randBetween(min,max){ return min+Math.random()*(max-min); }
     function generateSnapshot(){ return { nifty:{price:randBetween(21500,22000), chg:randBetween(-1.2,1.2)}, sensex:{price:randBetween(72000,74000), chg:randBetween(-1.0,1.0)}, bank:{price:randBetween(45500,46500), chg:randBetween(-1.5,1.5)}, iv:{val:randBetween(12,35), chg:randBetween(-12,14)}, pcr:{val:randBetween(0.7,1.3), chg:randBetween(-0.1,0.1)}, vix:{val:randBetween(12,25), chg:randBetween(-12,14)}, atmCall:randBetween(80,180), atmPut:randBetween(70,170) }; }
     function setTicker(idVal,idChg,obj){ document.getElementById(idVal).textContent=obj.price.toFixed(2); const el=document.getElementById(idChg); el.textContent=`${obj.chg>=0?'+':''}${obj.chg.toFixed(2)}%`; el.className='t-change '+(obj.chg>=0?'pos':'neg'); }
@@ -124,8 +176,10 @@
       document.getElementById('vixVal').textContent=snap.vix.val.toFixed(2); const vixChg=snap.vix.chg; const vixEl=document.getElementById('vixChg'); vixEl.textContent=`${vixChg>=0?'+':''}${vixChg.toFixed(2)}%`; vixEl.className='sub '+(Math.abs(vixChg)>10?'badge-red':'badge-green'); document.getElementById('vixStatus').textContent=Math.abs(vixChg)>10?'Vol spike':'Calm'; if(Math.abs(vixChg)>10) playBeep(900,200);
       document.getElementById('callVal').textContent=snap.atmCall.toFixed(2); document.getElementById('putVal').textContent=snap.atmPut.toFixed(2); document.getElementById('callSub').textContent='ATM Call premium'; document.getElementById('putSub').textContent='ATM Put premium'; const straddle=snap.atmCall+snap.atmPut; if(state.dayLowStraddle===null) state.dayLowStraddle=straddle; if(straddle<state.dayLowStraddle) state.dayLowStraddle=straddle; const fromLowPct=((straddle-state.dayLowStraddle)/state.dayLowStraddle)*100; document.getElementById('straddleVal').textContent=straddle.toFixed(2); const straddleSub=document.getElementById('straddleSub'); straddleSub.textContent=`From day low: ${fromLowPct>=0?'+':''}${fromLowPct.toFixed(2)}%`; const straddleStatus=document.getElementById('straddleStatus'); straddleStatus.textContent='Day low: '+state.dayLowStraddle.toFixed(2);
       if(fromLowPct>20){ straddleSub.className='sub badge-red'; state.chart.data.datasets[0].borderColor='#ef4444'; state.chart.data.datasets[0].backgroundColor='rgba(239,68,68,0.2)'; playBeep(700,220); } else if(fromLowPct>10){ straddleSub.className='sub badge-red'; state.chart.data.datasets[0].borderColor='#f59e0b'; state.chart.data.datasets[0].backgroundColor='rgba(245,158,11,0.2)'; playBeep(800,180); } else { straddleSub.className='sub badge-green'; state.chart.data.datasets[0].borderColor='#3b82f6'; state.chart.data.datasets[0].backgroundColor=state.chartMode==='candle'?'rgba(234,179,8,0.25)':'rgba(59,130,246,0.2)'; }
-      const now=new Date(); state.chart.data.labels.push(now.toLocaleTimeString()); state.chart.data.datasets[0].data.push(straddle.toFixed(2)); if(state.chart.data.labels.length>40){ state.chart.data.labels.shift(); state.chart.data.datasets[0].data.shift(); } state.chart.update(); document.getElementById('lastUpdated').textContent=now.toLocaleTimeString(); }
+      const now=new Date(); state.chart.data.labels.push(now.toLocaleTimeString()); state.chart.data.datasets[0].data.push(straddle.toFixed(2)); const ohlc={ x:now, o:straddle-randBetween(1,3), h:straddle+randBetween(0,2), l:straddle-randBetween(0,2), c:straddle }; state.ohlcData.push(ohlc); if(state.chart.data.labels.length>40){ state.chart.data.labels.shift(); state.chart.data.datasets[0].data.shift(); state.ohlcData.shift(); } state.chart.update(); document.getElementById('lastUpdated').textContent=now.toLocaleTimeString(); }
     updateIndicators(); setInterval(updateIndicators,5000);
+    function toggleChat(){ const widget=document.getElementById('chatWidget'); const btn=document.getElementById('minimizeBtn'); widget.classList.toggle('minimized'); btn.textContent=widget.classList.contains('minimized')?'+':'−'; }
+    function sendMessage(){ const input=document.getElementById('chatInput'); const msg=input.value.trim(); if(!msg)return; const chatBody=document.getElementById('chatBody'); const now=new Date(); const div=document.createElement('div'); div.className='chat-message own'; div.innerHTML=`<div class="user">You<span class="time">${now.toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'})}</span></div><div>${msg}</div>`; chatBody.appendChild(div); chatBody.scrollTop=chatBody.scrollHeight; input.value=''; }
     window.addEventListener('DOMContentLoaded',()=>{ if(window.AUTH && AUTH.initializeProfileDropdown){ AUTH.initializeProfileDropdown(); } });
   </script>
   <script src="auth.js?v=20260111"></script>
