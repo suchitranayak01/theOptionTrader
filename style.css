@@ -196,16 +196,16 @@ footer {
 /* Logo image styling */
 .logo-image {
   display: inline-block;
-  animation: logoPulse 2s ease-in-out infinite;
-  filter: drop-shadow(0 0 8px rgba(52, 211, 153, 0.4));
+  animation: logoPulse 2.5s ease-in-out infinite;
+  filter: drop-shadow(0 0 6px rgba(52, 211, 153, 0.5)) brightness(1.1);
 }
 
 @keyframes logoPulse {
   0%, 100% {
-    filter: drop-shadow(0 0 8px rgba(52, 211, 153, 0.4));
+    filter: drop-shadow(0 0 6px rgba(52, 211, 153, 0.5)) brightness(1.1);
   }
   50% {
-    filter: drop-shadow(0 0 15px rgba(59, 130, 246, 0.6));
+    filter: drop-shadow(0 0 12px rgba(59, 130, 246, 0.7)) brightness(1.2);
   }
 }
 
