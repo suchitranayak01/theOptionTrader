@@ -322,7 +322,8 @@
             .indicator .val { font-size:28px; font-weight:700; }
             .indicator .sub { font-size:13px; font-weight:600; }
             .status { display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border-radius:8px; border:1px solid var(--border); font-size:12px; color:var(--muted); margin-top:6px; }
-            .chart-wrap { margin-top:10px; background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:12px; }
+            .chart-wrap { margin-top:10px; background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:12px; min-height:50vh; }
+            .chart-wrap canvas { height:45vh !important; }
             .chart-toggle { display:flex; gap:16px; align-items:center; margin-bottom:10px; }
             .subtitle { color:var(--muted); font-size:13px; margin:4px 0 0; }
             .footer { color:var(--muted); font-size:12px; margin-top:16px; }
@@ -438,7 +439,7 @@
                 <label><input type="radio" name="chartMode" value="candle" /> Candle</label>
               </div>
             </div>
-            <canvas id="straddleChart" height="140"></canvas>
+            <canvas id="straddleChart"></canvas>
           </section>
 
           <div class="footer">Demo only. Not trading advice.</div>
@@ -502,7 +503,7 @@
             state.chart = new Chart(ctxChart, {
               type: 'line',
               data: { labels: [], datasets: [{ label:'Straddle Premium', data: [], borderColor: '#3b82f6', backgroundColor:'rgba(59,130,246,0.2)', tension:0.2 }] },
-              options: { responsive:true, animation:false, plugins:{legend:{display:false}}, scales:{x:{display:false}, y:{ticks:{color:'#cbd5e1'}, grid:{color:'rgba(148,163,184,0.2)'}}, x:{grid:{color:'rgba(148,163,184,0.2)'}}} }
+              options: { responsive:true, maintainAspectRatio:false, animation:false, plugins:{legend:{display:false}}, scales:{x:{display:false}, y:{ticks:{color:'#cbd5e1'}, grid:{color:'rgba(148,163,184,0.2)'}}, x:{grid:{color:'rgba(148,163,184,0.2)'}}} }
             });
 
             document.querySelectorAll('input[name="chartMode"]').forEach(r => {

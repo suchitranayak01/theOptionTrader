@@ -34,7 +34,8 @@
     .indicator .val { font-size:28px; font-weight:700; }
     .indicator .sub { font-size:13px; font-weight:600; }
     .status { display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border-radius:8px; border:1px solid var(--border); font-size:12px; color:var(--muted); margin-top:6px; }
-    .chart-wrap { margin-top:10px; background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:12px; }
+    .chart-wrap { margin-top:10px; background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:12px; min-height:50vh; }
+    .chart-wrap canvas { height:45vh !important; }
     .chart-toggle { display:flex; gap:16px; align-items:center; margin-bottom:10px; }
     .subtitle { color:var(--muted); font-size:13px; margin:4px 0 0; }
     .footer { color:var(--muted); font-size:12px; margin-top:16px; }
@@ -112,7 +113,7 @@
     marketSelect.addEventListener('change', populateSymbols); populateSymbols(); populateExpiry();
     function playBeep(f=880,d=180){ const ctx=new (window.AudioContext||window.webkitAudioContext)(); const osc=ctx.createOscillator(); const g=ctx.createGain(); osc.frequency.value=f; osc.type='sine'; g.gain.setValueAtTime(0.15,ctx.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,ctx.currentTime+d/1000); osc.connect(g).connect(ctx.destination); osc.start(); osc.stop(ctx.currentTime+d/1000); }
     const ctxChart=document.getElementById('straddleChart').getContext('2d');
-    state.chart=new Chart(ctxChart,{ type:'line', data:{ labels:[], datasets:[{ label:'Straddle Premium', data:[], borderColor:'#3b82f6', backgroundColor:'rgba(59,130,246,0.2)', tension:0.2 }]}, options:{ responsive:true, animation:false, plugins:{legend:{display:false}}, scales:{x:{display:false, grid:{color:'rgba(148,163,184,0.2)'}}, y:{ticks:{color:'#cbd5e1'}, grid:{color:'rgba(148,163,184,0.2)'}} } }});
+    state.chart=new Chart(ctxChart,{ type:'line', data:{ labels:[], datasets:[{ label:'Straddle Premium', data:[], borderColor:'#3b82f6', backgroundColor:'rgba(59,130,246,0.2)', tension:0.2 }]}, options:{ responsive:true, maintainAspectRatio:false, animation:false, plugins:{legend:{display:false}}, scales:{x:{display:false, grid:{color:'rgba(148,163,184,0.2)'}}, y:{ticks:{color:'#cbd5e1'}, grid:{color:'rgba(148,163,184,0.2)'}} } }});
     document.querySelectorAll('input[name="chartMode"]').forEach(r=>r.addEventListener('change',e=>{ state.chartMode=e.target.value; const ds=state.chart.data.datasets[0]; if(state.chartMode==='candle'){ ds.type='bar'; ds.backgroundColor='rgba(234,179,8,0.25)'; ds.borderColor='#eab308'; } else { ds.type='line'; ds.backgroundColor='rgba(59,130,246,0.2)'; ds.borderColor='#3b82f6'; } state.chart.update(); }));
     function randBetween(min,max){ return min+Math.random()*(max-min); }
     function generateSnapshot(){ return { nifty:{price:randBetween(21500,22000), chg:randBetween(-1.2,1.2)}, sensex:{price:randBetween(72000,74000), chg:randBetween(-1.0,1.0)}, bank:{price:randBetween(45500,46500), chg:randBetween(-1.5,1.5)}, iv:{val:randBetween(12,35), chg:randBetween(-12,14)}, pcr:{val:randBetween(0.7,1.3), chg:randBetween(-0.1,0.1)}, vix:{val:randBetween(12,25), chg:randBetween(-12,14)}, atmCall:randBetween(80,180), atmPut:randBetween(70,170) }; }
