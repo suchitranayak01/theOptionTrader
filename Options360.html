@@ -340,7 +340,8 @@
             function setTicker(idVal, idChg, obj) {
               document.getElementById(idVal).textContent = obj.price.toFixed(2);
               const el = document.getElementById(idChg);
-              el.textContent = `${obj.chg >=0 ? '+' : ''}${obj.chg.toFixed(2)}%`;
+              const points = (obj.price * obj.chg / 100).toFixed(2);
+              el.textContent = `${obj.chg >=0 ? '+' : ''}${points} pts (${obj.chg >=0 ? '+' : ''}${obj.chg.toFixed(2)}%)`;
               el.className = 't-change ' + (obj.chg >=0 ? 'pos' : 'neg');
             }
 
