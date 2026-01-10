@@ -211,6 +211,126 @@
         color: #94a3b8;
       }
 
+      /* Prediction Section */
+      .prediction-section {
+        background: rgba(59, 130, 246, 0.05);
+        border: 1px solid rgba(59, 130, 246, 0.2);
+        border-radius: 12px;
+        padding: 30px;
+        margin: 30px 0;
+      }
+
+      .prediction-result {
+        text-align: center;
+        padding: 30px;
+        border-radius: 12px;
+        margin: 20px 0;
+      }
+
+      .prediction-result.BULLISH {
+        background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.05));
+        border: 2px solid #22c55e;
+      }
+
+      .prediction-result.BEARISH {
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.05));
+        border: 2px solid #ef4444;
+      }
+
+      .prediction-result.NEUTRAL {
+        background: linear-gradient(135deg, rgba(148, 163, 184, 0.2), rgba(148, 163, 184, 0.05));
+        border: 2px solid #94a3b8;
+      }
+
+      .prediction-label {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+      }
+
+      .BULLISH .prediction-label { color: #22c55e; }
+      .BEARISH .prediction-label { color: #ef4444; }
+      .NEUTRAL .prediction-label { color: #94a3b8; }
+
+      .confidence-meter {
+        width: 100%;
+        height: 20px;
+        background: rgba(51, 65, 85, 0.5);
+        border-radius: 10px;
+        overflow: hidden;
+        margin: 15px 0;
+      }
+
+      .confidence-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #3b82f6, #22c55e);
+        transition: width 0.5s ease;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding-right: 8px;
+        color: white;
+        font-weight: 600;
+        font-size: 0.85rem;
+      }
+
+      .signals-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 12px;
+        margin: 15px 0;
+      }
+
+      .signal-item {
+        background: rgba(51, 65, 85, 0.3);
+        padding: 12px;
+        border-radius: 6px;
+        text-align: center;
+      }
+
+      .signal-label {
+        font-size: 0.75rem;
+        color: #94a3b8;
+        margin-bottom: 5px;
+      }
+
+      .signal-value {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #e6eef8;
+      }
+
+      .insight {
+        background: rgba(59, 130, 246, 0.1);
+        padding: 10px 12px;
+        margin: 6px 0;
+        border-radius: 6px;
+        border-left: 3px solid #3b82f6;
+        color: #e6eef8;
+        font-size: 0.9rem;
+      }
+
+      .pcr-input-group {
+        margin: 15px 0;
+      }
+
+      .pcr-input-group label {
+        display: block;
+        color: #94a3b8;
+        margin-bottom: 8px;
+        font-weight: 500;
+      }
+
+      .pcr-input-group input {
+        width: 100%;
+        padding: 10px;
+        background: rgba(15, 23, 42, 0.8);
+        border: 1px solid #334155;
+        border-radius: 6px;
+        color: #e6eef8;
+        font-size: 0.95rem;
+      }
+
       @media (max-width: 1024px) {
         .trend-grid {
           grid-template-columns: 1fr;
@@ -237,8 +357,8 @@
 
     <div class="trend-container">
       <div class="page-header">
-        <h1>📈 Trend Finder</h1>
-        <p>Analyze stock trends, support, resistance, and moving averages</p>
+        <h1>📈 Trend Finder & AI Prediction</h1>
+        <p>Analyze stock trends and get AI-powered market predictions based on price movement & PCR data</p>
       </div>
 
       <div class="search-section">
@@ -314,15 +434,52 @@
           </div>
         </div>
       </div>
+
+      <!-- AI Prediction Section -->
+      <div class="prediction-section">
+        <h3 style="margin-bottom: 20px;">🤖 AI Market Prediction</h3>
+        
+        <div class="pcr-input-group">
+          <label>Current PCR (Put-Call Ratio)</label>
+          <input type="number" id="pcrInput" placeholder="e.g., 0.85" step="0.01" value="0.85">
+          <button class="search-btn" style="margin-top: 10px; width: 100%;" onclick="runPrediction()">🔮 Generate AI Prediction</button>
+        </div>
+
+        <div id="predictionContainer" style="display: none;">
+          <div id="predictionResult" class="prediction-result">
+            <div class="prediction-label" id="predictionLabel">-</div>
+            <div style="font-size: 1rem; color: #94a3b8; margin-bottom: 10px;">
+              Score: <span id="predictionScore">0</span> | Confidence: <span id="confidenceText">0%</span>
+            </div>
+            <div class="confidence-meter">
+              <div class="confidence-fill" id="confidenceFill"></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h4 style="margin-bottom: 15px;">📊 Technical Signals</h4>
+            <div class="signals-grid" id="signalsGrid"></div>
+          </div>
+
+          <div class="card" style="margin-top: 15px;">
+            <h4 style="margin-bottom: 15px;">🧠 AI Analysis</h4>
+            <div id="analysisContainer"></div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <footer class="footer" style="background: #0f172a; text-align: center; padding: 40px 20px; border-top: 1px solid #334155;">
       <p style="color: #64748b;">&copy; 2026 TheOptionTrader. Technical analysis made simple.</p>
     </footer>
 
+    <script src="prediction-engine.js"></script>
+    <script src="prediction-engine.js"></script>
     <script>
       let currentSymbol = 'NSE:NIFTY';
       let tvWidget = null;
+      let priceHistory = [];
+      const predictionEngine = new PredictionEngine();
 
       function initTradingView(symbol) {
         if (tvWidget) {
@@ -391,6 +548,9 @@
         
         const rsi = 30 + Math.random() * 40;
         
+        // Generate price history for prediction
+        priceHistory = generatePriceHistory(currentPrice);
+        
         // Determine trend
         let trend = 'Neutral';
         let trendClass = 'neutral';
@@ -426,6 +586,70 @@
         
         const rsiText = rsi < 30 ? 'Oversold' : rsi > 70 ? 'Overbought' : 'Neutral';
         document.getElementById('rsiValue').textContent = `${rsi.toFixed(1)} (${rsiText})`;
+      }
+
+      function generatePriceHistory(currentPrice) {
+        const history = [];
+        let price = currentPrice * 0.95;
+        
+        for (let i = 0; i < 20; i++) {
+          const change = (Math.random() - 0.45) * (currentPrice * 0.02);
+          price += change;
+          history.push({
+            price: price,
+            timestamp: new Date(Date.now() - (20 - i) * 86400000)
+          });
+        }
+        
+        return history;
+      }
+
+      function runPrediction() {
+        const pcrValue = parseFloat(document.getElementById('pcrInput').value);
+        
+        if (!pcrValue || priceHistory.length === 0) {
+          alert('Please analyze a stock first before running prediction');
+          return;
+        }
+
+        // Run prediction
+        const result = predictionEngine.predict(priceHistory, pcrValue);
+        
+        // Display results
+        displayPrediction(result);
+      }
+
+      function displayPrediction(result) {
+        document.getElementById('predictionContainer').style.display = 'block';
+        
+        const resultDiv = document.getElementById('predictionResult');
+        resultDiv.className = 'prediction-result ' + result.prediction;
+        
+        document.getElementById('predictionLabel').textContent = result.prediction;
+        document.getElementById('predictionScore').textContent = result.score;
+        document.getElementById('confidenceText').textContent = result.confidence + '%';
+        document.getElementById('confidenceFill').style.width = result.confidence + '%';
+
+        // Display signals
+        const signalsGrid = document.getElementById('signalsGrid');
+        signalsGrid.innerHTML = '';
+        Object.entries(result.signals).forEach(([key, value]) => {
+          signalsGrid.innerHTML += `
+            <div class="signal-item">
+              <div class="signal-label">${key.toUpperCase()}</div>
+              <div class="signal-value">${value}</div>
+            </div>
+          `;
+        });
+
+        // Display analysis
+        const analysisContainer = document.getElementById('analysisContainer');
+        analysisContainer.innerHTML = result.analysis.map(insight => 
+          `<div class="insight">${insight}</div>`
+        ).join('');
+
+        // Scroll to prediction
+        document.getElementById('predictionContainer').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       }
 
       // Initialize with Nifty
